@@ -7,3 +7,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+app:
+  jwt:
+    secret: clave-de-pruebas-solo-para-test-1234567890abcdef
+    expiration-ms: 3600000

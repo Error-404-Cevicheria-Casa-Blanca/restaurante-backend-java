@@ -7,9 +7,11 @@ Backend de operaciones de la Cevichería "La Casa Blanca" — API REST con auten
 - Java 17
 - Spring Boot 3 (3.5.16)
 - Spring Web, Spring Data JPA, Spring Security, Validation
-- JJWT 0.12.6 (JWT)
+- JJWT 0.13.0 (JWT)
 - PostgreSQL (producción), H2 (tests)
 - Maven (wrapper `mvnw.cmd`), JUnit 5 + Mockito
+
+> **Nota (2026-10-09):** Spring Boot 3.5.16 es la última versión 3.x y está en fin de soporte OSS desde el 30/06/2026. Se mantiene por exigencia del brief (Spring Boot 3).
 
 ## Cómo ejecutar
 
