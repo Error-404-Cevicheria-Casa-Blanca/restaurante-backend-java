@@ -19,8 +19,8 @@
 
     <properties>
         <java.version>17</java.version>
-        <!-- Versión verificada hoy en Maven Central: docs/evidencias/PE-6-java/06-jjwt-versiones.txt -->
-        <jjwt.version>0.12.6</jjwt.version>
+        <!-- Versión verificada hoy en Maven Central: docs/evidencias/PE-6-fix-java/01-jjwt-metadata.txt -->
+        <jjwt.version>0.13.0</jjwt.version>
     </properties>
 
     <dependencies>
