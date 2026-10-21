@@ -1,0 +1,22 @@
+ docs/evidencias/PE-9/01-tests.txt                  | 140 +++++++++++++++++++++
+ docs/evidencias/PE-9/02-curl.txt                   |  51 ++++++++
+ docs/evidencias/PE-9/03-git.txt                    |  21 ++++
+ docs/evidencias/PE-9/CIERRE.md                     |  15 +++
+ .../backend/config/DataInitializer.java            |  44 +++++++
+ .../lacasablanca/backend/config/JacksonConfig.java |  15 +++
+ .../backend/controller/AuthController.java         |  36 ++++++
+ .../com/lacasablanca/backend/dto/LoginRequest.java |  28 +++++
+ .../lacasablanca/backend/dto/LoginResponse.java    |  25 ++++
+ .../com/lacasablanca/backend/dto/UsuarioDto.java   |  25 ++++
+ .../backend/exception/GlobalExceptionHandler.java  |  43 +++++++
+ .../java/com/lacasablanca/backend/model/Rol.java   |  32 +++++
+ .../com/lacasablanca/backend/model/Usuario.java    |  49 ++++++++
+ .../backend/repository/RolRepository.java          |   9 ++
+ .../backend/repository/UsuarioRepository.java      |   9 ++
+ .../backend/security/JwtAuthenticationFilter.java  |  57 +++++++++
+ .../com/lacasablanca/backend/security/JwtUtil.java |  51 ++++++++
+ .../backend/security/SecurityConfig.java           |  56 +++++++++
+ .../lacasablanca/backend/service/AuthService.java  |  43 +++++++
+ .../backend/controller/AuthControllerTest.java     |  83 ++++++++++++
+ .../backend/service/AuthServiceTest.java           |  91 ++++++++++++++
+ 21 files changed, 923 insertions(+)

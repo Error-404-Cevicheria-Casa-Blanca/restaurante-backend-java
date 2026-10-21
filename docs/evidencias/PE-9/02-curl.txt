@@ -1,0 +1,51 @@
+=== 1. E1 Login Exitoso (HTTP 200 OK) ===
+$ curl -i -X POST http://localhost:18080/api/v1/auth/login -H "Content-Type: application/json" -d '{"usuario":"mozo_01","clave":"password123"}'
+HTTP/1.1 200 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Wed, 21 Oct 2026 12:06:57 GMT
+
+{"token":"eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIyIiwibm9tYnJlIjoibW96b18wMSIsInJvbCI6Ik1PWk8iLCJpYXQiOjE3OTI1ODQ0MTcsImV4cCI6MTc5MjU4ODAxN30.BJWLi4uziq4RDkbXTJ3XrFwWqFmmzMUxn6-0avFO-adDt8ozBikFHmKjiZtHpfpD","tipo":"Bearer","usuario":{"id":2,"nombre":"mozo_01","rol":"MOZO"}}
+
+=== 2. E2 Credenciales Invalidas (HTTP 401 Unauthorized) ===
+$ curl -i -X POST http://localhost:18080/api/v1/auth/login -H "Content-Type: application/json" -d '{"usuario":"mozo_01","clave":"clave_incorrecta"}'
+HTTP/1.1 401 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Wed, 21 Oct 2026 12:06:57 GMT
+
+{"mensaje":"Usuario o contraseña incorrectos"}
+
+=== 3. E3 Token JWT Expirado en Endpoint Protegido (HTTP 403 Forbidden - Regla D9) ===
+$ curl -i -X GET http://localhost:18080/api/v1/auth/me -H "Authorization: Bearer <jwt>"
+HTTP/1.1 403 
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json;charset=UTF-8
+Content-Length: 33
+Date: Wed, 21 Oct 2026 12:06:57 GMT
+
+{"mensaje": "Token JWT expirado"}
+
