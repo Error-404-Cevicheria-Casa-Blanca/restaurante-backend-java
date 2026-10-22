@@ -1,0 +1,121 @@
+=== 1. E1 GET /api/v1/mesas con Token JWT de MOZO (HTTP 200 OK - 13 mesas) ===
+$ curl -i -X GET http://localhost:18080/api/v1/mesas -H "Authorization: Bearer <jwt>"
+HTTP/1.1 200 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Wed, 21 Oct 2026 12:06:57 GMT
+
+[{"id":1,"numero":1,"capacidad":4,"ubicacion":"Primer piso","estado":"LIBRE"},{"id":2,"numero":2,"capacidad":4,"ubicacion":"Primer piso","estado":"LIBRE"},{"id":3,"numero":3,"capacidad":4,"ubicacion":"Primer piso","estado":"LIBRE"},{"id":4,"numero":4,"capacidad":4,"ubicacion":"Primer piso","estado":"LIBRE"},{"id":5,"numero":5,"capacidad":4,"ubicacion":"Primer piso","estado":"LIBRE"},{"id":6,"numero":6,"capacidad":4,"ubicacion":"Primer piso","estado":"LIBRE"},{"id":7,"numero":7,"capacidad":4,"ubicacion":"Primer piso","estado":"LIBRE"},{"id":8,"numero":8,"capacidad":4,"ubicacion":"Segundo piso","estado":"LIBRE"},{"id":9,"numero":9,"capacidad":4,"ubicacion":"Segundo piso","estado":"LIBRE"},{"id":10,"numero":10,"capacidad":4,"ubicacion":"Segundo piso","estado":"LIBRE"},{"id":11,"numero":11,"capacidad":4,"ubicacion":"Segundo piso","estado":"LIBRE"},{"id":12,"numero":12,"capacidad":4,"ubicacion":"Segundo piso","estado":"LIBRE"},{"id":13,"numero":13,"capacidad":4,"ubicacion":"Segundo piso","estado":"LIBRE"}]
+
+=== 2. E2 PATCH /api/v1/mesas/1/estado a ATENDIDA (HTTP 200 OK) ===
+$ curl -i -X PATCH http://localhost:18080/api/v1/mesas/1/estado -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"estado":"ATENDIDA"}'
+HTTP/1.1 200 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Wed, 21 Oct 2026 12:06:57 GMT
+
+{"id":1,"numero":1,"capacidad":4,"ubicacion":"Primer piso","estado":"ATENDIDA"}
+
+=== 3. E2 PATCH /api/v1/mesas/1/estado a OCUPADA (HTTP 200 OK) ===
+$ curl -i -X PATCH http://localhost:18080/api/v1/mesas/1/estado -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"estado":"OCUPADA"}'
+HTTP/1.1 200 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Wed, 21 Oct 2026 12:06:57 GMT
+
+{"id":1,"numero":1,"capacidad":4,"ubicacion":"Primer piso","estado":"OCUPADA"}
+
+=== 4. E3 GET /api/v1/mesas sin Token JWT (HTTP 401 Unauthorized) ===
+$ curl -i -X GET http://localhost:18080/api/v1/mesas
+HTTP/1.1 401 
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json;charset=UTF-8
+Content-Length: 61
+Date: Wed, 21 Oct 2026 12:06:57 GMT
+
+{"mensaje": "No autorizado: Token JWT requerido o inválido"}
+
+=== 5. Validacion Estado Invalido EN_ATENCION (HTTP 400 Bad Request) ===
+$ curl -i -X PATCH http://localhost:18080/api/v1/mesas/1/estado -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"estado":"EN_ATENCION"}'
+HTTP/1.1 400 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Wed, 21 Oct 2026 12:06:58 GMT
+Connection: close
+
+{"mensaje":"Estado de mesa inválido. Valores permitidos: LIBRE, OCUPADA, ATENDIDA, CUENTA_SOLICITADA"}
+
+=== 6. Validacion Mesa Inexistente ID 999 (HTTP 404 Not Found) ===
+$ curl -i -X PATCH http://localhost:18080/api/v1/mesas/999/estado -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"estado":"OCUPADA"}'
+HTTP/1.1 404 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Wed, 21 Oct 2026 12:06:58 GMT
+
+{"mensaje":"Mesa no encontrada con ID: 999"}
+
+=== 7. Restriccion de Rol COCINERO intenta cambiar estado (HTTP 403 Forbidden) ===
+$ curl -i -X PATCH http://localhost:18080/api/v1/mesas/1/estado -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"estado":"LIBRE"}'
+HTTP/1.1 403 
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json;charset=UTF-8
+Content-Length: 54
+Date: Wed, 21 Oct 2026 12:06:58 GMT
+
+{"mensaje": "Acceso denegado: permisos insuficientes"}
+
