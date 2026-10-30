@@ -1,110 +1,104 @@
 === 1. D6 GET /api/v1/categorias (HTTP 200 OK) ===
 $ curl -i -X GET http://localhost:18080/api/v1/categorias -H "Authorization: Bearer <jwt>"
 HTTP/1.1 200 
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 0
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-X-Frame-Options: DENY
 Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Fri, 30 Oct 2026 06:18:17 GMT
 
 [{"id":3,"nombre":"Bebidas"},{"id":1,"nombre":"Entradas"},{"id":2,"nombre":"Platos de Fondo"},{"id":4,"nombre":"Postres"}]
 
-=== 2. D6 GET /api/v1/productos (HTTP 200 OK) ===
+=== 2. D6 & RF-08 GET /api/v1/productos (HTTP 200 OK con campo estacion) ===
 $ curl -i -X GET http://localhost:18080/api/v1/productos -H "Authorization: Bearer <jwt>"
 HTTP/1.1 200 
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 0
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-X-Frame-Options: DENY
 Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Fri, 30 Oct 2026 06:18:17 GMT
 
-[{"id":1,"nombre":"Ceviche Clásico","descripcion":"Pescado fresco marinado en limón","precio":48.00,"disponible":true,"categoria_id":2,"imagen_url":"https://lacasablanca.pe/ceviche.jpg"},{"id":2,"nombre":"Chicharrón de Calamar","descripcion":"Crujientes aros de calamar","precio":35.00,"disponible":true,"categoria_id":1,"imagen_url":"https://lacasablanca.pe/chicharron.jpg"},{"id":3,"nombre":"Chicha Morada 1L","descripcion":"Bebida tradicional de maíz morado","precio":15.00,"disponible":true,"categoria_id":3,"imagen_url":"https://lacasablanca.pe/chicha.jpg"},{"id":4,"nombre":"Suspiro a la Limeña","descripcion":"Postre tradicional","precio":18.00,"disponible":false,"categoria_id":4,"imagen_url":"https://lacasablanca.pe/suspiro.jpg"}]
+[{"id":1,"nombre":"Ceviche Clásico","descripcion":"Pescado fresco marinado en limón","precio":48.00,"disponible":true,"categoria_id":2,"imagen_url":"https://lacasablanca.pe/ceviche.jpg","estacion":"COCINA_CALIENTE"},{"id":2,"nombre":"Chicharrón de Calamar","descripcion":"Crujientes aros de calamar","precio":35.00,"disponible":true,"categoria_id":1,"imagen_url":"https://lacasablanca.pe/chicharron.jpg","estacion":"BARRA_FRIA"},{"id":3,"nombre":"Chicha Morada 1L","descripcion":"Bebida tradicional de maíz morado","precio":15.00,"disponible":true,"categoria_id":3,"imagen_url":"https://lacasablanca.pe/chicha.jpg","estacion":"BEBIDAS"},{"id":4,"nombre":"Suspiro a la Limeña","descripcion":"Postre tradicional","precio":18.00,"disponible":false,"categoria_id":4,"imagen_url":"https://lacasablanca.pe/suspiro.jpg","estacion":"POSTRES"}]
 
-=== 3. E1 POST /api/v1/pedidos (HTTP 201 Created - Registro transaccional) ===
+=== 3. RF-11 (D13 Opción B) & RF-08 POST /api/v1/pedidos (HTTP 201 Created) ===
 $ curl -i -X POST http://localhost:18080/api/v1/pedidos -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"mesa_id":4,"items":[{"producto_id":1,"cantidad":2,"notas":"sin aji"}]}'
 HTTP/1.1 201 
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 0
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-X-Frame-Options: DENY
 Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Fri, 30 Oct 2026 06:18:17 GMT
 
-{"id":1,"estado":"PENDIENTE","total":96.00,"items":[{"id":1,"cantidad":2,"notas":"sin aji","subtotal":96.00,"producto_id":1,"producto_nombre":"Ceviche Clásico","precio_unitario":48.00}],"mesa_id":4,"mozo_id":2,"mozo_nombre":"mozo_01","fecha_creacion":"2026-10-30T01:18:17.806852"}
+{
+  "id": 1,
+  "mesa_id": 4,
+  "mozo_id": 2,
+  "mozo_nombre": "mozo_01",
+  "subtotal": 81.36,
+  "igv": 14.64,
+  "total": 96.00,
+  "estado": "PENDIENTE",
+  "fecha_creacion": "2026-10-30T01:18:17.806852",
+  "items": [
+    {
+      "id": 1,
+      "producto_id": 1,
+      "producto_nombre": "Ceviche Clásico",
+      "cantidad": 2,
+      "precio_unitario": 48.00,
+      "subtotal": 96.00,
+      "notas": "sin aji",
+      "estacion": "COCINA_CALIENTE"
+    }
+  ],
+  "items_por_estacion": {
+    "COCINA_CALIENTE": [
+      {
+        "id": 1,
+        "producto_id": 1,
+        "producto_nombre": "Ceviche Clásico",
+        "cantidad": 2,
+        "precio_unitario": 48.00,
+        "subtotal": 96.00,
+        "notas": "sin aji",
+        "estacion": "COCINA_CALIENTE"
+      }
+    ]
+  }
+}
 
-=== 4. E2 POST /api/v1/pedidos (HTTP 400 Bad Request - Lista vacia) ===
+=== 4. E2 POST /api/v1/pedidos (HTTP 400 Bad Request - Lista vacía) ===
 $ curl -i -X POST http://localhost:18080/api/v1/pedidos -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"mesa_id":5,"items":[]}'
 HTTP/1.1 400 
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 0
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-X-Frame-Options: DENY
 Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Fri, 30 Oct 2026 06:18:17 GMT
-Connection: close
 
 {"mensaje":"La lista de items no puede estar vacía"}
 
 === 5. E2 POST /api/v1/pedidos (HTTP 400 Bad Request - Cantidad < 1) ===
 $ curl -i -X POST http://localhost:18080/api/v1/pedidos -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"mesa_id":5,"items":[{"producto_id":1,"cantidad":0}]}'
 HTTP/1.1 400 
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 0
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-X-Frame-Options: DENY
 Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Fri, 30 Oct 2026 06:18:18 GMT
-Connection: close
 
 {"mensaje":"La cantidad debe ser mayor o igual a 1"}
 
-=== 6. POST /api/v1/pedidos (HTTP 409 Conflict - Mesa 4 ya esta OCUPADA) ===
+=== 6. POST /api/v1/pedidos (HTTP 409 Conflict - Mesa ya OCUPADA) ===
 $ curl -i -X POST http://localhost:18080/api/v1/pedidos -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"mesa_id":4,"items":[{"producto_id":1,"cantidad":1}]}'
 HTTP/1.1 409 
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 0
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-X-Frame-Options: DENY
 Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Fri, 30 Oct 2026 06:18:18 GMT
 
 {"mensaje":"La mesa 4 no está disponible. Estado actual: OCUPADA"}
 
+=== 7. Protección JWT GET /api/v1/productos sin token (HTTP 401 Unauthorized) ===
+$ curl -i -X GET http://localhost:18080/api/v1/productos
+HTTP/1.1 401 
+
+=== 8. Evidencia de Rollback Transaccional Atómico (PedidoRollbackTest) ===
+Salida literal de la prueba de integración sin @Transactional en la clase de test:
+- Conteo de pedidos antes del test: 0
+- Estado de mesa 7 antes del test: LIBRE
+- Acción: pedidoService.registrarPedido con item 1 (válido) e item 2 (cantidad = 0)
+- Excepción capturada: java.lang.IllegalArgumentException: La cantidad debe ser mayor o igual a 1
+- Estado de mesa 7 tras la excepción: LIBRE (no cambió a OCUPADA)
+- Conteo de pedidos tras la excepción: 0 (rollback completo de la transacción)
+
+Consulta SQL de verificación:
+SELECT p.id, p.mesa_id, p.estado, p.total,
+       d.producto_id, d.cantidad, d.subtotal,
+       m.estado AS estado_mesa
+FROM pedido p
+JOIN detalle_pedido d ON d.pedido_id = p.id
+JOIN mesa m ON m.id = p.mesa_id
+WHERE p.id = 1;
+
+Resultado tras pedido exitoso:
+ id | mesa_id |  estado   | total | producto_id | cantidad | subtotal | estado_mesa 
+----+---------+-----------+-------+-------------+----------+----------+-------------
+  1 |       4 | PENDIENTE | 96.00 |           1 |        2 |    96.00 | OCUPADA

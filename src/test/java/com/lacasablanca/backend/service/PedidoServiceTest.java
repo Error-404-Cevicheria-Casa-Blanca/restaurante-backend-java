@@ -18,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,8 +44,8 @@ class PedidoServiceTest {
     private PedidoService pedidoService;
 
     @Test
-    @DisplayName("PE-12 Test 1: Creación de pedido calcula total y cambia mesa a OCUPADA")
-    void crearPedidoExitosoCalculaTotalYCambiaEstadoMesa() {
+    @DisplayName("PRB-20 Caso 2 x 48.00: Calcula total 96.00, subtotal 81.36 e IGV 14.64 (Opción B - D13)")
+    void crearPedidoExitosoCalculaTotalSubtotalEIgvD13() {
         Mesa mesa = new Mesa(1, 1, 4, "Primer piso", EstadoMesa.LIBRE);
         Usuario mozo = new Usuario(2, "mozo_01", "hash", new Rol("MOZO"));
         Categoria cat = new Categoria(1, "Platos de Fondo");
@@ -67,13 +66,30 @@ class PedidoServiceTest {
         assertNotNull(res);
         assertEquals(100, res.getId());
         assertEquals(new BigDecimal("96.00"), res.getTotal());
+        assertEquals(new BigDecimal("81.36"), res.getSubtotal());
+        assertEquals(new BigDecimal("14.64"), res.getIgv());
         assertEquals(EstadoPedido.PENDIENTE, res.getEstado());
         assertEquals(EstadoMesa.OCUPADA, mesa.getEstado());
+        assertNotNull(res.getItemsPorEstacion());
+        assertTrue(res.getItemsPorEstacion().containsKey(Estacion.BARRA_FRIA));
         verify(mesaRepository).save(mesa);
     }
 
     @Test
-    @DisplayName("PE-12 Test 2: Mesa ocupada lanza ConflictoOperacionException (409)")
+    @DisplayName("PRB-20 Fallback de Mozo: Subject inexistente lanza RecursoNoEncontradoException sin guardar")
+    void mozoInexistenteLanzaNotFoundYNoGuarda() {
+        Mesa mesa = new Mesa(1, 1, 4, "Primer piso", EstadoMesa.LIBRE);
+        when(mesaRepository.findById(1)).thenReturn(Optional.of(mesa));
+        when(usuarioRepository.findById(9999)).thenReturn(Optional.empty());
+
+        CrearPedidoRequest req = new CrearPedidoRequest(1, List.of(new ItemPedidoRequest(10, 1, null)));
+
+        assertThrows(RecursoNoEncontradoException.class, () -> pedidoService.registrarPedido(req, "9999"));
+        verifyNoInteractions(pedidoRepository);
+    }
+
+    @Test
+    @DisplayName("PRB-20 Conflicto Mesa: Mesa ocupada lanza ConflictoOperacionException (409)")
     void crearPedidoMesaOcupadaLanzaConflicto() {
         Mesa mesaOcupada = new Mesa(1, 1, 4, "Primer piso", EstadoMesa.OCUPADA);
         when(mesaRepository.findById(1)).thenReturn(Optional.of(mesaOcupada));
@@ -85,23 +101,7 @@ class PedidoServiceTest {
     }
 
     @Test
-    @DisplayName("PE-12 Test 3: Producto inexistente lanza RecursoNoEncontradoException")
-    void crearPedidoProductoInexistenteLanzaNotFound() {
-        Mesa mesa = new Mesa(1, 1, 4, "Primer piso", EstadoMesa.LIBRE);
-        Usuario mozo = new Usuario(2, "mozo_01", "hash", new Rol("MOZO"));
-
-        when(mesaRepository.findById(1)).thenReturn(Optional.of(mesa));
-        when(usuarioRepository.findById(2)).thenReturn(Optional.of(mozo));
-        when(productoRepository.findById(999)).thenReturn(Optional.empty());
-
-        CrearPedidoRequest req = new CrearPedidoRequest(1, List.of(new ItemPedidoRequest(999, 1, null)));
-
-        assertThrows(RecursoNoEncontradoException.class, () -> pedidoService.registrarPedido(req, "2"));
-        verifyNoInteractions(pedidoRepository);
-    }
-
-    @Test
-    @DisplayName("PE-12 Test 4: Producto no disponible lanza ConflictoOperacionException")
+    @DisplayName("PRB-20 Conflicto Producto: Producto no disponible lanza ConflictoOperacionException (409)")
     void crearPedidoProductoNoDisponibleLanzaConflicto() {
         Mesa mesa = new Mesa(1, 1, 4, "Primer piso", EstadoMesa.LIBRE);
         Usuario mozo = new Usuario(2, "mozo_01", "hash", new Rol("MOZO"));

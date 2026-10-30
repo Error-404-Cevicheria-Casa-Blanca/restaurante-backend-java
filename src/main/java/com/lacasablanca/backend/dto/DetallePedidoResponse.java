@@ -1,6 +1,7 @@
 package com.lacasablanca.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lacasablanca.backend.model.Estacion;
 import java.math.BigDecimal;
 
 public class DetallePedidoResponse {
@@ -13,6 +14,8 @@ public class DetallePedidoResponse {
     @JsonProperty("producto_nombre")
     private String productoNombre;
 
+    private Estacion estacion;
+
     @JsonProperty("precio_unitario")
     private BigDecimal precioUnitario;
 
@@ -22,10 +25,11 @@ public class DetallePedidoResponse {
 
     public DetallePedidoResponse() {}
 
-    public DetallePedidoResponse(Integer id, Integer productoId, String productoNombre, BigDecimal precioUnitario, Integer cantidad, String notas, BigDecimal subtotal) {
+    public DetallePedidoResponse(Integer id, Integer productoId, String productoNombre, Estacion estacion, BigDecimal precioUnitario, Integer cantidad, String notas, BigDecimal subtotal) {
         this.id = id;
         this.productoId = productoId;
         this.productoNombre = productoNombre;
+        this.estacion = estacion;
         this.precioUnitario = precioUnitario;
         this.cantidad = cantidad;
         this.notas = notas;
@@ -40,6 +44,9 @@ public class DetallePedidoResponse {
 
     public String getProductoNombre() { return productoNombre; }
     public void setProductoNombre(String productoNombre) { this.productoNombre = productoNombre; }
+
+    public Estacion getEstacion() { return estacion; }
+    public void setEstacion(Estacion estacion) { this.estacion = estacion; }
 
     public BigDecimal getPrecioUnitario() { return precioUnitario; }
     public void setPrecioUnitario(BigDecimal precioUnitario) { this.precioUnitario = precioUnitario; }

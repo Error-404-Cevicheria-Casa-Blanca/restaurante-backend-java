@@ -2,9 +2,11 @@ package com.lacasablanca.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lacasablanca.backend.model.EstadoPedido;
+import com.lacasablanca.backend.model.Estacion;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class PedidoResponse {
 
@@ -20,6 +22,9 @@ public class PedidoResponse {
     private String mozoNombre;
 
     private EstadoPedido estado;
+
+    private BigDecimal subtotal;
+    private BigDecimal igv;
     private BigDecimal total;
 
     @JsonProperty("fecha_creacion")
@@ -27,17 +32,23 @@ public class PedidoResponse {
 
     private List<DetallePedidoResponse> items;
 
+    @JsonProperty("items_por_estacion")
+    private Map<Estacion, List<DetallePedidoResponse>> itemsPorEstacion;
+
     public PedidoResponse() {}
 
-    public PedidoResponse(Integer id, Integer mesaId, Integer mozoId, String mozoNombre, EstadoPedido estado, BigDecimal total, LocalDateTime fechaCreacion, List<DetallePedidoResponse> items) {
+    public PedidoResponse(Integer id, Integer mesaId, Integer mozoId, String mozoNombre, EstadoPedido estado, BigDecimal subtotal, BigDecimal igv, BigDecimal total, LocalDateTime fechaCreacion, List<DetallePedidoResponse> items, Map<Estacion, List<DetallePedidoResponse>> itemsPorEstacion) {
         this.id = id;
         this.mesaId = mesaId;
         this.mozoId = mozoId;
         this.mozoNombre = mozoNombre;
         this.estado = estado;
+        this.subtotal = subtotal;
+        this.igv = igv;
         this.total = total;
         this.fechaCreacion = fechaCreacion;
         this.items = items;
+        this.itemsPorEstacion = itemsPorEstacion;
     }
 
     public Integer getId() { return id; }
@@ -55,6 +66,12 @@ public class PedidoResponse {
     public EstadoPedido getEstado() { return estado; }
     public void setEstado(EstadoPedido estado) { this.estado = estado; }
 
+    public BigDecimal getSubtotal() { return subtotal; }
+    public void setSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }
+
+    public BigDecimal getIgv() { return igv; }
+    public void setIgv(BigDecimal igv) { this.igv = igv; }
+
     public BigDecimal getTotal() { return total; }
     public void setTotal(BigDecimal total) { this.total = total; }
 
@@ -63,4 +80,7 @@ public class PedidoResponse {
 
     public List<DetallePedidoResponse> getItems() { return items; }
     public void setItems(List<DetallePedidoResponse> items) { this.items = items; }
+
+    public Map<Estacion, List<DetallePedidoResponse>> getItemsPorEstacion() { return itemsPorEstacion; }
+    public void setItemsPorEstacion(Map<Estacion, List<DetallePedidoResponse>> itemsPorEstacion) { this.itemsPorEstacion = itemsPorEstacion; }
 }

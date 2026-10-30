@@ -31,7 +31,8 @@ public class ProductoService {
                         p.getPrecio(),
                         p.getDisponible(),
                         p.getCategoria().getId(),
-                        p.getImagenUrl()))
+                        p.getImagenUrl(),
+                        p.getEstacion()))
                 .collect(Collectors.toList());
     }
 }

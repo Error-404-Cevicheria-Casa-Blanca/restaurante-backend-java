@@ -51,6 +51,21 @@ public class Producto {
         this.imagenUrl = imagenUrl;
     }
 
+    public Estacion getEstacion() {
+        if (categoria == null || categoria.getNombre() == null) {
+            return Estacion.COCINA_CALIENTE;
+        }
+        String catNom = categoria.getNombre().toUpperCase();
+        if (catNom.contains("BEBIDA")) {
+            return Estacion.BEBIDAS;
+        } else if (catNom.contains("POSTRE")) {
+            return Estacion.POSTRES;
+        } else if (catNom.contains("ENTRADA") || (nombre != null && nombre.toUpperCase().contains("CEVICHE"))) {
+            return Estacion.BARRA_FRIA;
+        }
+        return Estacion.COCINA_CALIENTE;
+    }
+
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 

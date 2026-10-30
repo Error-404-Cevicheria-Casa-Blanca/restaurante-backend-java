@@ -12,9 +12,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class PedidoService {
+
+    private static final BigDecimal FACTOR_IGV = new BigDecimal("1.18");
 
     private final PedidoRepository pedidoRepository;
     private final MesaRepository mesaRepository;
@@ -44,19 +48,20 @@ public class PedidoService {
             throw new ConflictoOperacionException("La mesa " + mesa.getNumero() + " no está disponible. Estado actual: " + mesa.getEstado());
         }
 
-        Usuario mozo = null;
-        if (username != null) {
-            try {
-                Integer userId = Integer.parseInt(username);
-                mozo = usuarioRepository.findById(userId).orElse(null);
-            } catch (NumberFormatException ignored) {}
-            if (mozo == null) {
-                mozo = usuarioRepository.findByUsername(username).orElse(null);
-            }
+        if (username == null || username.trim().isEmpty()) {
+            throw new RecursoNoEncontradoException("Usuario no autenticado o sesión inválida");
         }
+
+        Usuario mozo = null;
+        try {
+            Integer userId = Integer.parseInt(username);
+            mozo = usuarioRepository.findById(userId).orElse(null);
+        } catch (NumberFormatException e) {
+            mozo = usuarioRepository.findByUsername(username).orElse(null);
+        }
+
         if (mozo == null) {
-            mozo = usuarioRepository.findAll().stream().findFirst()
-                    .orElseThrow(() -> new RecursoNoEncontradoException("No existe usuario registrado para asociar el pedido"));
+            throw new RecursoNoEncontradoException("Usuario mozo no encontrado con identificador: " + username);
         }
 
         Pedido pedido = new Pedido(mesa, mozo, EstadoPedido.PENDIENTE, BigDecimal.ZERO);
@@ -75,18 +80,24 @@ public class PedidoService {
             }
 
             BigDecimal precioUnitario = producto.getPrecio();
-            BigDecimal subtotal = precioUnitario.multiply(BigDecimal.valueOf(itemReq.getCantidad()))
+            BigDecimal subtotalItem = precioUnitario.multiply(BigDecimal.valueOf(itemReq.getCantidad()))
                     .setScale(2, RoundingMode.HALF_UP);
 
-            DetallePedido detalle = new DetallePedido(producto, precioUnitario, itemReq.getCantidad(), itemReq.getNotas(), subtotal);
+            DetallePedido detalle = new DetallePedido(producto, precioUnitario, itemReq.getCantidad(), itemReq.getNotas(), subtotalItem);
             pedido.agregarDetalle(detalle);
 
-            total = total.add(subtotal);
+            total = total.add(subtotalItem);
         }
 
-        pedido.setTotal(total.setScale(2, RoundingMode.HALF_UP));
+        BigDecimal totalRedondeado = total.setScale(2, RoundingMode.HALF_UP);
+        pedido.setTotal(totalRedondeado);
 
-        // En la misma transacción, cambiar la mesa a OCUPADA
+        // Desglose informativo D13: Precios incluyen IGV (18%)
+        // subtotal = total / 1.18, igv = total - subtotal
+        BigDecimal subtotalNeto = totalRedondeado.divide(FACTOR_IGV, 2, RoundingMode.HALF_UP);
+        BigDecimal igv = totalRedondeado.subtract(subtotalNeto);
+
+        // Cambiar estado de la mesa a OCUPADA
         mesa.setEstado(EstadoMesa.OCUPADA);
         mesaRepository.save(mesa);
 
@@ -97,6 +108,7 @@ public class PedidoService {
                     dp.getId(),
                     dp.getProducto().getId(),
                     dp.getProducto().getNombre(),
+                    dp.getProducto().getEstacion(),
                     dp.getPrecioUnitario(),
                     dp.getCantidad(),
                     dp.getNotas(),
@@ -104,15 +116,21 @@ public class PedidoService {
             ));
         }
 
+        Map<Estacion, List<DetallePedidoResponse>> itemsPorEstacion = detalleResponses.stream()
+                .collect(Collectors.groupingBy(DetallePedidoResponse::getEstacion));
+
         return new PedidoResponse(
                 guardado.getId(),
                 guardado.getMesa().getId(),
                 guardado.getMozo().getId(),
                 guardado.getMozo().getUsername(),
                 guardado.getEstado(),
+                subtotalNeto,
+                igv,
                 guardado.getTotal(),
                 guardado.getFechaCreacion(),
-                detalleResponses
+                detalleResponses,
+                itemsPorEstacion
         );
     }
 }
