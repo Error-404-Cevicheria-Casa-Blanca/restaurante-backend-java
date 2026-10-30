@@ -26,10 +26,16 @@ public class GlobalExceptionHandler {
                 .body(Map.of("mensaje", ex.getMessage()));
     }
 
+    @ExceptionHandler(ConflictoOperacionException.class)
+    public ResponseEntity<Map<String, String>> handleConflicto(ConflictoOperacionException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of("mensaje", ex.getMessage()));
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Map<String, String>> handleAccessDenied(AccessDeniedException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(Map.of("mensaje", "Acceso denegado: solo MOZO o ADMIN pueden realizar esta acción"));
+                .body(Map.of("mensaje", "Acceso denegado: permisos insuficientes"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -45,7 +51,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, String>> handleUnreadable(HttpMessageNotReadableException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("mensaje", "Estado de mesa inválido. Valores permitidos: LIBRE, OCUPADA, ATENDIDA, CUENTA_SOLICITADA"));
+                .body(Map.of("mensaje", "Formato JSON o valor de campo inválido"));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
