@@ -76,6 +76,24 @@ class PedidoServiceTest {
     }
 
     @Test
+    @DisplayName("PRB-20 404: Producto inexistente lanza RecursoNoEncontradoException")
+    void crearPedidoProductoInexistenteLanzaNotFound() {
+        Mesa mesa = new Mesa(1, 1, 4, "Primer piso", EstadoMesa.LIBRE);
+        Usuario mozo = new Usuario(2, "mozo_01", "hash", new Rol("MOZO"));
+
+        when(mesaRepository.findById(1)).thenReturn(Optional.of(mesa));
+        when(usuarioRepository.findById(2)).thenReturn(Optional.of(mozo));
+        when(productoRepository.findById(999)).thenReturn(Optional.empty());
+
+        CrearPedidoRequest req = new CrearPedidoRequest(1,
+                List.of(new ItemPedidoRequest(999, 1, null)));
+
+        assertThrows(RecursoNoEncontradoException.class,
+                () -> pedidoService.registrarPedido(req, "2"));
+        verifyNoInteractions(pedidoRepository);
+    }
+
+    @Test
     @DisplayName("PRB-20 Fallback de Mozo: Subject inexistente lanza RecursoNoEncontradoException sin guardar")
     void mozoInexistenteLanzaNotFoundYNoGuarda() {
         Mesa mesa = new Mesa(1, 1, 4, "Primer piso", EstadoMesa.LIBRE);

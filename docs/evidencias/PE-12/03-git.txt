@@ -1,8 +1,8 @@
  docs/contratos/API-v1.md                           |  71 +++++--
- docs/evidencias/PE-12/01-tests.txt                 | 156 ++++++++++++++++
+ docs/evidencias/PE-12/01-tests.txt                 | 160 ++++++++++++++++
  docs/evidencias/PE-12/02-curl.txt                  | 104 +++++++++++
  docs/evidencias/PE-12/03-git.txt                   |   0
- docs/evidencias/PE-12/CIERRE.md                    |  46 +++++
+ docs/evidencias/PE-12/CIERRE.md                    |  51 ++++++
  .../backend/config/DataInitializer.java            |  29 ++-
  .../backend/controller/CategoriaController.java    |  25 +++
  .../backend/controller/PedidoController.java       |  30 +++
@@ -17,6 +17,7 @@
  .../backend/exception/GlobalExceptionHandler.java  |   6 +
  .../com/lacasablanca/backend/model/Categoria.java  |  32 ++++
  .../lacasablanca/backend/model/DetallePedido.java  |  64 +++++++
+ .../com/lacasablanca/backend/model/Estacion.java   |   8 +
  .../lacasablanca/backend/model/EstadoPedido.java   |   9 +
  .../com/lacasablanca/backend/model/Pedido.java     |  73 ++++++++
  .../com/lacasablanca/backend/model/Producto.java   |  89 +++++++++
@@ -27,6 +28,7 @@
  .../backend/service/CategoriaService.java          |  26 +++
  .../backend/service/PedidoService.java             | 136 ++++++++++++++
  .../backend/service/ProductoService.java           |  38 ++++
+ .../lacasablanca/backend/PedidoRollbackTest.java   |  64 +++++++
  .../backend/controller/PedidoControllerTest.java   | 204 +++++++++++++++++++++
- .../backend/service/PedidoServiceTest.java         | 120 ++++++++++++
- 31 files changed, 1596 insertions(+), 20 deletions(-)
+ .../backend/service/PedidoServiceTest.java         | 138 ++++++++++++++
+ 33 files changed, 1695 insertions(+), 20 deletions(-)

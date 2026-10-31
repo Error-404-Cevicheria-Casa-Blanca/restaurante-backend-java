@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -31,28 +32,33 @@ class PedidoRollbackTest {
     private PedidoRepository pedidoRepository;
 
     @Test
-    @DisplayName("PRB-20 Rollback IT: Fallo en el 2.º detalle hace rollback completo sin dejar pedido ni mesa OCUPADA")
-    void falloEnSegundoDetalleNoDejaPedidoNiMesaOcupada() {
-        // Aseguramos mesa 7 en LIBRE
+    @DisplayName("PRB-20 E3: fallo real al insertar el 2.º detalle revierte la mesa y no deja pedido")
+    void falloEnInsercionDeDetalleHaceRollbackCompleto() {
+        // Mesa 7 en LIBRE
         Mesa mesa = mesaRepository.findById(7).orElseThrow();
         mesa.setEstado(EstadoMesa.LIBRE);
         mesaRepository.save(mesa);
 
         long pedidosAntes = pedidoRepository.count();
 
-        // El segundo item tiene cantidad = 0 que viola la validación del servicio
+        // `notas` excede varchar(255) => DataIntegrityViolationException al insertar el detalle
+        String notasDemasiadoLargas = "x".repeat(300);
+
         CrearPedidoRequest req = new CrearPedidoRequest(7, List.of(
                 new ItemPedidoRequest(1, 1, "ok"),
-                new ItemPedidoRequest(2, 0, "falla por cantidad cero")
+                new ItemPedidoRequest(2, 1, notasDemasiadoLargas)
         ));
 
-        assertThrows(IllegalArgumentException.class, () -> pedidoService.registrarPedido(req, "2"));
+        assertThrows(DataIntegrityViolationException.class,
+                () -> pedidoService.registrarPedido(req, "2"));
 
-        // Verificamos que la mesa NO quedó en OCUPADA (rollback exitoso)
-        Mesa mesaDespues = mesaRepository.findById(7).orElseThrow();
-        assertEquals(EstadoMesa.LIBRE, mesaDespues.getEstado());
+        // El rollback debe devolver la mesa a LIBRE
+        assertEquals(EstadoMesa.LIBRE,
+                mesaRepository.findById(7).orElseThrow().getEstado(),
+                "La mesa debió revertir a LIBRE por el rollback");
 
-        // Verificamos que NO se persistió ningún pedido
-        assertEquals(pedidosAntes, pedidoRepository.count());
+        // No debe quedar ningún pedido persistido
+        assertEquals(pedidosAntes, pedidoRepository.count(),
+                "No debe quedar ningún pedido persistido");
     }
 }

@@ -1,0 +1,57 @@
+=== PRUEBA DE MUTACIÓN DE ROLLBACK TRANSACCIONAL (PedidoRollbackTest) ===
+Fecha: 2026-10-30 22:44:16
+Clase de prueba: com.lacasablanca.backend.PedidoRollbackTest
+Método: falloEnInsercionDeDetalleHaceRollbackCompleto()
+
+================================================================================
+FASE 1: Ejecución con @Transactional COMENTADO en PedidoService.registrarPedido
+Resultado esperado: FALLO (demuestra que sin transacción la mesa queda OCUPADA)
+================================================================================
+
+[INFO] Running com.lacasablanca.backend.PedidoRollbackTest
+2026-10-30T22:43:33.547-05:00  WARN 16444 --- [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 22001, SQLState: 22001
+2026-10-30T22:43:33.548-05:00 ERROR 16444 --- [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : Valor demasiado largo para la columna "NOTAS CHARACTER VARYING(255)": "'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx... (300)"
+Value too long for column "NOTAS CHARACTER VARYING(255)": "'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx... (300)"; SQL statement:
+insert into detalle_pedido (cantidad,notas,pedido_id,precio_unitario,producto_id,subtotal,id) values (?,?,?,?,?,?,default) [22001-232]
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 9.743 s <<< FAILURE! -- in com.lacasablanca.backend.PedidoRollbackTest
+[ERROR] com.lacasablanca.backend.PedidoRollbackTest.falloEnInsercionDeDetalleHaceRollbackCompleto -- Time elapsed: 0.757 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: La mesa debió revertir a LIBRE por el rollback ==> expected: <LIBRE> but was: <OCUPADA>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1156)
+	at com.lacasablanca.backend.PedidoRollbackTest.falloEnInsercionDeDetalleHaceRollbackCompleto(PedidoRollbackTest.java:56)
+
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   PedidoRollbackTest.falloEnInsercionDeDetalleHaceRollbackCompleto:56 La mesa debió revertir a LIBRE por el rollback ==> expected: <LIBRE> but was: <OCUPADA>
+[INFO] 
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+
+================================================================================
+FASE 2: Ejecución con @Transactional RESTAURADO en PedidoService.registrarPedido
+Resultado esperado: ÉXITO (demuestra que la transacción revierte la mesa a LIBRE)
+================================================================================
+
+[INFO] Running com.lacasablanca.backend.PedidoRollbackTest
+2026-10-30T22:44:16.580-05:00  WARN 23948 --- [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 22001, SQLState: 22001
+2026-10-30T22:44:16.581-05:00 ERROR 23948 --- [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : Valor demasiado largo para la columna "NOTAS CHARACTER VARYING(255)": "'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx... (300)"
+Value too long for column "NOTAS CHARACTER VARYING(255)": "'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx... (300)"; SQL statement:
+insert into detalle_pedido (cantidad,notas,pedido_id,precio_unitario,producto_id,subtotal,id) values (?,?,?,?,?,?,default) [22001-232]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.263 s -- in com.lacasablanca.backend.PedidoRollbackTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  16.791 s
+[INFO] Finished at: 2026-10-30T22:44:16-05:00
+[INFO] ------------------------------------------------------------------------

@@ -16,31 +16,36 @@
 - **Persistencia:** No se alteró `db/schema.sql`, evitando riesgos con `ddl-auto: validate`.
 - **Test:** Caso unitario 2 × 48.00 verificado en `PedidoServiceTest` (subtotal 81.36, igv 14.64, total 96.00).
 
-### 2. Prueba Real de Rollback Transaccional y Consulta SQL
-- Creado `PedidoRollbackTest` con `@SpringBootTest` y `@ActiveProfiles("test")`, **sin** `@Transactional` en la clase de test para garantizar que el rollback ocurre en el motor real de base de datos H2/PostgreSQL.
-- Se comprueba que ante fallo en el 2.º detalle:
-  - La mesa permanece en estado `LIBRE`.
-  - El conteo de pedidos en base de datos no se incrementa (permanece en 0).
-- Salida literal y consulta SQL registradas en `docs/evidencias/PE-12/02-curl.txt`.
+### 2. Prueba Real de Rollback Transaccional en Inserción de Detalle (E3)
+- `PedidoRollbackTest` reescrito con `@SpringBootTest` y `@ActiveProfiles("test")`, sin `@Transactional` en la clase de test.
+- El fallo se induce mediante `notas` con longitud de 300 caracteres (excede `VARCHAR(255)` de `detalle_pedido`), ocurriendo estrictamente en la inserción JPA del segundo detalle (`DataIntegrityViolationException`), **después** de que la mesa fue marcada como `OCUPADA`.
+- **Prueba de mutación superada:**
+  - Al comentar `@Transactional` en `PedidoService.registrarPedido`, el test falla (`expected: <LIBRE> but was: <OCUPADA>`).
+  - Al restaurar `@Transactional`, el test pasa exitosamente revirtiendo la mesa a `LIBRE` y dejando el conteo de pedidos en 0.
+- Evidencias en `docs/evidencias/PE-12/05-rollback-mutacion.txt`.
 
-### 3. División por Estaciones de Cocina (RF-08)
+### 3. Cobertura Unitaria de Producto Inexistente (404)
+- Se restauró el test unitario `crearPedidoProductoInexistenteLanzaNotFound` en `PedidoServiceTest.java`.
+- Verifica que ante un producto con ID inexistente se lanza `RecursoNoEncontradoException` y `verifyNoInteractions(pedidoRepository)`.
+
+### 4. División por Estaciones de Cocina (RF-08)
 - Creado enum `Estacion`: `BARRA_FRIA`, `COCINA_CALIENTE`, `BEBIDAS`, `POSTRES`.
 - Mapeado en `Producto` a partir de su categoría sin requerir cambios DDL en PostgreSQL.
 - Expuesto en `ProductoDto`, `DetallePedidoResponse`, y agrupado en `PedidoResponse.items_por_estacion`.
 - Documentado en el contrato `docs/contratos/API-v1.md`.
 
-### 4. Seguridad y Asignación de Mozo
+### 5. Seguridad y Asignación de Mozo
 - Eliminado el fallback silencioso (`findAll().stream().findFirst()`).
 - Si el ID del token JWT no corresponde a un usuario existente, se lanza `RecursoNoEncontradoException`.
 - Test unitario con subject `"9999"` agregado en `PedidoServiceTest` verificando que no se interactúa con `pedidoRepository`.
 
-### 5. Restauración de Mensajes de PRB-17
+### 6. Restauración de Mensajes de PRB-17
 - Se restauraron los mensajes literales en `GlobalExceptionHandler`:
   - `AccessDeniedException`: `"Acceso denegado: solo MOZO o ADMIN pueden realizar esta acción"`
   - `HttpMessageNotReadableException`: `"Estado de mesa inválido. Valores permitidos: LIBRE, OCUPADA, ATENDIDA, CUENTA_SOLICITADA"`
 
-### 6. Suite de Pruebas Automatizadas
+### 7. Suite de Pruebas Automatizadas
 - Aislamiento en tests (`@BeforeEach` en `PedidoControllerTest` limpiando pedidos y liberando mesas).
 - Tests HTTP para 401 sin token en `/categorias` y `/productos`.
 - Tests HTTP para 409 (mesa ocupada) y 404 (producto no encontrado).
-- **Resultado:** **29/29 pruebas en verde (BUILD SUCCESS)**.
+- **Resultado final:** **30/30 pruebas en verde (BUILD SUCCESS)**.
