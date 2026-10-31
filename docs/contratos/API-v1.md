@@ -7,6 +7,7 @@ Leyenda: **[CONFIRMADO]** = escrito en una historia de Jira / verificado en cód
 - Autenticación: header `Authorization: Bearer <jwt>` en todo salvo `/auth/login` **[CONFIRMADO: JWT]**.
 - JSON en snake_case **[CONFIRMADO D5]**.
 - Errores: cuerpo `{"mensaje": "texto legible"}` **[CONFIRMADO]**.
+- Precios e IGV (D13): Los precios en carta **incluyen IGV (18%)**. El backend expone desglose informativo: `subtotal = total / 1.18` e `igv = total - subtotal` calculados con `BigDecimal`, escala 2 y `HALF_UP` **[CONFIRMADO D13]**.
 
 ## POST /api/v1/auth/login  (HU-01)
 Request **[CONFIRMADO D4]**: `{"usuario": "string", "clave": "string"}`
@@ -19,26 +20,70 @@ Request **[CONFIRMADO D4]**: `{"usuario": "string", "clave": "string"}`
 ```json
 [{"id":1,"numero":1,"capacidad":4,"ubicacion":"Primer piso","estado":"LIBRE"}]
 ```
-- `estado` **[CONFIRMADO D2]**: `LIBRE | OCUPADA | ATENDIDA | CUENTA_SOLICITADA` (colores por RF-05: verde, rojo, azul, amarillo).
+- `estado` **[CONFIRMADO D2]**: `LIBRE | OCUPADA | ATENDIDA | CUENTA_SOLICITADA`.
 - 401 sin token **[CONFIRMADO]**.
 
 ## PATCH /api/v1/mesas/{id}/estado  (HU-02)
 Request **[CONFIRMADO]**: `{"estado":"OCUPADA"}` → 200 **[CONFIRMADO]** con la mesa actualizada.
-- Roles permitidos: `MOZO` y `ADMIN` **[CONFIRMADO]** (otros roles reciben 403).
-- 400 estado inválido · 401 sin token · 404 mesa inexistente **[CONFIRMADO]**.
+- Roles permitidos: `MOZO` y `ADMIN` **[CONFIRMADO]**.
+- 400 estado inválido (`{"mensaje": "Estado de mesa inválido. Valores permitidos: LIBRE, OCUPADA, ATENDIDA, CUENTA_SOLICITADA"}`) · 401 sin token · 404 mesa inexistente **[CONFIRMADO]**.
 
-## GET /api/v1/categorias · GET /api/v1/productos  (**sin historia: D6**) **[PROPUESTA]**
+## GET /api/v1/categorias · GET /api/v1/productos  (D6) **[CONFIRMADO]**
+- Protegidos con token JWT (401 sin token) **[CONFIRMADO]**.
+- `GET /api/v1/categorias`: `[{"id":1,"nombre":"Entradas"},{"id":2,"nombre":"Platos de Fondo"},...]`
+- `GET /api/v1/productos` (soporta filtro opcional `?categoria_id=`):
 ```json
-{"id":10,"nombre":"Ceviche Clásico","descripcion":"...","precio":48.00,"disponible":true,"categoria_id":2,"imagen_url":"https://.../x.jpg"}
+[
+  {
+    "id": 1,
+    "nombre": "Ceviche Clásico",
+    "descripcion": "Pescado fresco marinado en limón",
+    "precio": 48.00,
+    "disponible": true,
+    "categoria_id": 2,
+    "imagen_url": "https://lacasablanca.pe/ceviche.jpg",
+    "estacion": "BARRA_FRIA"
+  }
+]
 ```
-Categorías según PE-8: Entradas, Platos de Fondo, Bebidas, Postres. `disponible=false` → la app lo muestra deshabilitado (HU-06, escenario 2 **[CONFIRMADO]**).
+Estaciones operativas (RF-08): `BARRA_FRIA`, `COCINA_CALIENTE`, `BEBIDAS`, `POSTRES` **[CONFIRMADO]**.
 
-## POST /api/v1/pedidos  (HU-04)
-Request **[CONFIRMADO en forma, nombres de lista PROPUESTA]**:
+## POST /api/v1/pedidos  (HU-04 / PRB-20) **[CONFIRMADO]**
+Request:
 ```json
-{"mesa_id":7,"items":[{"producto_id":10,"cantidad":2,"notas":"sin picante"}]}
+{"mesa_id":7,"items":[{"producto_id":1,"cantidad":2,"notas":"sin picante"}]}
 ```
-- 201 **[CONFIRMADO]**: id del pedido, detalle consolidado y total calculado por el backend; estado `PENDIENTE`.
-- 400 **[CONFIRMADO]**: lista vacía o cantidad < 1, mensajes de Bean Validation.
-- Fallo en un detalle → rollback completo **[CONFIRMADO]**.
-- Mesa no libre → 409 **[PROPUESTA]**.
+- 201 **[CONFIRMADO]**: Registro transaccional `@Transactional`. La mesa pasa automáticamente a `OCUPADA`. Precio unitario copiado de la base de datos con cálculo `BigDecimal` (escala 2, `HALF_UP`).
+Respuesta:
+```json
+{
+  "id": 1,
+  "mesa_id": 7,
+  "mozo_id": 2,
+  "mozo_nombre": "mozo_01",
+  "estado": "PENDIENTE",
+  "subtotal": 81.36,
+  "igv": 14.64,
+  "total": 96.00,
+  "fecha_creacion": "2026-10-30T01:18:17",
+  "items": [
+    {
+      "id": 1,
+      "producto_id": 1,
+      "producto_nombre": "Ceviche Clásico",
+      "estacion": "BARRA_FRIA",
+      "precio_unitario": 48.00,
+      "cantidad": 2,
+      "notas": "sin picante",
+      "subtotal": 96.00
+    }
+  ],
+  "items_por_estacion": {
+    "BARRA_FRIA": [ ... ]
+  }
+}
+```
+- 400 **[CONFIRMADO]**: Lista de items vacía o cantidad < 1.
+- 404 **[CONFIRMADO]**: Mesa, producto o mozo no encontrado.
+- 409 **[CONFIRMADO]**: Mesa no disponible (ya está `OCUPADA` o `CUENTA_SOLICITADA`) o producto no disponible (`disponible=false`).
+- Fallo en un detalle → Rollback completo `@Transactional` (la mesa permanece en `LIBRE` y no se persiste el pedido) **[CONFIRMADO]**.
