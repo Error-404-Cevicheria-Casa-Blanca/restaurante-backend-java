@@ -1,0 +1,6 @@
+ docs/contratos/API-v1.md                           | 16 ++++-
+ .../backend/repository/MesaRepository.java         | 11 +++
+ .../lacasablanca/backend/service/MesaService.java  | 46 +++++++++++-
+ .../backend/controller/MesaControllerTest.java     | 84 +++++++++++++++++++++-
+ .../backend/service/MesaServiceTest.java           | 81 +++++++++++++++++++--
+ 5 files changed, 227 insertions(+), 11 deletions(-)

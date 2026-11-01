@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lacasablanca.backend.dto.EstadoMesaRequest;
 import com.lacasablanca.backend.dto.LoginRequest;
 import com.lacasablanca.backend.model.EstadoMesa;
+import com.lacasablanca.backend.model.Mesa;
+import com.lacasablanca.backend.repository.MesaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,11 +33,31 @@ class MesaControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private MesaRepository mesaRepository;
+
     private String tokenMozo;
     private String tokenCocinero;
 
     @BeforeEach
-    void obtenerTokens() throws Exception {
+    void prepararDatosYTokens() throws Exception {
+        // Aseguramos estados iniciales limpios para aislamiento de pruebas
+        Mesa mesa1 = mesaRepository.findById(1).orElse(null);
+        if (mesa1 != null) {
+            mesa1.setEstado(EstadoMesa.LIBRE);
+            mesaRepository.save(mesa1);
+        }
+        Mesa mesa2 = mesaRepository.findById(2).orElse(null);
+        if (mesa2 != null) {
+            mesa2.setEstado(EstadoMesa.LIBRE);
+            mesaRepository.save(mesa2);
+        }
+        Mesa mesa3 = mesaRepository.findById(3).orElse(null);
+        if (mesa3 != null) {
+            mesa3.setEstado(EstadoMesa.OCUPADA);
+            mesaRepository.save(mesa3);
+        }
+
         LoginRequest reqMozo = new LoginRequest("mozo_01", "password123");
         MvcResult resMozo = mockMvc.perform(post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -91,6 +113,62 @@ class MesaControllerTest {
     }
 
     @Test
+    @DisplayName("PRB-40 Transición Válida: ATENDIDA -> LIBRE (cancelación o liberación PRB-39) retorna 200 OK")
+    void transicionAtendidaALibreRetorna200() throws Exception {
+        // Ponemos mesa 2 en ATENDIDA
+        mockMvc.perform(patch("/api/v1/mesas/2/estado")
+                .header("Authorization", "Bearer " + tokenMozo)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new EstadoMesaRequest(EstadoMesa.ATENDIDA))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("ATENDIDA"));
+
+        // Liberamos la mesa a LIBRE
+        mockMvc.perform(patch("/api/v1/mesas/2/estado")
+                .header("Authorization", "Bearer " + tokenMozo)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new EstadoMesaRequest(EstadoMesa.LIBRE))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("LIBRE"));
+    }
+
+    @Test
+    @DisplayName("PRB-40 Conflicto 409: Intentar abrir mesa ya OCUPADA retorna 409 Conflict")
+    void abrirMesaYaOcupadaRetorna409() throws Exception {
+        EstadoMesaRequest req = new EstadoMesaRequest(EstadoMesa.ATENDIDA);
+        mockMvc.perform(patch("/api/v1/mesas/3/estado")
+                .header("Authorization", "Bearer " + tokenMozo)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.mensaje").value("La mesa 3 no está disponible. Estado actual: OCUPADA"));
+    }
+
+    @Test
+    @DisplayName("PRB-40 Conflicto 409: Transición inválida de LIBRE a CUENTA_SOLICITADA retorna 409 Conflict")
+    void transicionInvalidaRetorna409() throws Exception {
+        EstadoMesaRequest req = new EstadoMesaRequest(EstadoMesa.CUENTA_SOLICITADA);
+        mockMvc.perform(patch("/api/v1/mesas/1/estado")
+                .header("Authorization", "Bearer " + tokenMozo)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.mensaje").exists());
+    }
+
+    @Test
+    @DisplayName("PRB-40 Conflicto 409: Enviar mismo estado a mesa ya OCUPADA retorna 409 Conflict")
+    void mismoEstadoRetorna409() throws Exception {
+        EstadoMesaRequest req = new EstadoMesaRequest(EstadoMesa.OCUPADA);
+        mockMvc.perform(patch("/api/v1/mesas/3/estado")
+                .header("Authorization", "Bearer " + tokenMozo)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.mensaje").value("La mesa 3 ya se encuentra en estado OCUPADA"));
+    }
+
+    @Test
     @DisplayName("PE-10 E3: Petición sin token JWT a /api/v1/mesas retorna 401 Unauthorized")
     void accesoSinTokenRechazado() throws Exception {
         mockMvc.perform(get("/api/v1/mesas"))
@@ -99,7 +177,7 @@ class MesaControllerTest {
     }
 
     @Test
-    @DisplayName("PE-10 Validación 400: Estado inválido (ej. EN_ATENCION) retorna 400 Bad Request con {mensaje}")
+    @DisplayName("PE-10 Validacion 400: Estado inválido (ej. EN_ATENCION) retorna 400 Bad Request con {mensaje}")
     void cambiarEstadoInvalidoRetorna400() throws Exception {
         mockMvc.perform(patch("/api/v1/mesas/1/estado")
                 .header("Authorization", "Bearer " + tokenMozo)
@@ -110,7 +188,7 @@ class MesaControllerTest {
     }
 
     @Test
-    @DisplayName("PE-10 Validación 404: Mesa inexistente retorna 404 Not Found con {mensaje}")
+    @DisplayName("PE-10 Validacion 404: Mesa inexistente retorna 404 Not Found con {mensaje}")
     void cambiarEstadoMesaInexistenteRetorna404() throws Exception {
         EstadoMesaRequest req = new EstadoMesaRequest(EstadoMesa.OCUPADA);
         mockMvc.perform(patch("/api/v1/mesas/999/estado")

@@ -1,0 +1,62 @@
+=== 1. Login para obtener token JWT ===
+$ curl -i -X POST http://localhost:8080/api/v1/auth/login -H "Content-Type: application/json" -d '{"username":"mozo_01","password":"password123"}'
+HTTP/1.1 200 
+Content-Type: application/json
+
+{"token":"<jwt>","usuario":"mozo_01","rol":"MOZO"}
+
+=== 2. PATCH /api/v1/mesas/1/estado (HTTP 200 OK - Transición válida LIBRE -> ATENDIDA) ===
+$ curl -i -X PATCH http://localhost:8080/api/v1/mesas/1/estado -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"estado":"ATENDIDA"}'
+HTTP/1.1 200 
+Content-Type: application/json
+
+{"id":1,"numero":1,"capacidad":4,"ubicacion":"Primer piso","estado":"ATENDIDA"}
+
+=== 3. PATCH /api/v1/mesas/1/estado (HTTP 200 OK - Transición válida ATENDIDA -> OCUPADA al confirmar comanda) ===
+$ curl -i -X PATCH http://localhost:8080/api/v1/mesas/1/estado -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"estado":"OCUPADA"}'
+HTTP/1.1 200 
+Content-Type: application/json
+
+{"id":1,"numero":1,"capacidad":4,"ubicacion":"Primer piso","estado":"OCUPADA"}
+
+=== 4. PATCH /api/v1/mesas/1/estado (HTTP 409 Conflict - Intentar abrir mesa ya OCUPADA por otra tablet) ===
+$ curl -i -X PATCH http://localhost:8080/api/v1/mesas/1/estado -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"estado":"ATENDIDA"}'
+HTTP/1.1 409 
+Content-Type: application/json
+
+{"mensaje":"La mesa 1 no está disponible. Estado actual: OCUPADA"}
+
+=== 5. PATCH /api/v1/mesas/2/estado (HTTP 409 Conflict - Transición no permitida de LIBRE a CUENTA_SOLICITADA) ===
+$ curl -i -X PATCH http://localhost:8080/api/v1/mesas/2/estado -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"estado":"CUENTA_SOLICITADA"}'
+HTTP/1.1 409 
+Content-Type: application/json
+
+{"mensaje":"Transición de estado no permitida: de LIBRE a CUENTA_SOLICITADA para la mesa 2"}
+
+=== 6. PATCH /api/v1/mesas/1/estado (HTTP 409 Conflict - Mismo estado ya establecido) ===
+$ curl -i -X PATCH http://localhost:8080/api/v1/mesas/1/estado -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"estado":"OCUPADA"}'
+HTTP/1.1 409 
+Content-Type: application/json
+
+{"mensaje":"La mesa 1 ya se encuentra en estado OCUPADA"}
+
+=== 7. PATCH /api/v1/mesas/2/estado (HTTP 200 OK - Liberación de mesa ATENDIDA -> LIBRE, PRB-39 / D11) ===
+$ curl -i -X PATCH http://localhost:8080/api/v1/mesas/2/estado -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"estado":"LIBRE"}'
+HTTP/1.1 200 
+Content-Type: application/json
+
+{"id":2,"numero":2,"capacidad":2,"ubicacion":"Primer piso","estado":"LIBRE"}
+
+=== 8. PATCH /api/v1/mesas/1/estado sin token (HTTP 401 Unauthorized) ===
+$ curl -i -X PATCH http://localhost:8080/api/v1/mesas/1/estado -H "Content-Type: application/json" -d '{"estado":"OCUPADA"}'
+HTTP/1.1 401 
+Content-Type: application/json
+
+{"mensaje":"Acceso denegado: token no proporcionado o inválido"}
+
+=== 9. PATCH /api/v1/mesas/1/estado con estado inválido (HTTP 400 Bad Request) ===
+$ curl -i -X PATCH http://localhost:8080/api/v1/mesas/1/estado -H "Authorization: Bearer <jwt>" -H "Content-Type: application/json" -d '{"estado":"EN_ATENCION"}'
+HTTP/1.1 400 
+Content-Type: application/json
+
+{"mensaje":"Estado de mesa inválido. Valores permitidos: LIBRE, OCUPADA, ATENDIDA, CUENTA_SOLICITADA"}

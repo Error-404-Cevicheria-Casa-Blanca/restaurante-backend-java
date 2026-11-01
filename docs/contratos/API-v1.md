@@ -23,10 +23,22 @@ Request **[CONFIRMADO D4]**: `{"usuario": "string", "clave": "string"}`
 - `estado` **[CONFIRMADO D2]**: `LIBRE | OCUPADA | ATENDIDA | CUENTA_SOLICITADA`.
 - 401 sin token **[CONFIRMADO]**.
 
-## PATCH /api/v1/mesas/{id}/estado  (HU-02)
+## PATCH /api/v1/mesas/{id}/estado  (HU-02 / PRB-40)
 Request **[CONFIRMADO]**: `{"estado":"OCUPADA"}` → 200 **[CONFIRMADO]** con la mesa actualizada.
 - Roles permitidos: `MOZO` y `ADMIN` **[CONFIRMADO]**.
-- 400 estado inválido (`{"mensaje": "Estado de mesa inválido. Valores permitidos: LIBRE, OCUPADA, ATENDIDA, CUENTA_SOLICITADA"}`) · 401 sin token · 404 mesa inexistente **[CONFIRMADO]**.
+- **Máquina de Estados de Mesa (PRB-40)**:
+  * `LIBRE` → `ATENDIDA` (mozo abre comanda), `OCUPADA` (pedido directo).
+  * `ATENDIDA` → `LIBRE` (cancelación o liberación PRB-39), `OCUPADA` (confirmación de comanda).
+  * `OCUPADA` → `CUENTA_SOLICITADA` (cliente pide la cuenta), `LIBRE` (liberación administrativa).
+  * `CUENTA_SOLICITADA` → `LIBRE` (cobro y liberación), `OCUPADA` (cliente reanuda pedido).
+- 400 estado inválido (`{"mensaje": "Estado de mesa inválido. Valores permitidos: LIBRE, OCUPADA, ATENDIDA, CUENTA_SOLICITADA"}`).
+- 401 sin token.
+- 404 mesa inexistente (`{"mensaje": "Mesa no encontrada con ID: X"}`).
+- 409 Conflicto **[CONFIRMADO PRB-40]**:
+  * Mesa no disponible (ya tomada por otro mozo): `{"mensaje": "La mesa X no está disponible. Estado actual: Y"}`.
+  * Transición no permitida por máquina de estados: `{"mensaje": "Transición de estado no permitida: de X a Y para la mesa Z"}`.
+  * Reintento de mismo estado: `{"mensaje": "La mesa X ya se encuentra en estado Y"}`.
+  * Concurrencia optimista atómica (D7 DDL Ownership): `{"mensaje": "Conflicto de concurrencia: la mesa X cambió a estado Y por otra operación"}`.
 
 ## GET /api/v1/categorias · GET /api/v1/productos  (D6) **[CONFIRMADO]**
 - Protegidos con token JWT (401 sin token) **[CONFIRMADO]**.
