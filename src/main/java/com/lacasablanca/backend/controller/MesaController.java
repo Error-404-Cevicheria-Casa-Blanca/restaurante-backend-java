@@ -6,6 +6,7 @@ import com.lacasablanca.backend.service.MesaService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +30,9 @@ public class MesaController {
     @PatchMapping("/{id}/estado")
     @PreAuthorize("hasAnyRole('MOZO', 'ADMIN')")
     public ResponseEntity<MesaDto> cambiarEstado(@PathVariable Integer id,
-                                                 @Valid @RequestBody EstadoMesaRequest request) {
-        return ResponseEntity.ok(mesaService.actualizarEstado(id, request.getEstado()));
+                                                 @Valid @RequestBody EstadoMesaRequest request,
+                                                 Authentication authentication) {
+        String identificador = (authentication != null) ? authentication.getName() : null;
+        return ResponseEntity.ok(mesaService.actualizarEstado(id, request.getEstado(), identificador));
     }
 }

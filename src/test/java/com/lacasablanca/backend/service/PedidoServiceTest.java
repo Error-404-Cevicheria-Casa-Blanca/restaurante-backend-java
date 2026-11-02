@@ -40,6 +40,9 @@ class PedidoServiceTest {
     @Mock
     private ProductoRepository productoRepository;
 
+    @Mock
+    private MesaService mesaService;
+
     @InjectMocks
     private PedidoService pedidoService;
 
@@ -69,10 +72,9 @@ class PedidoServiceTest {
         assertEquals(new BigDecimal("81.36"), res.getSubtotal());
         assertEquals(new BigDecimal("14.64"), res.getIgv());
         assertEquals(EstadoPedido.PENDIENTE, res.getEstado());
-        assertEquals(EstadoMesa.OCUPADA, mesa.getEstado());
         assertNotNull(res.getItemsPorEstacion());
         assertTrue(res.getItemsPorEstacion().containsKey(Estacion.BARRA_FRIA));
-        verify(mesaRepository).save(mesa);
+        verify(mesaService).actualizarEstado(1, EstadoMesa.OCUPADA, "2");
     }
 
     @Test

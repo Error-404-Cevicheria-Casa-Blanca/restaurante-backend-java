@@ -1,0 +1,16 @@
+ docs/contratos/API-v1.md                           |  23 ++-
+ docs/evidencias/PRB-40/01-tests.txt                | 165 ++++++++++++++++
+ docs/evidencias/PRB-40/02-curl.txt                 | 213 +++++++++++++++++++++
+ docs/evidencias/PRB-40/03-git.txt                  |   6 +
+ docs/evidencias/PRB-40/CIERRE.md                   |  69 +++++++
+ .../backend/controller/MesaController.java         |   7 +-
+ .../java/com/lacasablanca/backend/model/Mesa.java  |  20 ++
+ .../backend/repository/MesaRepository.java         |  15 ++
+ .../lacasablanca/backend/service/MesaService.java  |  92 ++++++++-
+ .../backend/service/PedidoService.java             |  10 +-
+ .../lacasablanca/backend/MesaConcurrenciaTest.java |  79 ++++++++
+ .../backend/controller/MesaControllerTest.java     | 117 ++++++++++-
+ .../backend/service/MesaServiceTest.java           | 121 +++++++++++-
+ .../backend/service/PedidoServiceTest.java         |   6 +-
+ src/test/resources/application-test.yml            |   4 +-
+ 15 files changed, 920 insertions(+), 27 deletions(-)

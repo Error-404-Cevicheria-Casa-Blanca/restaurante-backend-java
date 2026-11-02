@@ -24,15 +24,18 @@ public class PedidoService {
     private final MesaRepository mesaRepository;
     private final UsuarioRepository usuarioRepository;
     private final ProductoRepository productoRepository;
+    private final MesaService mesaService;
 
     public PedidoService(PedidoRepository pedidoRepository,
                          MesaRepository mesaRepository,
                          UsuarioRepository usuarioRepository,
-                         ProductoRepository productoRepository) {
+                         ProductoRepository productoRepository,
+                         MesaService mesaService) {
         this.pedidoRepository = pedidoRepository;
         this.mesaRepository = mesaRepository;
         this.usuarioRepository = usuarioRepository;
         this.productoRepository = productoRepository;
+        this.mesaService = mesaService;
     }
 
     @Transactional
@@ -97,9 +100,8 @@ public class PedidoService {
         BigDecimal subtotalNeto = totalRedondeado.divide(FACTOR_IGV, 2, RoundingMode.HALF_UP);
         BigDecimal igv = totalRedondeado.subtract(subtotalNeto);
 
-        // Cambiar estado de la mesa a OCUPADA
-        mesa.setEstado(EstadoMesa.OCUPADA);
-        mesaRepository.save(mesa);
+        // Transición de estado mediante máquina de estados y bloqueo optimista (PRB-40)
+        mesaService.actualizarEstado(mesa.getId(), EstadoMesa.OCUPADA, username);
 
         Pedido guardado = pedidoRepository.save(pedido);
 
