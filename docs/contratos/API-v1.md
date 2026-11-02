@@ -37,8 +37,15 @@ Request **[CONFIRMADO]**: `{"estado":"OCUPADA"}` → 200 **[CONFIRMADO]** con la
 - 409 Conflicto **[CONFIRMADO PRB-40]**:
   * Mesa no disponible (ya tomada por otro mozo): `{"mensaje": "La mesa X no está disponible. Estado actual: Y"}`.
   * Transición no permitida por máquina de estados: `{"mensaje": "Transición de estado no permitida: de X a Y para la mesa Z"}`.
-  * Reintento de mismo estado: `{"mensaje": "La mesa X ya se encuentra en estado Y"}`.
+  * Reintento de mismo estado en ATENDIDA u OCUPADA: `{"mensaje": "La mesa X ya se encuentra en estado Y"}`.
   * Concurrencia optimista atómica (D7 DDL Ownership): `{"mensaje": "Conflicto de concurrencia: la mesa X cambió a estado Y por otra operación"}`.
+- **Idempotencia (PRB-40)**:
+  * Reintentar `LIBRE` sobre mesa en `LIBRE` o `CUENTA_SOLICITADA` sobre mesa en `CUENTA_SOLICITADA` es un no-op idempotente y retorna 200 OK.
+  * Reintentar `ATENDIDA` o `OCUPADA` sobre una mesa ya tomada retorna 409 Conflict para evitar que un segundo mozo entre.
+- **Auditoría interna de mesa (PRB-40)**:
+  * Al pasar de `LIBRE` a `ATENDIDA` u `OCUPADA`, el backend vincula `mozo_id` (a partir del subject del JWT) y registra `fecha_apertura = NOW()`.
+  * Al pasar a `LIBRE`, se registra `fecha_cierre = NOW()`.
+  * Por diseño de contrato y para preservar la compatibilidad estricta con la app Android, estos campos se gestionan en base de datos y no se exponen en el DTO de `GET /api/v1/mesas` ni en `MesaDto`.
 
 ## GET /api/v1/categorias · GET /api/v1/productos  (D6) **[CONFIRMADO]**
 - Protegidos con token JWT (401 sin token) **[CONFIRMADO]**.

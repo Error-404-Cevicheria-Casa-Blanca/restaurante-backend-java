@@ -1,6 +1,7 @@
 package com.lacasablanca.backend.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "mesa")
@@ -22,6 +23,16 @@ public class Mesa {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private EstadoMesa estado = EstadoMesa.LIBRE;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "mozo_id")
+    private Usuario mozo;
+
+    @Column(name = "fecha_apertura")
+    private LocalDateTime fechaApertura;
+
+    @Column(name = "fecha_cierre")
+    private LocalDateTime fechaCierre;
 
     public Mesa() {}
 
@@ -54,4 +65,13 @@ public class Mesa {
 
     public EstadoMesa getEstado() { return estado; }
     public void setEstado(EstadoMesa estado) { this.estado = estado; }
+
+    public Usuario getMozo() { return mozo; }
+    public void setMozo(Usuario mozo) { this.mozo = mozo; }
+
+    public LocalDateTime getFechaApertura() { return fechaApertura; }
+    public void setFechaApertura(LocalDateTime fechaApertura) { this.fechaApertura = fechaApertura; }
+
+    public LocalDateTime getFechaCierre() { return fechaCierre; }
+    public void setFechaCierre(LocalDateTime fechaCierre) { this.fechaCierre = fechaCierre; }
 }

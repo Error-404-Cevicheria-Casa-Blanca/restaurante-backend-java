@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MesaRepository extends JpaRepository<Mesa, Integer> {
     List<Mesa> findAllByOrderByNumeroAsc();
@@ -17,4 +18,7 @@ public interface MesaRepository extends JpaRepository<Mesa, Integer> {
     int actualizarEstadoCondicional(@Param("id") Integer id,
                                    @Param("nuevoEstado") EstadoMesa nuevoEstado,
                                    @Param("estadoEsperado") EstadoMesa estadoEsperado);
+
+    @Query("SELECT m.estado FROM Mesa m WHERE m.id = :id")
+    Optional<EstadoMesa> findEstadoById(@Param("id") Integer id);
 }
