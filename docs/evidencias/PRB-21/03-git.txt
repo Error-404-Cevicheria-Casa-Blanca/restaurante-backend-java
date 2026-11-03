@@ -1,0 +1,9 @@
+ docs/evidencias/PRB-21/01-tests.txt                | 15575 +++++++++++++++++++
+ docs/evidencias/PRB-21/02-cobertura.txt            |    17 +
+ docs/evidencias/PRB-21/CIERRE.md                   |    66 +
+ .../backend/FlujoRestauranteIntegrationTest.java   |   224 +
+ .../controller/CategoriaControllerTest.java        |    68 +
+ .../backend/controller/ProductoControllerTest.java |   100 +
+ .../backend/service/CategoriaServiceTest.java      |    46 +
+ .../backend/service/ProductoServiceTest.java       |    69 +
+ 8 files changed, 16165 insertions(+)
