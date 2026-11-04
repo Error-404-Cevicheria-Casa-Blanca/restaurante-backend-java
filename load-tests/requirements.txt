@@ -1,0 +1,2 @@
+# Dependencias para pruebas de carga y estrés (PRB-25)
+locust==2.47.0

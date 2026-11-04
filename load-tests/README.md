@@ -28,9 +28,9 @@ El script `locustfile.py` modela el ciclo de vida real de un mozo autenticado:
 ## 4. Instrucciones de Ejecución
 
 ### Prerrequisitos
-- Python 3.10+ con Locust instalado:
+- Python 3.10+ con dependencias instaladas:
   ```bash
-  pip install locust
+  pip install -r load-tests/requirements.txt
   ```
 - Backend Spring Boot levantado en `http://localhost:8080`.
 
