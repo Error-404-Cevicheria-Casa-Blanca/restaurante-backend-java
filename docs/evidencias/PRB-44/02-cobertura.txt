@@ -1,0 +1,17 @@
+==================================================
+REPORTE DE COBERTURA DE CÓDIGO (JACOCO 0.8.12)
+==================================================
+Proyecto: restaurante-backend-java
+Tarea: PRB-44 (Prueba de integración de conflicto 409 en mesas)
+Fecha: 2026-11-04
+
+MÉTRICAS GLOBALES:
+--------------------------------------------------
+- Cobertura de Instrucciones: 84.43% (2228/2639)
+- Cobertura de Líneas:        85.13% (578/679)
+- Cobertura de Ramas:         74.17% (89/120)
+
+CRITERIO DE CALIDAD:
+- Umbral mínimo exigido: > 70.00%
+- Estado Quality Gate:   PASSED (Superado con 85.13%)
+==================================================
