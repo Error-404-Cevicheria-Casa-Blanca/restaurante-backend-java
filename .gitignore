@@ -44,3 +44,9 @@ application-local.properties
 iniciar-backend.ps1
 iniciar_backend.bat
 
+### Python (Load Tests) ###
+__pycache__/
+*.py[cod]
+*$py.class
+
+
