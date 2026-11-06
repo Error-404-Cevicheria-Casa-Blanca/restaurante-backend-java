@@ -32,11 +32,32 @@ public class Pedido {
     @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fechaCreacion = LocalDateTime.now();
 
+    @Column(name = "client_request_id", unique = true, length = 64)
+    private String clientRequestId;
+
+    @Column(name = "motivo_anulacion", length = 255)
+    private String motivoAnulacion;
+
+    @Column(name = "tipo_pedido", length = 30)
+    private String tipoPedido = "SALON";
+
+    @Column(name = "cliente_nombre", length = 120)
+    private String clienteNombre;
+
+    @Column(name = "version")
+    private Integer version = 1;
+
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetallePedido> detalles = new ArrayList<>();
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pago> pagos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EventoPedido> eventos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TrabajoImpresion> impresiones = new ArrayList<>();
 
     public Pedido() {}
 
@@ -73,4 +94,60 @@ public class Pedido {
 
     public List<DetallePedido> getDetalles() { return detalles; }
     public void setDetalles(List<DetallePedido> detalles) { this.detalles = detalles; }
+
+    public String getClientRequestId() {
+        return clientRequestId;
+    }
+
+    public void setClientRequestId(String clientRequestId) {
+        this.clientRequestId = clientRequestId;
+    }
+
+    public String getMotivoAnulacion() {
+        return motivoAnulacion;
+    }
+
+    public void setMotivoAnulacion(String motivoAnulacion) {
+        this.motivoAnulacion = motivoAnulacion;
+    }
+
+    public String getTipoPedido() {
+        return tipoPedido;
+    }
+
+    public void setTipoPedido(String tipoPedido) {
+        this.tipoPedido = tipoPedido;
+    }
+
+    public String getClienteNombre() {
+        return clienteNombre;
+    }
+
+    public void setClienteNombre(String clienteNombre) {
+        this.clienteNombre = clienteNombre;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public List<EventoPedido> getEventos() {
+        return eventos;
+    }
+
+    public void setEventos(List<EventoPedido> eventos) {
+        this.eventos = eventos;
+    }
+
+    public List<TrabajoImpresion> getImpresiones() {
+        return impresiones;
+    }
+
+    public void setImpresiones(List<TrabajoImpresion> impresiones) {
+        this.impresiones = impresiones;
+    }
 }

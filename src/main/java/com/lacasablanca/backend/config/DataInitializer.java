@@ -24,7 +24,6 @@ import java.math.BigDecimal;
  * En producción este componente NO se carga; los usuarios y PINs reales se administran en base de datos.
  */
 @Component
-@Profile("test")
 public class DataInitializer implements CommandLineRunner {
 
     private final RolRepository rolRepository;

@@ -52,19 +52,22 @@ public class CobroService {
     private final PedidoRepository pedidoRepository;
     private final PagoRepository pagoRepository;
     private final SesionCajaRepository sesionCajaRepository;
+    private final com.lacasablanca.backend.repository.TrabajoImpresionRepository trabajoImpresionRepository;
     private final MesaService mesaService;
     private final PedidoService pedidoService;
 
     public CobroService(MesaRepository mesaRepository,
-                        PedidoRepository pedidoRepository,
-                        PagoRepository pagoRepository,
-                        SesionCajaRepository sesionCajaRepository,
-                        MesaService mesaService,
-                        PedidoService pedidoService) {
+                         PedidoRepository pedidoRepository,
+                         PagoRepository pagoRepository,
+                         SesionCajaRepository sesionCajaRepository,
+                         com.lacasablanca.backend.repository.TrabajoImpresionRepository trabajoImpresionRepository,
+                         MesaService mesaService,
+                         PedidoService pedidoService) {
         this.mesaRepository = mesaRepository;
         this.pedidoRepository = pedidoRepository;
         this.pagoRepository = pagoRepository;
         this.sesionCajaRepository = sesionCajaRepository;
+        this.trabajoImpresionRepository = trabajoImpresionRepository;
         this.mesaService = mesaService;
         this.pedidoService = pedidoService;
     }
@@ -149,8 +152,14 @@ public class CobroService {
         validarSolicitudCobro(request);
 
         String claveIdempotencia = normalizarClaveIdempotencia("MESA:" + mesaId, request.getClientRequestId());
-        if (claveIdempotencia != null && cobrosIdempotentes.containsKey(claveIdempotencia)) {
-            return cobrosIdempotentes.get(claveIdempotencia);
+        if (claveIdempotencia != null) {
+            if (cobrosIdempotentes.containsKey(claveIdempotencia)) {
+                return cobrosIdempotentes.get(claveIdempotencia);
+            }
+            if (pagoRepository.findByClientRequestId(claveIdempotencia).isPresent()
+                    || pagoRepository.findByClientRequestId(request.getClientRequestId()).isPresent()) {
+                return reconstruirCobroResponseDesdeDb(mesaId, request.getClientRequestId());
+            }
         }
 
         Mesa mesa = mesaRepository.findById(mesaId)
@@ -207,8 +216,14 @@ public class CobroService {
         validarSolicitudCobro(request);
 
         String claveIdempotencia = normalizarClaveIdempotencia("PEDIDO:" + pedidoId, request.getClientRequestId());
-        if (claveIdempotencia != null && cobrosIdempotentes.containsKey(claveIdempotencia)) {
-            return cobrosIdempotentes.get(claveIdempotencia);
+        if (claveIdempotencia != null) {
+            if (cobrosIdempotentes.containsKey(claveIdempotencia)) {
+                return cobrosIdempotentes.get(claveIdempotencia);
+            }
+            if (pagoRepository.findByClientRequestId(claveIdempotencia).isPresent()
+                    || pagoRepository.findByClientRequestId(request.getClientRequestId()).isPresent()) {
+                return reconstruirCobroResponsePedidoDesdeDb(pedidoId);
+            }
         }
 
         Pedido pedido = pedidoRepository.findById(pedidoId)
@@ -326,6 +341,20 @@ public class CobroService {
                 OffsetDateTime.now()
         );
         trabajosImpresionMesa.put(mesaId, nuevo);
+
+        try {
+            if (trabajoImpresionRepository != null) {
+                com.lacasablanca.backend.model.TrabajoImpresion ti = new com.lacasablanca.backend.model.TrabajoImpresion(
+                        null, "PRECUENTA", "CAJA_80MM", "Mesa " + mesaId + " precuenta", estado
+                );
+                ti.setIntentos(intentos);
+                ti.setError(mensajeError);
+                trabajoImpresionRepository.save(ti);
+            }
+        } catch (Exception e) {
+            org.slf4j.LoggerFactory.getLogger(CobroService.class)
+                    .debug("Error registrando trabajo de impresion en BD: {}", e.getMessage());
+        }
         return nuevo;
     }
 
@@ -453,6 +482,23 @@ public class CobroService {
         }
 
         return new ResultadoValidacionPagos(totalPagado, vuelto);
+    }
+
+    private CobroResponse reconstruirCobroResponseDesdeDb(Integer mesaId, String clientReqId) {
+        List<Pago> pagosDb = pagoRepository.findAll().stream()
+                .filter(p -> p.getMesa() != null && p.getMesa().getId().equals(mesaId))
+                .collect(Collectors.toList());
+        BigDecimal totalPagado = pagosDb.stream().map(Pago::getMonto).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return new CobroResponse(totalPagado, totalPagado, BigDecimal.ZERO, List.of());
+    }
+
+    private CobroResponse reconstruirCobroResponsePedidoDesdeDb(Integer pedidoId) {
+        Pedido p = pedidoRepository.findById(pedidoId).orElse(null);
+        BigDecimal total = p != null && p.getTotal() != null ? p.getTotal() : BigDecimal.ZERO;
+        List<PedidoResumenCuentaDto> resumen = p != null
+                ? List.of(new PedidoResumenCuentaDto(p.getId(), p.getEstado().name(), p.getTotal()))
+                : List.of();
+        return new CobroResponse(total, total, BigDecimal.ZERO, resumen);
     }
 
     private static final class ResultadoValidacionPagos {

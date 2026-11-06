@@ -56,17 +56,20 @@ public class PedidoService {
     private final MesaRepository mesaRepository;
     private final UsuarioRepository usuarioRepository;
     private final ProductoRepository productoRepository;
+    private final com.lacasablanca.backend.repository.EventoPedidoRepository eventoPedidoRepository;
     private final MesaService mesaService;
 
     public PedidoService(PedidoRepository pedidoRepository,
                          MesaRepository mesaRepository,
                          UsuarioRepository usuarioRepository,
                          ProductoRepository productoRepository,
+                         com.lacasablanca.backend.repository.EventoPedidoRepository eventoPedidoRepository,
                          MesaService mesaService) {
         this.pedidoRepository = pedidoRepository;
         this.mesaRepository = mesaRepository;
         this.usuarioRepository = usuarioRepository;
         this.productoRepository = productoRepository;
+        this.eventoPedidoRepository = eventoPedidoRepository;
         this.mesaService = mesaService;
     }
 
@@ -79,17 +82,16 @@ public class PedidoService {
     public PedidoResponse registrarPedido(CrearPedidoRequest request, String username, String headerIdempotencyKey) {
         String claveIdempotencia = resolverClaveIdempotencia(request, headerIdempotencyKey);
         if (claveIdempotencia != null) {
-            Integer pedidoExistenteId = idempotenciaKeyAPedidoId.get(claveIdempotencia);
-            if (pedidoExistenteId != null) {
-                Pedido pedidoExistente = pedidoRepository.findById(pedidoExistenteId).orElse(null);
-                if (pedidoExistente != null) {
-                    PedidoResponse replayResponse = construirPedidoResponse(pedidoExistente);
-                    replayResponse.setReplay(Boolean.TRUE);
-                    replayResponse.setClientRequestId(claveIdempotencia);
-                    return replayResponse;
-                } else {
-                    idempotenciaKeyAPedidoId.remove(claveIdempotencia);
-                }
+            Pedido pedidoExistente = pedidoRepository.findByClientRequestId(claveIdempotencia)
+                    .orElseGet(() -> {
+                        Integer idMem = idempotenciaKeyAPedidoId.get(claveIdempotencia);
+                        return idMem != null ? pedidoRepository.findById(idMem).orElse(null) : null;
+                    });
+            if (pedidoExistente != null) {
+                PedidoResponse replayResponse = construirPedidoResponse(pedidoExistente);
+                replayResponse.setReplay(Boolean.TRUE);
+                replayResponse.setClientRequestId(claveIdempotencia);
+                return replayResponse;
             }
         }
 
@@ -110,18 +112,27 @@ public class PedidoService {
                 );
             }
             if (mesa.getEstado() == EstadoMesa.OCUPADA) {
+                Pedido pedidoActivo = null;
                 Integer idActivo = pedidoActivoPorMesaId.get(mesa.getId());
                 if (idActivo != null) {
-                    Pedido pedidoActivo = pedidoRepository.findById(idActivo).orElse(null);
-                    if (pedidoActivo != null
-                            && pedidoActivo.getEstado() != EstadoPedido.COBRADO
-                            && pedidoActivo.getEstado() != EstadoPedido.ANULADO
-                            && pedidoActivo.getMesa() != null
-                            && mesa.getId().equals(pedidoActivo.getMesa().getId())) {
-                        return ampliarPedidoExistente(
-                                pedidoActivo, request.getItems(), username, claveIdempotencia
-                        );
+                    pedidoActivo = pedidoRepository.findById(idActivo).orElse(null);
+                }
+                if (pedidoActivo == null) {
+                    List<Pedido> activosDb = pedidoRepository.findByMesaIdAndEstadoNotOrderByFechaCreacionAsc(
+                            mesa.getId(), EstadoPedido.COBRADO
+                    ).stream().filter(p -> p.getEstado() != EstadoPedido.ANULADO).collect(Collectors.toList());
+                    if (!activosDb.isEmpty()) {
+                        pedidoActivo = activosDb.get(activosDb.size() - 1);
                     }
+                }
+                if (pedidoActivo != null
+                        && pedidoActivo.getEstado() != EstadoPedido.COBRADO
+                        && pedidoActivo.getEstado() != EstadoPedido.ANULADO
+                        && pedidoActivo.getMesa() != null
+                        && mesa.getId().equals(pedidoActivo.getMesa().getId())) {
+                    return ampliarPedidoExistente(
+                            pedidoActivo, request.getItems(), username, claveIdempotencia
+                    );
                 }
                 throw new ConflictoOperacionException(
                         "La mesa " + mesa.getNumero() + " no está disponible. Estado actual: " + mesa.getEstado()
@@ -132,6 +143,17 @@ public class PedidoService {
         Usuario mozo = resolverMozo(username);
 
         Pedido pedido = new Pedido(mesa, mozo, EstadoPedido.PENDIENTE, BigDecimal.ZERO);
+        if (claveIdempotencia != null) {
+            pedido.setClientRequestId(claveIdempotencia);
+        }
+        String tipoResuelto = (request.getTipoPedido() != null && !request.getTipoPedido().isBlank())
+                ? request.getTipoPedido().trim()
+                : (mesa == null ? "PARA_LLEVAR" : "SALON");
+        pedido.setTipoPedido(tipoResuelto);
+        if (request.getClienteNombre() != null && !request.getClienteNombre().isBlank()) {
+            pedido.setClienteNombre(request.getClienteNombre().trim());
+        }
+
         BigDecimal total = BigDecimal.ZERO;
         List<List<ModificadorItemDto>> modsPorIndice = new ArrayList<>();
 
@@ -163,6 +185,9 @@ public class PedidoService {
             DetallePedido detalle = new DetallePedido(
                     producto, precioUnitario, itemReq.getCantidad(), notasFinales, subtotalItem
             );
+            if (!modsItem.isEmpty()) {
+                detalle.setModificadoresJson(serializarModificadoresAJson(modsItem));
+            }
             pedido.agregarDetalle(detalle);
 
             total = total.add(subtotalItem);
@@ -182,9 +207,6 @@ public class PedidoService {
             if (mesa != null && mesa.getId() != null) {
                 pedidoActivoPorMesaId.put(mesa.getId(), guardado.getId());
             }
-            String tipoResuelto = (request.getTipoPedido() != null && !request.getTipoPedido().isBlank())
-                    ? request.getTipoPedido().trim()
-                    : (mesa == null ? "PARA_LLEVAR" : "SALON");
             tipoPorPedidoId.put(guardado.getId(), tipoResuelto);
             if (request.getClienteNombre() != null && !request.getClienteNombre().isBlank()) {
                 clientePorPedidoId.put(guardado.getId(), request.getClienteNombre().trim());
@@ -222,9 +244,12 @@ public class PedidoService {
                                              String username,
                                              String headerIdempotencyKey) {
         String claveIdempotencia = resolverClaveIdempotencia(request, headerIdempotencyKey);
-        if (claveIdempotencia != null && idempotenciaKeyAPedidoId.containsKey(claveIdempotencia)) {
-            Pedido existente = pedidoRepository.findById(idempotenciaKeyAPedidoId.get(claveIdempotencia))
-                    .orElse(null);
+        if (claveIdempotencia != null) {
+            Pedido existente = pedidoRepository.findByClientRequestId(claveIdempotencia)
+                    .orElseGet(() -> {
+                        Integer idMem = idempotenciaKeyAPedidoId.get(claveIdempotencia);
+                        return idMem != null ? pedidoRepository.findById(idMem).orElse(null) : null;
+                    });
             if (existente != null) {
                 PedidoResponse replay = construirPedidoResponse(existente);
                 replay.setReplay(Boolean.TRUE);
@@ -284,6 +309,9 @@ public class PedidoService {
             DetallePedido detalle = new DetallePedido(
                     producto, precioUnitario, itemReq.getCantidad(), notasFinales, subtotalItem
             );
+            if (!modsItem.isEmpty()) {
+                detalle.setModificadoresJson(serializarModificadoresAJson(modsItem));
+            }
             pedido.agregarDetalle(detalle);
             totalActual = totalActual.add(subtotalItem);
         }
@@ -392,9 +420,10 @@ public class PedidoService {
         }
 
         pedido.setEstado(EstadoPedido.ANULADO);
+        String motivoLimpio = motivo.trim();
+        pedido.setMotivoAnulacion(motivoLimpio);
         Pedido guardado = pedidoRepository.save(pedido);
 
-        String motivoLimpio = motivo.trim();
         motivosAnulacion.put(guardado.getId(), motivoLimpio);
         registrarEvento(guardado.getId(), estadoAnterior, EstadoPedido.ANULADO, username, motivoLimpio);
 
@@ -439,6 +468,7 @@ public class PedidoService {
         String motivoLimpio = motivo.trim();
         if (pedido.getDetalles().isEmpty()) {
             pedido.setEstado(EstadoPedido.ANULADO);
+            pedido.setMotivoAnulacion(motivoLimpio);
             motivosAnulacion.put(pedidoId, motivoLimpio);
             registrarEvento(pedidoId, estadoActual, EstadoPedido.ANULADO, username,
                     "Anulación total por eliminación del último ítem: " + motivoLimpio);
@@ -532,6 +562,11 @@ public class PedidoService {
                     itemOriginal.getNotas(),
                     itemOriginal.getSubtotal()
             );
+            if (itemOriginal.getModificadoresJson() != null && !itemOriginal.getModificadoresJson().isBlank()) {
+                clon.setModificadoresJson(itemOriginal.getModificadoresJson());
+            } else if (!modsPrevios.isEmpty()) {
+                clon.setModificadoresJson(serializarModificadoresAJson(modsPrevios));
+            }
             nuevoPedido.agregarDetalle(clon);
             if (itemOriginal.getId() != null) {
                 modificadoresPorDetalleId.remove(itemOriginal.getId());
@@ -597,6 +632,9 @@ public class PedidoService {
 
         if (mesaDestino.getEstado() == EstadoMesa.LIBRE || mesaOrigen.getEstado() == EstadoMesa.LIBRE) {
             throw new ConflictoOperacionException("Ambas mesas deben estar ocupadas para poder fusionarse");
+        }
+        if (mesaDestino.getEstado() == EstadoMesa.CUENTA_SOLICITADA || mesaOrigen.getEstado() == EstadoMesa.CUENTA_SOLICITADA) {
+            throw new ConflictoOperacionException("No se pueden fusionar mesas en estado CUENTA_SOLICITADA");
         }
 
         List<Pedido> pedidosDestino = pedidoRepository.findByMesaIdOrderByFechaCreacionDesc(mesaDestinoId).stream()
@@ -687,6 +725,12 @@ public class PedidoService {
         if (dp == null) {
             return List.of();
         }
+        if (dp.getModificadoresJson() != null && !dp.getModificadoresJson().isBlank()) {
+            List<ModificadorItemDto> deserializados = deserializarModificadoresDesdeJson(dp.getModificadoresJson());
+            if (!deserializados.isEmpty()) {
+                return deserializados;
+            }
+        }
         if (dp.getId() != null && modificadoresPorDetalleId.containsKey(dp.getId())) {
             return new ArrayList<>(modificadoresPorDetalleId.get(dp.getId()));
         }
@@ -737,6 +781,40 @@ public class PedidoService {
             return notasOriginales;
         }
         return combinada;
+    }
+
+    private String serializarModificadoresAJson(List<ModificadorItemDto> mods) {
+        if (mods == null || mods.isEmpty()) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < mods.size(); i++) {
+            ModificadorItemDto m = mods.get(i);
+            if (i > 0) {
+                sb.append(",");
+            }
+            sb.append("{\"nombre\":\"").append(m.getNombre().replace("\"", "\\\"")).append("\",\"precio_adicional\":")
+                    .append(m.getPrecioAdicional() != null ? m.getPrecioAdicional() : BigDecimal.ZERO).append("}");
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    private List<ModificadorItemDto> deserializarModificadoresDesdeJson(String json) {
+        if (json == null || json.isBlank() || !json.startsWith("[")) {
+            return List.of();
+        }
+        List<ModificadorItemDto> lista = new ArrayList<>();
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(
+                "\\{\"nombre\"\\s*:\\s*\"([^\"]+)\"\\s*,\\s*\"precio_adicional\"\\s*:\\s*([0-9.]+)\\}"
+        );
+        java.util.regex.Matcher m = p.matcher(json);
+        while (m.find()) {
+            String nombre = m.group(1);
+            BigDecimal precio = new BigDecimal(m.group(2));
+            lista.add(new ModificadorItemDto(nombre, precio));
+        }
+        return lista;
     }
 
     private List<ModificadorItemDto> extraerModificadoresDesdeNotas(String notas) {
@@ -815,6 +893,28 @@ public class PedidoService {
         eventosPorPedido
                 .computeIfAbsent(pedidoId, k -> new CopyOnWriteArrayList<>())
                 .add(new EventoPedidoDto(estadoAnterior, estadoNuevo, usuario, motivo, LocalDateTime.now()));
+
+        try {
+            if (eventoPedidoRepository != null) {
+                Pedido p = pedidoRepository.findById(pedidoId).orElse(null);
+                if (p != null) {
+                    Usuario u = null;
+                    if (usuario != null && !usuario.isBlank()) {
+                        try {
+                            Integer uid = Integer.parseInt(usuario);
+                            u = usuarioRepository.findById(uid).orElse(null);
+                        } catch (NumberFormatException e) {
+                            u = usuarioRepository.findByUsername(usuario).orElse(null);
+                        }
+                    }
+                    eventoPedidoRepository.save(new com.lacasablanca.backend.model.EventoPedido(
+                            p, estadoAnterior, estadoNuevo, u, motivo
+                    ));
+                }
+            }
+        } catch (Exception ignored) {
+            // No interrumpir la transacción principal si la auditoría en BD falla
+        }
     }
 
     private PedidoResponse construirPedidoResponse(Pedido guardado) {
@@ -860,16 +960,46 @@ public class PedidoService {
         );
 
         if (guardado.getId() != null) {
-            response.setClientRequestId(pedidoIdAClientRequestId.get(guardado.getId()));
-            response.setMotivoAnulacion(motivosAnulacion.get(guardado.getId()));
+            String clientReq = guardado.getClientRequestId() != null
+                    ? guardado.getClientRequestId()
+                    : pedidoIdAClientRequestId.get(guardado.getId());
+            response.setClientRequestId(clientReq);
+
+            String motAnul = guardado.getMotivoAnulacion() != null
+                    ? guardado.getMotivoAnulacion()
+                    : motivosAnulacion.get(guardado.getId());
+            response.setMotivoAnulacion(motAnul);
+
             List<EventoPedidoDto> eventos = eventosPorPedido.get(guardado.getId());
+            if ((eventos == null || eventos.isEmpty()) && eventoPedidoRepository != null) {
+                try {
+                    List<com.lacasablanca.backend.model.EventoPedido> evsDb =
+                            eventoPedidoRepository.findByPedidoIdOrderByFechaAsc(guardado.getId());
+                    if (!evsDb.isEmpty()) {
+                        eventos = evsDb.stream().map(e -> new EventoPedidoDto(
+                                e.getEstadoAnterior(),
+                                e.getEstadoNuevo(),
+                                e.getUsuario() != null ? e.getUsuario().getUsername() : "sistema",
+                                e.getMotivo(),
+                                e.getFecha()
+                        )).collect(Collectors.toList());
+                    }
+                } catch (Exception ignored) {
+                }
+            }
             response.setEventos(eventos != null ? new ArrayList<>(eventos) : List.of());
+
             boolean esParaLlevar = guardado.getMesa() == null;
             response.setParaLlevar(esParaLlevar);
-            response.setTipoPedido(
-                    tipoPorPedidoId.getOrDefault(guardado.getId(), esParaLlevar ? "PARA_LLEVAR" : "SALON")
-            );
-            response.setClienteNombre(clientePorPedidoId.get(guardado.getId()));
+            String tipo = guardado.getTipoPedido() != null
+                    ? guardado.getTipoPedido()
+                    : tipoPorPedidoId.getOrDefault(guardado.getId(), esParaLlevar ? "PARA_LLEVAR" : "SALON");
+            response.setTipoPedido(tipo);
+
+            String cliente = guardado.getClienteNombre() != null
+                    ? guardado.getClienteNombre()
+                    : clientePorPedidoId.get(guardado.getId());
+            response.setClienteNombre(cliente);
         }
         return response;
     }

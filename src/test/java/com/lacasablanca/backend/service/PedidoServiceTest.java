@@ -41,6 +41,9 @@ class PedidoServiceTest {
     private ProductoRepository productoRepository;
 
     @Mock
+    private com.lacasablanca.backend.repository.EventoPedidoRepository eventoPedidoRepository;
+
+    @Mock
     private MesaService mesaService;
 
     @InjectMocks
@@ -113,11 +116,13 @@ class PedidoServiceTest {
     void crearPedidoMesaOcupadaLanzaConflicto() {
         Mesa mesaOcupada = new Mesa(1, 1, 4, "Primer piso", EstadoMesa.OCUPADA);
         when(mesaRepository.findById(1)).thenReturn(Optional.of(mesaOcupada));
+        when(pedidoRepository.findByMesaIdAndEstadoNotOrderByFechaCreacionAsc(1, EstadoPedido.COBRADO))
+                .thenReturn(List.of());
 
         CrearPedidoRequest req = new CrearPedidoRequest(1, List.of(new ItemPedidoRequest(10, 1, null)));
 
         assertThrows(ConflictoOperacionException.class, () -> pedidoService.registrarPedido(req, "2"));
-        verifyNoInteractions(pedidoRepository);
+        verify(pedidoRepository, never()).save(any());
     }
 
     @Test

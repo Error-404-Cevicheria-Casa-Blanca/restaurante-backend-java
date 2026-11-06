@@ -20,8 +20,14 @@ public class Usuario {
     @JoinColumn(name = "rol_id", nullable = false)
     private Rol rol;
 
-    @Transient
+    @Column(name = "pin_hash", length = 255)
     private String pinHash;
+
+    @Column(name = "intentos_fallidos", nullable = false)
+    private Integer intentosFallidos = 0;
+
+    @Column(name = "bloqueado_hasta")
+    private java.time.LocalDateTime bloqueadoHasta;
 
     public Usuario() {}
 
@@ -56,5 +62,21 @@ public class Usuario {
 
     public void setPinHash(String pinHash) {
         this.pinHash = pinHash;
+    }
+
+    public Integer getIntentosFallidos() {
+        return intentosFallidos != null ? intentosFallidos : 0;
+    }
+
+    public void setIntentosFallidos(Integer intentosFallidos) {
+        this.intentosFallidos = intentosFallidos;
+    }
+
+    public java.time.LocalDateTime getBloqueadoHasta() {
+        return bloqueadoHasta;
+    }
+
+    public void setBloqueadoHasta(java.time.LocalDateTime bloqueadoHasta) {
+        this.bloqueadoHasta = bloqueadoHasta;
     }
 }

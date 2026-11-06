@@ -52,13 +52,22 @@ public class AuthService {
         verificarCuentaNoBloqueada(username);
 
         Optional<Usuario> optUsuario = usuarioRepository.findByUsername(username);
-        if (optUsuario.isEmpty() || !passwordEncoder.matches(request.getClave(), optUsuario.get().getClaveHash())) {
-            registrarIntentoFallido(username);
+        if (optUsuario.isEmpty()) {
             throw new BadCredentialsException(MENSAJE_CREDENCIALES_INVALIDAS);
         }
 
-        limpiarIntentosUsuario(username);
-        return construirRespuestaLogin(optUsuario.get());
+        Usuario u = optUsuario.get();
+        if (estaBloqueado(u.getUsername())) {
+            throw new CuentaBloqueadaException(MENSAJE_CUENTA_BLOQUEADA);
+        }
+
+        if (!passwordEncoder.matches(request.getClave(), u.getClaveHash())) {
+            registrarIntentoFallido(u);
+            throw new BadCredentialsException(MENSAJE_CREDENCIALES_INVALIDAS);
+        }
+
+        limpiarIntentosUsuario(u);
+        return construirRespuestaLogin(u);
     }
 
     public LoginResponse autenticarPorPin(PinLoginRequest request) {
@@ -73,18 +82,21 @@ public class AuthService {
 
         Optional<Usuario> optUsuario = usuarioRepository.findByUsername(username);
         if (optUsuario.isEmpty()) {
-            registrarIntentoFallido(username);
             throw new BadCredentialsException(MENSAJE_PIN_INVALIDO);
         }
 
         Usuario u = optUsuario.get();
+        if (estaBloqueado(u.getUsername())) {
+            throw new CuentaBloqueadaException(MENSAJE_CUENTA_BLOQUEADA);
+        }
+
         String hashPin = obtenerHashPinDeUsuario(u);
         if (hashPin == null || !passwordEncoder.matches(pin, hashPin)) {
-            registrarIntentoFallido(username);
+            registrarIntentoFallido(u);
             throw new BadCredentialsException(MENSAJE_PIN_INVALIDO);
         }
 
-        limpiarIntentosUsuario(username);
+        limpiarIntentosUsuario(u);
         return construirRespuestaLogin(u);
     }
 
@@ -96,7 +108,13 @@ public class AuthService {
             throw new IllegalArgumentException("El PIN debe contener exactamente 4 dígitos numéricos");
         }
         String key = normalizarUsuario(username);
-        pinHashesPorUsuario.put(key, passwordEncoder.encode(pinPlano.trim()));
+        String encodedPin = passwordEncoder.encode(pinPlano.trim());
+        pinHashesPorUsuario.put(key, encodedPin);
+
+        usuarioRepository.findByUsername(username).ifPresent(u -> {
+            u.setPinHash(encodedPin);
+            usuarioRepository.save(u);
+        });
     }
 
     public void cerrarSesion(String authorizationHeader) {
@@ -109,19 +127,45 @@ public class AuthService {
     public boolean estaBloqueado(String username) {
         String key = normalizarUsuario(username);
         LocalDateTime hasta = bloqueoHastaPorUsuario.get(key);
-        if (hasta == null) {
-            return false;
+        if (hasta != null) {
+            if (LocalDateTime.now().isAfter(hasta)) {
+                bloqueoHastaPorUsuario.remove(key);
+                intentosFallidosPorUsuario.remove(key);
+                usuarioRepository.findByUsername(username).ifPresent(u -> {
+                    u.setBloqueadoHasta(null);
+                    u.setIntentosFallidos(0);
+                    usuarioRepository.save(u);
+                });
+                return false;
+            }
+            return true;
         }
-        if (LocalDateTime.now().isAfter(hasta)) {
-            bloqueoHastaPorUsuario.remove(key);
-            intentosFallidosPorUsuario.remove(key);
-            return false;
+
+        Optional<Usuario> opt = usuarioRepository.findByUsername(username);
+        if (opt.isPresent()) {
+            Usuario u = opt.get();
+            if (u.getBloqueadoHasta() != null) {
+                if (LocalDateTime.now().isAfter(u.getBloqueadoHasta())) {
+                    u.setBloqueadoHasta(null);
+                    u.setIntentosFallidos(0);
+                    usuarioRepository.save(u);
+                    return false;
+                }
+                bloqueoHastaPorUsuario.put(key, u.getBloqueadoHasta());
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 
     public int obtenerIntentosFallidos(String username) {
-        return intentosFallidosPorUsuario.getOrDefault(normalizarUsuario(username), 0);
+        Integer mem = intentosFallidosPorUsuario.get(normalizarUsuario(username));
+        if (mem != null) {
+            return mem;
+        }
+        return usuarioRepository.findByUsername(username)
+                .map(Usuario::getIntentosFallidos)
+                .orElse(0);
     }
 
     public void limpiarBloqueos() {
@@ -135,22 +179,33 @@ public class AuthService {
         }
     }
 
-    private void registrarIntentoFallido(String username) {
-        if (username == null || username.isBlank()) {
+    private void registrarIntentoFallido(Usuario usuario) {
+        if (usuario == null) {
             return;
         }
-        String key = normalizarUsuario(username);
-        int nuevosIntentos = intentosFallidosPorUsuario.getOrDefault(key, 0) + 1;
+        String key = normalizarUsuario(usuario.getUsername());
+        int nuevosIntentos = intentosFallidosPorUsuario.getOrDefault(key, usuario.getIntentosFallidos()) + 1;
         intentosFallidosPorUsuario.put(key, nuevosIntentos);
+        usuario.setIntentosFallidos(nuevosIntentos);
+
         if (nuevosIntentos >= MAX_INTENTOS_FALLIDOS) {
-            bloqueoHastaPorUsuario.put(key, LocalDateTime.now().plusMinutes(MINUTOS_BLOQUEO));
+            LocalDateTime hasta = LocalDateTime.now().plusMinutes(MINUTOS_BLOQUEO);
+            bloqueoHastaPorUsuario.put(key, hasta);
+            usuario.setBloqueadoHasta(hasta);
         }
+        usuarioRepository.save(usuario);
     }
 
-    private void limpiarIntentosUsuario(String username) {
-        String key = normalizarUsuario(username);
+    private void limpiarIntentosUsuario(Usuario usuario) {
+        if (usuario == null) {
+            return;
+        }
+        String key = normalizarUsuario(usuario.getUsername());
         intentosFallidosPorUsuario.remove(key);
         bloqueoHastaPorUsuario.remove(key);
+        usuario.setIntentosFallidos(0);
+        usuario.setBloqueadoHasta(null);
+        usuarioRepository.save(usuario);
     }
 
     private String obtenerHashPinDeUsuario(Usuario usuario) {

@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.List;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
+    java.util.Optional<Pedido> findByClientRequestId(String clientRequestId);
+
     List<Pedido> findByMesaIdOrderByFechaCreacionDesc(Integer mesaId);
 
     List<Pedido> findByMesaIdAndEstadoNotOrderByFechaCreacionAsc(Integer mesaId, EstadoPedido estado);
