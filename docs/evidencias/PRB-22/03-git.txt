@@ -1,0 +1,5 @@
+commit b46110568421612c9e34f3321c64f8cec24d3334
+Author: maxmunoz-debug <max.munoz@tecsup.edu.pe>
+Date:   Fri Nov 6 00:49:41 2026 -0500
+
+    docs(PRB-16,PRB-24,PRB-26,PRB-48): evidencias de retrospectiva sprint 4, plan de carga, matriz UAT y release v0.1.0
