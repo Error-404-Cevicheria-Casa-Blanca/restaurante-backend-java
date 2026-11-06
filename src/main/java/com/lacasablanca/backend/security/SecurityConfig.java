@@ -47,7 +47,15 @@ public class SecurityConfig {
                 })
             )
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/auth/login", "/api/v1/auth/pin", "/error").permitAll()
+                .requestMatchers(
+                    "/api/v1/auth/login",
+                    "/api/v1/auth/pin",
+                    "/api/v1/health",
+                    "/health",
+                    "/api/v1/version",
+                    "/version",
+                    "/error"
+                ).permitAll()
                 .requestMatchers(HttpMethod.PATCH, "/api/v1/mesas/*/estado").hasAnyRole("MOZO", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/v1/mesas/*/cuenta").hasAnyRole("MOZO", "CAJERO", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/mesas/*/precuenta").hasAnyRole("MOZO", "CAJERO", "ADMIN")

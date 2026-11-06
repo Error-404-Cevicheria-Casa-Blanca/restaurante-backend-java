@@ -35,6 +35,9 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetallePedido> detalles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pago> pagos = new ArrayList<>();
+
     public Pedido() {}
 
     public Pedido(Mesa mesa, Usuario mozo, EstadoPedido estado, BigDecimal total) {

@@ -12,21 +12,27 @@ import com.lacasablanca.backend.model.DetallePedido;
 import com.lacasablanca.backend.model.EstadoMesa;
 import com.lacasablanca.backend.model.EstadoPedido;
 import com.lacasablanca.backend.model.Mesa;
+import com.lacasablanca.backend.model.Pago;
 import com.lacasablanca.backend.model.Pedido;
+import com.lacasablanca.backend.model.SesionCaja;
 import com.lacasablanca.backend.repository.MesaRepository;
+import com.lacasablanca.backend.repository.PagoRepository;
 import com.lacasablanca.backend.repository.PedidoRepository;
+import com.lacasablanca.backend.repository.SesionCajaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -41,13 +47,19 @@ public class CobroService {
 
     private final MesaRepository mesaRepository;
     private final PedidoRepository pedidoRepository;
+    private final PagoRepository pagoRepository;
+    private final SesionCajaRepository sesionCajaRepository;
     private final MesaService mesaService;
 
     public CobroService(MesaRepository mesaRepository,
                         PedidoRepository pedidoRepository,
+                        PagoRepository pagoRepository,
+                        SesionCajaRepository sesionCajaRepository,
                         MesaService mesaService) {
         this.mesaRepository = mesaRepository;
         this.pedidoRepository = pedidoRepository;
+        this.pagoRepository = pagoRepository;
+        this.sesionCajaRepository = sesionCajaRepository;
         this.mesaService = mesaService;
     }
 
@@ -136,7 +148,12 @@ public class CobroService {
 
         ResultadoValidacionPagos validacion = validarYCalcularPagos(totalConsumo, request);
 
-        // 1. Transicionar todos los pedidos activos a COBRADO
+        // 1. Persistir registros en la tabla 'pago' y actualizar 'sesion_caja' si está abierta
+        if (!pedidosActivos.isEmpty()) {
+            registrarPagosEnBaseDeDatos(pedidosActivos.get(0), mesa, request, validacion.vuelto);
+        }
+
+        // 2. Transicionar todos los pedidos activos a COBRADO
         List<PedidoResumenCuentaDto> pedidosCobrados = new ArrayList<>();
         for (Pedido p : pedidosActivos) {
             p.setEstado(EstadoPedido.COBRADO);
@@ -144,7 +161,7 @@ public class CobroService {
             pedidosCobrados.add(new PedidoResumenCuentaDto(p.getId(), p.getEstado().name(), p.getTotal()));
         }
 
-        // 2. Liberar la mesa y registrar fecha de cierre
+        // 3. Liberar la mesa y registrar fecha de cierre
         mesa.setEstado(EstadoMesa.LIBRE);
         mesa.setFechaCierre(LocalDateTime.now());
         mesa.setMozo(null);
@@ -182,14 +199,18 @@ public class CobroService {
         BigDecimal totalConsumo = pedido.getTotal();
         ResultadoValidacionPagos validacion = validarYCalcularPagos(totalConsumo, request);
 
+        Mesa mesa = pedido.getMesa();
+        if (mesa != null) {
+            registrarPagosEnBaseDeDatos(pedido, mesa, request, validacion.vuelto);
+        }
+
         pedido.setEstado(EstadoPedido.COBRADO);
         pedidoRepository.save(pedido);
 
-        Mesa mesa = pedido.getMesa();
         if (mesa != null) {
             List<Pedido> pendientesMesa = pedidoRepository.findByMesaIdAndEstadoNotOrderByFechaCreacionAsc(
                     mesa.getId(), EstadoPedido.COBRADO
-            );
+            ).stream().filter(p -> p.getEstado() != EstadoPedido.ANULADO).collect(Collectors.toList());
             if (pendientesMesa.isEmpty()) {
                 mesa.setEstado(EstadoMesa.LIBRE);
                 mesa.setFechaCierre(LocalDateTime.now());
@@ -230,6 +251,71 @@ public class CobroService {
         }
 
         return obtenerCuenta(mesaId);
+    }
+
+    private void registrarPagosEnBaseDeDatos(Pedido pedido,
+                                             Mesa mesa,
+                                             CobrarRequest request,
+                                             BigDecimal vueltoTotal) {
+        SesionCaja sesionAbierta = sesionCajaRepository
+                .findFirstByEstadoOrderByFechaAperturaDesc("ABIERTA")
+                .orElse(null);
+
+        BigDecimal propinaTotal = request.getPropina() != null ? request.getPropina() : BigDecimal.ZERO;
+        String baseClientId = (request.getClientRequestId() != null && !request.getClientRequestId().isBlank())
+                ? request.getClientRequestId().trim()
+                : UUID.randomUUID().toString();
+
+        BigDecimal vueltoRestante = vueltoTotal != null ? vueltoTotal : BigDecimal.ZERO;
+
+        List<PagoRequestDto> listaPagos = request.getPagos();
+        for (int i = 0; i < listaPagos.size(); i++) {
+            PagoRequestDto dto = listaPagos.get(i);
+            String metodoUpper = dto.getMetodo().trim().toUpperCase(Locale.ROOT);
+            String metodoDb = "TRANSFERENCIA".equals(metodoUpper) ? "TARJETA" : metodoUpper;
+
+            BigDecimal montoNeto = dto.getMonto();
+            if ("EFECTIVO".equals(metodoDb) && vueltoRestante.compareTo(BigDecimal.ZERO) > 0) {
+                BigDecimal descuentoVuelto = montoNeto.min(vueltoRestante);
+                montoNeto = montoNeto.subtract(descuentoVuelto);
+                vueltoRestante = vueltoRestante.subtract(descuentoVuelto);
+            }
+
+            String itemClientId = (i == 0) ? baseClientId : baseClientId + "-" + i;
+            if (itemClientId.length() > 64) {
+                itemClientId = itemClientId.substring(0, 64);
+            }
+            if (pagoRepository.findByClientRequestId(itemClientId).isPresent()) {
+                itemClientId = UUID.randomUUID().toString();
+            }
+
+            Pago pago = new Pago();
+            pago.setPedido(pedido);
+            pago.setMesa(mesa);
+            pago.setMozo(mesa.getMozo() != null ? mesa.getMozo() : pedido.getMozo());
+            pago.setSesionCaja(sesionAbierta);
+            pago.setMetodo(metodoDb);
+            pago.setMonto(montoNeto.compareTo(BigDecimal.ZERO) > 0 ? montoNeto : dto.getMonto());
+            pago.setPropina(i == 0 ? propinaTotal : BigDecimal.ZERO);
+            pago.setReferencia(dto.getReferencia());
+            pago.setClientRequestId(itemClientId);
+            pago.setFechaPago(OffsetDateTime.now());
+            pagoRepository.save(pago);
+
+            if (sesionAbierta != null) {
+                if ("EFECTIVO".equals(metodoDb)) {
+                    BigDecimal nuevoEfectivo = sesionAbierta.getMontoVentasEfectivo().add(pago.getMonto());
+                    sesionAbierta.setMontoVentasEfectivo(nuevoEfectivo);
+                    sesionAbierta.setMontoEsperado(
+                            sesionAbierta.getMontoInicial().add(nuevoEfectivo)
+                    );
+                } else {
+                    BigDecimal nuevoDigital = sesionAbierta.getMontoVentasDigital().add(pago.getMonto());
+                    sesionAbierta.setMontoVentasDigital(nuevoDigital);
+                }
+                sesionCajaRepository.save(sesionAbierta);
+            }
+        }
     }
 
     private void validarSolicitudCobro(CobrarRequest request) {

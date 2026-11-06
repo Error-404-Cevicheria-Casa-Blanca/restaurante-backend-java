@@ -1,0 +1,36 @@
+ docs/evidencias/PRB-64/01-tests.txt                | 100 +++++++++++++
+ docs/evidencias/PRB-64/02-cobertura.txt            |  15 ++
+ docs/evidencias/PRB-64/CIERRE.md                   |  20 +++
+ .../backend/controller/HealthController.java       |  59 ++++++++
+ .../java/com/lacasablanca/backend/model/Pago.java  | 148 +++++++++++++++++++
+ .../com/lacasablanca/backend/model/Pedido.java     |   3 +
+ .../com/lacasablanca/backend/model/SesionCaja.java | 156 +++++++++++++++++++++
+ .../backend/repository/PagoRepository.java         |  18 +++
+ .../backend/repository/SesionCajaRepository.java   |  13 ++
+ .../backend/security/SecurityConfig.java           |  10 +-
+ .../lacasablanca/backend/service/CobroService.java |  94 ++++++++++++-
+ src/main/resources/logback-spring.xml              |  31 ++++
+ .../controller/HealthCheckIntegrationTest.java     |  67 +++++++++
+ .../controller/MesaCobroIntegrationTest.java       |  10 ++
+ 14 files changed, 739 insertions(+), 5 deletions(-)
+commit 219eabd417b4f3a50fdcc0f5d6458bb39c59032b
+Author: maxmunoz-debug <max.munoz@tecsup.edu.pe>
+Date:   Thu Nov 5 22:57:27 2026 -0500
+
+    feat(PRB-64): healthcheck con estado de BD, logs rotativos y persistencia JPA de pago y sesion_caja
+
+ docs/evidencias/PRB-64/01-tests.txt                | 100 +++++++++++++
+ docs/evidencias/PRB-64/02-cobertura.txt            |  15 ++
+ docs/evidencias/PRB-64/CIERRE.md                   |  20 +++
+ .../backend/controller/HealthController.java       |  59 ++++++++
+ .../java/com/lacasablanca/backend/model/Pago.java  | 148 +++++++++++++++++++
+ .../com/lacasablanca/backend/model/Pedido.java     |   3 +
+ .../com/lacasablanca/backend/model/SesionCaja.java | 156 +++++++++++++++++++++
+ .../backend/repository/PagoRepository.java         |  18 +++
+ .../backend/repository/SesionCajaRepository.java   |  13 ++
+ .../backend/security/SecurityConfig.java           |  10 +-
+ .../lacasablanca/backend/service/CobroService.java |  94 ++++++++++++-
+ src/main/resources/logback-spring.xml              |  31 ++++
+ .../controller/HealthCheckIntegrationTest.java     |  67 +++++++++
+ .../controller/MesaCobroIntegrationTest.java       |  10 ++
+ 14 files changed, 739 insertions(+), 5 deletions(-)

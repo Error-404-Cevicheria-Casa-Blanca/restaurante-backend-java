@@ -11,8 +11,10 @@ import com.lacasablanca.backend.dto.PagoRequestDto;
 import com.lacasablanca.backend.model.EstadoMesa;
 import com.lacasablanca.backend.model.EstadoPedido;
 import com.lacasablanca.backend.model.Mesa;
+import com.lacasablanca.backend.model.Pago;
 import com.lacasablanca.backend.model.Pedido;
 import com.lacasablanca.backend.repository.MesaRepository;
+import com.lacasablanca.backend.repository.PagoRepository;
 import com.lacasablanca.backend.repository.PedidoRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,6 +60,9 @@ class MesaCobroIntegrationTest {
 
     @Autowired
     private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private PagoRepository pagoRepository;
 
     private String tokenMozo;
 
@@ -195,6 +200,11 @@ class MesaCobroIntegrationTest {
 
         List<Pedido> pedidos = pedidoRepository.findByMesaIdOrderByFechaCreacionDesc(MESA_ID);
         assertEquals(EstadoPedido.COBRADO, pedidos.get(0).getEstado());
+
+        List<Pago> pagosGuardados = pagoRepository.findByMesaIdOrderByFechaPagoAsc(MESA_ID);
+        assertEquals(1, pagosGuardados.size());
+        assertEquals("EFECTIVO", pagosGuardados.get(0).getMetodo());
+        assertEquals(0, BigDecimal.valueOf(85.00).compareTo(pagosGuardados.get(0).getMonto()));
     }
 
     @Test
