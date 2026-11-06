@@ -1,7 +1,10 @@
 package com.lacasablanca.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemCuentaDto {
 
@@ -14,6 +17,8 @@ public class ItemCuentaDto {
     @JsonProperty("subtotal_linea")
     private BigDecimal subtotalLinea;
 
+    private List<ModificadorItemDto> modificadores = new ArrayList<>();
+
     public ItemCuentaDto() {
     }
 
@@ -22,6 +27,15 @@ public class ItemCuentaDto {
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
         this.subtotalLinea = subtotalLinea;
+    }
+
+    public ItemCuentaDto(String nombre,
+                         Integer cantidad,
+                         BigDecimal precioUnitario,
+                         BigDecimal subtotalLinea,
+                         List<ModificadorItemDto> modificadores) {
+        this(nombre, cantidad, precioUnitario, subtotalLinea);
+        this.modificadores = modificadores != null ? modificadores : new ArrayList<>();
     }
 
     public String getNombre() {
@@ -54,5 +68,13 @@ public class ItemCuentaDto {
 
     public void setSubtotalLinea(BigDecimal subtotalLinea) {
         this.subtotalLinea = subtotalLinea;
+    }
+
+    public List<ModificadorItemDto> getModificadores() {
+        return modificadores;
+    }
+
+    public void setModificadores(List<ModificadorItemDto> modificadores) {
+        this.modificadores = modificadores;
     }
 }

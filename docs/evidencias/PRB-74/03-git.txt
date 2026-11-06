@@ -1,0 +1,28 @@
+ docs/evidencias/PRB-74/01-tests.txt                | 104 ++++++++++++++
+ docs/evidencias/PRB-74/02-cobertura.txt            |  15 ++
+ docs/evidencias/PRB-74/CIERRE.md                   |  21 +++
+ .../backend/dto/DetallePedidoResponse.java         | 109 +++++++++++---
+ .../lacasablanca/backend/dto/ItemCuentaDto.java    |  22 +++
+ .../backend/dto/ItemPedidoRequest.java             |  52 ++++++-
+ .../backend/dto/ModificadorItemDto.java            |  42 ++++++
+ .../lacasablanca/backend/service/CobroService.java |  17 ++-
+ .../backend/service/PedidoService.java             | 106 +++++++++++++-
+ .../ModificadoresPedidoIntegrationTest.java        | 160 +++++++++++++++++++++
+ 10 files changed, 618 insertions(+), 30 deletions(-)
+commit 575c0474e6b3cf70ca5170ed2c2436718d4d8b85
+Author: maxmunoz-debug <max.munoz@tecsup.edu.pe>
+Date:   Thu Nov 5 23:17:40 2026 -0500
+
+    feat(PRB-74): soporte de modificadores estructurados por plato en comandas KDS y pre-cuenta
+
+ docs/evidencias/PRB-74/01-tests.txt                | 104 ++++++++++++++
+ docs/evidencias/PRB-74/02-cobertura.txt            |  15 ++
+ docs/evidencias/PRB-74/CIERRE.md                   |  21 +++
+ .../backend/dto/DetallePedidoResponse.java         | 109 +++++++++++---
+ .../lacasablanca/backend/dto/ItemCuentaDto.java    |  22 +++
+ .../backend/dto/ItemPedidoRequest.java             |  52 ++++++-
+ .../backend/dto/ModificadorItemDto.java            |  42 ++++++
+ .../lacasablanca/backend/service/CobroService.java |  17 ++-
+ .../backend/service/PedidoService.java             | 106 +++++++++++++-
+ .../ModificadoresPedidoIntegrationTest.java        | 160 +++++++++++++++++++++
+ 10 files changed, 618 insertions(+), 30 deletions(-)

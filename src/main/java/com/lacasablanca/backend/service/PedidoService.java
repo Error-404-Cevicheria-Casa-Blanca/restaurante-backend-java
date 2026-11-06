@@ -4,6 +4,7 @@ import com.lacasablanca.backend.dto.CrearPedidoRequest;
 import com.lacasablanca.backend.dto.DetallePedidoResponse;
 import com.lacasablanca.backend.dto.EventoPedidoDto;
 import com.lacasablanca.backend.dto.ItemPedidoRequest;
+import com.lacasablanca.backend.dto.ModificadorItemDto;
 import com.lacasablanca.backend.dto.PedidoResponse;
 import com.lacasablanca.backend.exception.ConflictoOperacionException;
 import com.lacasablanca.backend.exception.RecursoNoEncontradoException;
@@ -42,6 +43,7 @@ public class PedidoService {
     private final Map<Integer, String> pedidoIdAClientRequestId = new ConcurrentHashMap<>();
     private final Map<Integer, String> motivosAnulacion = new ConcurrentHashMap<>();
     private final Map<Integer, List<EventoPedidoDto>> eventosPorPedido = new ConcurrentHashMap<>();
+    private final Map<Integer, List<ModificadorItemDto>> modificadoresPorDetalleId = new ConcurrentHashMap<>();
 
     private final PedidoRepository pedidoRepository;
     private final MesaRepository mesaRepository;
@@ -103,6 +105,7 @@ public class PedidoService {
 
         Pedido pedido = new Pedido(mesa, mozo, EstadoPedido.PENDIENTE, BigDecimal.ZERO);
         BigDecimal total = BigDecimal.ZERO;
+        List<List<ModificadorItemDto>> modsPorIndice = new ArrayList<>();
 
         for (ItemPedidoRequest itemReq : request.getItems()) {
             if (itemReq.getCantidad() == null || itemReq.getCantidad() < 1) {
@@ -119,12 +122,18 @@ public class PedidoService {
                 );
             }
 
-            BigDecimal precioUnitario = producto.getPrecio();
+            List<ModificadorItemDto> modsItem = limpiarModificadores(itemReq.getModificadores());
+            modsPorIndice.add(modsItem);
+
+            BigDecimal recargoMods = calcularRecargoModificadores(modsItem);
+            BigDecimal precioUnitario = producto.getPrecio().add(recargoMods).setScale(2, RoundingMode.HALF_UP);
             BigDecimal subtotalItem = precioUnitario.multiply(BigDecimal.valueOf(itemReq.getCantidad()))
                     .setScale(2, RoundingMode.HALF_UP);
 
+            String notasFinales = componerNotasConModificadores(itemReq.getNotas(), modsItem);
+
             DetallePedido detalle = new DetallePedido(
-                    producto, precioUnitario, itemReq.getCantidad(), itemReq.getNotas(), subtotalItem
+                    producto, precioUnitario, itemReq.getCantidad(), notasFinales, subtotalItem
             );
             pedido.agregarDetalle(detalle);
 
@@ -138,6 +147,16 @@ public class PedidoService {
         mesaService.actualizarEstado(mesa.getId(), EstadoMesa.OCUPADA, username);
 
         Pedido guardado = pedidoRepository.save(pedido);
+
+        if (guardado.getDetalles() != null) {
+            for (int i = 0; i < guardado.getDetalles().size() && i < modsPorIndice.size(); i++) {
+                DetallePedido dp = guardado.getDetalles().get(i);
+                List<ModificadorItemDto> mods = modsPorIndice.get(i);
+                if (dp.getId() != null && !mods.isEmpty()) {
+                    modificadoresPorDetalleId.put(dp.getId(), mods);
+                }
+            }
+        }
 
         if (guardado.getId() != null) {
             registrarEvento(guardado.getId(), null, EstadoPedido.PENDIENTE,
@@ -291,6 +310,85 @@ public class PedidoService {
         return construirPedidoResponse(guardado);
     }
 
+    public List<ModificadorItemDto> obtenerModificadoresDeDetalle(DetallePedido dp) {
+        if (dp == null) {
+            return List.of();
+        }
+        if (dp.getId() != null && modificadoresPorDetalleId.containsKey(dp.getId())) {
+            return new ArrayList<>(modificadoresPorDetalleId.get(dp.getId()));
+        }
+        return extraerModificadoresDesdeNotas(dp.getNotas());
+    }
+
+    private List<ModificadorItemDto> limpiarModificadores(List<ModificadorItemDto> raw) {
+        if (raw == null || raw.isEmpty()) {
+            return List.of();
+        }
+        List<ModificadorItemDto> resultado = new ArrayList<>();
+        for (ModificadorItemDto mod : raw) {
+            if (mod != null && mod.getNombre() != null && !mod.getNombre().isBlank()) {
+                BigDecimal precio = mod.getPrecioAdicional() != null ? mod.getPrecioAdicional() : BigDecimal.ZERO;
+                if (precio.compareTo(BigDecimal.ZERO) < 0) {
+                    throw new IllegalArgumentException("El precio adicional del modificador no puede ser negativo");
+                }
+                resultado.add(new ModificadorItemDto(mod.getNombre().trim(), precio));
+            }
+        }
+        return resultado;
+    }
+
+    private BigDecimal calcularRecargoModificadores(List<ModificadorItemDto> mods) {
+        BigDecimal suma = BigDecimal.ZERO;
+        for (ModificadorItemDto mod : mods) {
+            if (mod.getPrecioAdicional() != null && mod.getPrecioAdicional().compareTo(BigDecimal.ZERO) > 0) {
+                suma = suma.add(mod.getPrecioAdicional());
+            }
+        }
+        return suma;
+    }
+
+    private String componerNotasConModificadores(String notasOriginales, List<ModificadorItemDto> mods) {
+        if (mods == null || mods.isEmpty()) {
+            return notasOriginales;
+        }
+        String etiquetaMods = "[Modificadores: "
+                + mods.stream().map(ModificadorItemDto::getNombre).collect(Collectors.joining(", "))
+                + "]";
+        String combinada;
+        if (notasOriginales == null || notasOriginales.isBlank()) {
+            combinada = etiquetaMods;
+        } else {
+            combinada = notasOriginales.trim() + " " + etiquetaMods;
+        }
+        if (combinada.length() > 255) {
+            return notasOriginales;
+        }
+        return combinada;
+    }
+
+    private List<ModificadorItemDto> extraerModificadoresDesdeNotas(String notas) {
+        if (notas == null || !notas.contains("[Modificadores:")) {
+            return List.of();
+        }
+        int inicio = notas.indexOf("[Modificadores:") + "[Modificadores:".length();
+        int fin = notas.indexOf("]", inicio);
+        if (fin <= inicio) {
+            return List.of();
+        }
+        String contenido = notas.substring(inicio, fin).trim();
+        if (contenido.isEmpty()) {
+            return List.of();
+        }
+        String[] partes = contenido.split(",");
+        List<ModificadorItemDto> mods = new ArrayList<>();
+        for (String p : partes) {
+            if (!p.isBlank()) {
+                mods.add(new ModificadorItemDto(p.trim(), BigDecimal.ZERO));
+            }
+        }
+        return mods;
+    }
+
     private void verificarYLiberarMesaSiSinPedidosActivos(Mesa mesa) {
         if (mesa == null || mesa.getId() == null) {
             return;
@@ -356,6 +454,7 @@ public class PedidoService {
         List<DetallePedidoResponse> detalleResponses = new ArrayList<>();
         if (guardado.getDetalles() != null) {
             for (DetallePedido dp : guardado.getDetalles()) {
+                List<ModificadorItemDto> mods = obtenerModificadoresDeDetalle(dp);
                 detalleResponses.add(new DetallePedidoResponse(
                         dp.getId(),
                         dp.getProducto().getId(),
@@ -364,7 +463,8 @@ public class PedidoService {
                         dp.getPrecioUnitario(),
                         dp.getCantidad(),
                         dp.getNotas(),
-                        dp.getSubtotal()
+                        dp.getSubtotal(),
+                        mods
                 ));
             }
         }

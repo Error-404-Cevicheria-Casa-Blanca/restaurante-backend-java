@@ -4,6 +4,7 @@ import com.lacasablanca.backend.dto.CobrarRequest;
 import com.lacasablanca.backend.dto.CobroResponse;
 import com.lacasablanca.backend.dto.CuentaResponse;
 import com.lacasablanca.backend.dto.ItemCuentaDto;
+import com.lacasablanca.backend.dto.ModificadorItemDto;
 import com.lacasablanca.backend.dto.PagoRequestDto;
 import com.lacasablanca.backend.dto.PedidoResumenCuentaDto;
 import com.lacasablanca.backend.exception.ConflictoOperacionException;
@@ -50,17 +51,20 @@ public class CobroService {
     private final PagoRepository pagoRepository;
     private final SesionCajaRepository sesionCajaRepository;
     private final MesaService mesaService;
+    private final PedidoService pedidoService;
 
     public CobroService(MesaRepository mesaRepository,
                         PedidoRepository pedidoRepository,
                         PagoRepository pagoRepository,
                         SesionCajaRepository sesionCajaRepository,
-                        MesaService mesaService) {
+                        MesaService mesaService,
+                        PedidoService pedidoService) {
         this.mesaRepository = mesaRepository;
         this.pedidoRepository = pedidoRepository;
         this.pagoRepository = pagoRepository;
         this.sesionCajaRepository = sesionCajaRepository;
         this.mesaService = mesaService;
+        this.pedidoService = pedidoService;
     }
 
     @Transactional(readOnly = true)
@@ -96,12 +100,21 @@ public class CobroService {
                     int cantidad = detalle.getCantidad();
                     BigDecimal subtotalLinea = detalle.getSubtotal();
 
+                    List<ModificadorItemDto> mods = pedidoService.obtenerModificadoresDeDetalle(detalle);
                     if (itemsConsolidados.containsKey(prodId)) {
                         ItemCuentaDto existente = itemsConsolidados.get(prodId);
                         existente.setCantidad(existente.getCantidad() + cantidad);
                         existente.setSubtotalLinea(existente.getSubtotalLinea().add(subtotalLinea));
+                        if (!mods.isEmpty()) {
+                            List<ModificadorItemDto> acumulados = new ArrayList<>(existente.getModificadores());
+                            acumulados.addAll(mods);
+                            existente.setModificadores(acumulados);
+                        }
                     } else {
-                        itemsConsolidados.put(prodId, new ItemCuentaDto(nombre, cantidad, precio, subtotalLinea));
+                        itemsConsolidados.put(
+                                prodId,
+                                new ItemCuentaDto(nombre, cantidad, precio, subtotalLinea, mods)
+                        );
                     }
                 }
             }

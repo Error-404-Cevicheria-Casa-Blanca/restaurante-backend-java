@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 public class ItemPedidoRequest {
 
     @NotNull(message = "El producto_id es obligatorio")
@@ -16,7 +18,10 @@ public class ItemPedidoRequest {
 
     private String notas;
 
-    public ItemPedidoRequest() {}
+    private List<ModificadorItemDto> modificadores;
+
+    public ItemPedidoRequest() {
+    }
 
     public ItemPedidoRequest(Integer productoId, Integer cantidad, String notas) {
         this.productoId = productoId;
@@ -24,12 +29,45 @@ public class ItemPedidoRequest {
         this.notas = notas;
     }
 
-    public Integer getProductoId() { return productoId; }
-    public void setProductoId(Integer productoId) { this.productoId = productoId; }
+    public ItemPedidoRequest(Integer productoId,
+                             Integer cantidad,
+                             String notas,
+                             List<ModificadorItemDto> modificadores) {
+        this.productoId = productoId;
+        this.cantidad = cantidad;
+        this.notas = notas;
+        this.modificadores = modificadores;
+    }
 
-    public Integer getCantidad() { return cantidad; }
-    public void setCantidad(Integer cantidad) { this.cantidad = cantidad; }
+    public Integer getProductoId() {
+        return productoId;
+    }
 
-    public String getNotas() { return notas; }
-    public void setNotas(String notas) { this.notas = notas; }
+    public void setProductoId(Integer productoId) {
+        this.productoId = productoId;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public String getNotas() {
+        return notas;
+    }
+
+    public void setNotas(String notas) {
+        this.notas = notas;
+    }
+
+    public List<ModificadorItemDto> getModificadores() {
+        return modificadores;
+    }
+
+    public void setModificadores(List<ModificadorItemDto> modificadores) {
+        this.modificadores = modificadores;
+    }
 }
