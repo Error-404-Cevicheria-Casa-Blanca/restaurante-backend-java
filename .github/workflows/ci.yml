@@ -1,0 +1,35 @@
+name: CI — Backend Spring Boot (PRB-22)
+
+on:
+  push:
+    branches: [ main, develop, "feature/**" ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test-java:
+    name: Build, Test, Checkstyle, SpotBugs & JaCoCo (JDK 17)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: maven
+
+      - name: Run Maven Verify (Tests + Checkstyle + SpotBugs + JaCoCo)
+        run: mvn -B clean verify
+
+      - name: Upload JUnit & JaCoCo Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-and-coverage-reports
+          path: |
+            target/surefire-reports/*.xml
+            target/site/jacoco/**
