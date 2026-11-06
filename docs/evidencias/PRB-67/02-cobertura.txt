@@ -1,0 +1,15 @@
+=== REPORTE DE COBERTURA JACOCO - PRB-67 ===
+Fecha: 2026-11-05
+Rama: feature/PRB-67-hardening-seguridad
+
+Clases analizadas: 56
+Tests ejecutados: 83 (0 fallos, 0 errores, 0 omitidos)
+
+Metricas globales:
+- Lineas cubiertas:        1222 / 1484 (82.35%) [Meta > 70% CUMPLIDA]
+- Instrucciones cubiertas: 4996 / 5966 (83.74%) [Meta > 70% CUMPLIDA]
+- Ramas cubiertas:          261 /  418 (62.44%)
+
+Calidad estatica:
+- Checkstyle: 0 violaciones
+- SpotBugs:   0 bugs / 0 errores

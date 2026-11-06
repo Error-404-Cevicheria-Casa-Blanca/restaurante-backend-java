@@ -1,0 +1,32 @@
+ docs/evidencias/PRB-67/01-tests.txt                | 102 +++++++++++++++++++++
+ docs/evidencias/PRB-67/02-cobertura.txt            |  15 +++
+ docs/evidencias/PRB-67/CIERRE.md                   |  38 ++++++++
+ .../backend/controller/AuthController.java         |   2 -
+ .../backend/controller/CategoriaController.java    |   1 -
+ .../backend/controller/HealthController.java       |   2 -
+ .../backend/controller/MesaController.java         |   2 -
+ .../backend/controller/PedidoController.java       |   2 -
+ .../backend/controller/ProductoController.java     |   1 -
+ .../backend/security/SecurityConfig.java           |  39 ++++++++
+ src/main/resources/application.yml                 |   2 +
+ .../SecurityHardeningIntegrationTest.java          |  69 ++++++++++++++
+ 12 files changed, 265 insertions(+), 10 deletions(-)
+commit c7fa62a4d4328759f7d2af56df2ab619d284314b
+Author: maxmunoz-debug <max.munoz@tecsup.edu.pe>
+Date:   Thu Nov 5 23:06:19 2026 -0500
+
+    feat(PRB-67): hardening de seguridad HTTP, restriccion de CORS al panel y auditoria final
+
+ docs/evidencias/PRB-67/01-tests.txt                | 102 +++++++++++++++++++++
+ docs/evidencias/PRB-67/02-cobertura.txt            |  15 +++
+ docs/evidencias/PRB-67/CIERRE.md                   |  38 ++++++++
+ .../backend/controller/AuthController.java         |   2 -
+ .../backend/controller/CategoriaController.java    |   1 -
+ .../backend/controller/HealthController.java       |   2 -
+ .../backend/controller/MesaController.java         |   2 -
+ .../backend/controller/PedidoController.java       |   2 -
+ .../backend/controller/ProductoController.java     |   1 -
+ .../backend/security/SecurityConfig.java           |  39 ++++++++
+ src/main/resources/application.yml                 |   2 +
+ .../SecurityHardeningIntegrationTest.java          |  69 ++++++++++++++
+ 12 files changed, 265 insertions(+), 10 deletions(-)
