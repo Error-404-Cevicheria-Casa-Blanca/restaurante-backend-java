@@ -213,9 +213,7 @@ public class CobroService {
         ResultadoValidacionPagos validacion = validarYCalcularPagos(totalConsumo, request);
 
         Mesa mesa = pedido.getMesa();
-        if (mesa != null) {
-            registrarPagosEnBaseDeDatos(pedido, mesa, request, validacion.vuelto);
-        }
+        registrarPagosEnBaseDeDatos(pedido, mesa, request, validacion.vuelto);
 
         pedido.setEstado(EstadoPedido.COBRADO);
         pedidoRepository.save(pedido);
@@ -305,7 +303,7 @@ public class CobroService {
             Pago pago = new Pago();
             pago.setPedido(pedido);
             pago.setMesa(mesa);
-            pago.setMozo(mesa.getMozo() != null ? mesa.getMozo() : pedido.getMozo());
+            pago.setMozo((mesa != null && mesa.getMozo() != null) ? mesa.getMozo() : pedido.getMozo());
             pago.setSesionCaja(sesionAbierta);
             pago.setMetodo(metodoDb);
             pago.setMonto(montoNeto.compareTo(BigDecimal.ZERO) > 0 ? montoNeto : dto.getMonto());

@@ -102,7 +102,7 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoService.anularItemPedido(id, itemId, request.getMotivo(), username));
     }
 
-    @PostMapping("/{id}/pagos")
+    @PostMapping({"/{id}/pagos", "/{id}/cobrar"})
     @PreAuthorize("hasAnyRole('MOZO', 'CAJERO', 'ADMIN')")
     public ResponseEntity<CobroResponse> registrarPagoPedido(
             @PathVariable Integer id,

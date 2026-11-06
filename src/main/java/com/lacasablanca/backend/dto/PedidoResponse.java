@@ -43,6 +43,15 @@ public class PedidoResponse {
     @JsonProperty("motivo_anulacion")
     private String motivoAnulacion;
 
+    @JsonProperty("para_llevar")
+    private Boolean paraLlevar = Boolean.FALSE;
+
+    @JsonProperty("tipo_pedido")
+    private String tipoPedido = "SALON";
+
+    @JsonProperty("cliente_nombre")
+    private String clienteNombre;
+
     private List<EventoPedidoDto> eventos;
 
     public PedidoResponse() {
@@ -184,5 +193,29 @@ public class PedidoResponse {
 
     public void setEventos(List<EventoPedidoDto> eventos) {
         this.eventos = eventos;
+    }
+
+    public Boolean getParaLlevar() {
+        return paraLlevar;
+    }
+
+    public void setParaLlevar(Boolean paraLlevar) {
+        this.paraLlevar = paraLlevar;
+    }
+
+    public String getTipoPedido() {
+        return tipoPedido;
+    }
+
+    public void setTipoPedido(String tipoPedido) {
+        this.tipoPedido = tipoPedido;
+    }
+
+    public String getClienteNombre() {
+        return clienteNombre;
+    }
+
+    public void setClienteNombre(String clienteNombre) {
+        this.clienteNombre = clienteNombre;
     }
 }

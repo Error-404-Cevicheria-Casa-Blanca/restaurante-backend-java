@@ -48,6 +48,8 @@ public class PedidoService {
     private final Map<Integer, String> motivosAnulacion = new ConcurrentHashMap<>();
     private final Map<Integer, List<EventoPedidoDto>> eventosPorPedido = new ConcurrentHashMap<>();
     private final Map<Integer, List<ModificadorItemDto>> modificadoresPorDetalleId = new ConcurrentHashMap<>();
+    private final Map<Integer, String> tipoPorPedidoId = new ConcurrentHashMap<>();
+    private final Map<Integer, String> clientePorPedidoId = new ConcurrentHashMap<>();
 
     private final PedidoRepository pedidoRepository;
     private final MesaRepository mesaRepository;
@@ -94,15 +96,18 @@ public class PedidoService {
             throw new IllegalArgumentException("La lista de items no puede estar vacía");
         }
 
-        Mesa mesa = mesaRepository.findById(request.getMesaId())
-                .orElseThrow(() -> new RecursoNoEncontradoException(
-                        "Mesa no encontrada con ID: " + request.getMesaId()
-                ));
+        Mesa mesa = null;
+        if (request.getMesaId() != null) {
+            mesa = mesaRepository.findById(request.getMesaId())
+                    .orElseThrow(() -> new RecursoNoEncontradoException(
+                            "Mesa no encontrada con ID: " + request.getMesaId()
+                    ));
 
-        if (mesa.getEstado() == EstadoMesa.OCUPADA || mesa.getEstado() == EstadoMesa.CUENTA_SOLICITADA) {
-            throw new ConflictoOperacionException(
-                    "La mesa " + mesa.getNumero() + " no está disponible. Estado actual: " + mesa.getEstado()
-            );
+            if (mesa.getEstado() == EstadoMesa.OCUPADA || mesa.getEstado() == EstadoMesa.CUENTA_SOLICITADA) {
+                throw new ConflictoOperacionException(
+                        "La mesa " + mesa.getNumero() + " no está disponible. Estado actual: " + mesa.getEstado()
+                );
+            }
         }
 
         Usuario mozo = resolverMozo(username);
@@ -147,10 +152,22 @@ public class PedidoService {
         BigDecimal totalRedondeado = total.setScale(2, RoundingMode.HALF_UP);
         pedido.setTotal(totalRedondeado);
 
-        // Transición de estado mediante máquina de estados y bloqueo optimista (PRB-40)
-        mesaService.actualizarEstado(mesa.getId(), EstadoMesa.OCUPADA, username);
+        // Transición de estado mediante máquina de estados y bloqueo optimista (PRB-40) solo si tiene mesa
+        if (mesa != null) {
+            mesaService.actualizarEstado(mesa.getId(), EstadoMesa.OCUPADA, username);
+        }
 
         Pedido guardado = pedidoRepository.save(pedido);
+
+        if (guardado.getId() != null) {
+            String tipoResuelto = (request.getTipoPedido() != null && !request.getTipoPedido().isBlank())
+                    ? request.getTipoPedido().trim()
+                    : (mesa == null ? "PARA_LLEVAR" : "SALON");
+            tipoPorPedidoId.put(guardado.getId(), tipoResuelto);
+            if (request.getClienteNombre() != null && !request.getClienteNombre().isBlank()) {
+                clientePorPedidoId.put(guardado.getId(), request.getClienteNombre().trim());
+            }
+        }
 
         if (guardado.getDetalles() != null) {
             for (int i = 0; i < guardado.getDetalles().size() && i < modsPorIndice.size(); i++) {
@@ -722,6 +739,12 @@ public class PedidoService {
             response.setMotivoAnulacion(motivosAnulacion.get(guardado.getId()));
             List<EventoPedidoDto> eventos = eventosPorPedido.get(guardado.getId());
             response.setEventos(eventos != null ? new ArrayList<>(eventos) : List.of());
+            boolean esParaLlevar = guardado.getMesa() == null;
+            response.setParaLlevar(esParaLlevar);
+            response.setTipoPedido(
+                    tipoPorPedidoId.getOrDefault(guardado.getId(), esParaLlevar ? "PARA_LLEVAR" : "SALON")
+            );
+            response.setClienteNombre(clientePorPedidoId.get(guardado.getId()));
         }
         return response;
     }

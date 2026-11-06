@@ -15,7 +15,7 @@ public class Pedido {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "mesa_id", nullable = false)
+    @JoinColumn(name = "mesa_id", nullable = true)
     private Mesa mesa;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -3,12 +3,11 @@ package com.lacasablanca.backend.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 public class CrearPedidoRequest {
 
-    @NotNull(message = "El mesa_id es obligatorio")
     @JsonProperty("mesa_id")
     private Integer mesaId;
 
@@ -18,6 +17,12 @@ public class CrearPedidoRequest {
 
     @JsonProperty("client_request_id")
     private String clientRequestId;
+
+    @JsonProperty("tipo_pedido")
+    private String tipoPedido;
+
+    @JsonProperty("cliente_nombre")
+    private String clienteNombre;
 
     public CrearPedidoRequest() {
     }
@@ -31,6 +36,18 @@ public class CrearPedidoRequest {
         this.mesaId = mesaId;
         this.items = items;
         this.clientRequestId = clientRequestId;
+    }
+
+    public CrearPedidoRequest(Integer mesaId,
+                              List<ItemPedidoRequest> items,
+                              String clientRequestId,
+                              String tipoPedido,
+                              String clienteNombre) {
+        this.mesaId = mesaId;
+        this.items = items;
+        this.clientRequestId = clientRequestId;
+        this.tipoPedido = tipoPedido;
+        this.clienteNombre = clienteNombre;
     }
 
     public Integer getMesaId() {
@@ -55,5 +72,21 @@ public class CrearPedidoRequest {
 
     public void setClientRequestId(String clientRequestId) {
         this.clientRequestId = clientRequestId;
+    }
+
+    public String getTipoPedido() {
+        return tipoPedido;
+    }
+
+    public void setTipoPedido(String tipoPedido) {
+        this.tipoPedido = tipoPedido;
+    }
+
+    public String getClienteNombre() {
+        return clienteNombre;
+    }
+
+    public void setClienteNombre(String clienteNombre) {
+        this.clienteNombre = clienteNombre;
     }
 }
