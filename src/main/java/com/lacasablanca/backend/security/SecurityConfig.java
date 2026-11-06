@@ -106,6 +106,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/v1/mesas/*/fusionar").hasAnyRole("MOZO", "CAJERO", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/mesas/*/transferir").hasAnyRole("MOZO", "CAJERO", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/pedidos").hasAnyRole("MOZO", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/v1/pedidos/*/items").hasAnyRole("MOZO", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/pedidos/*/anular").hasAnyRole("MOZO", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/pedidos/*/items/*/anular").hasAnyRole("MOZO", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/pedidos/*/pagos").hasAnyRole("MOZO", "CAJERO", "ADMIN")

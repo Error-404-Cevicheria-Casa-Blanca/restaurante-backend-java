@@ -69,6 +69,21 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoService.obtenerPedidoPorId(id));
     }
 
+    @PostMapping("/{id}/items")
+    @PreAuthorize("hasAnyRole('MOZO', 'ADMIN')")
+    public ResponseEntity<PedidoResponse> ampliarPedido(
+            @PathVariable Integer id,
+            @Valid @RequestBody CrearPedidoRequest request,
+            @RequestHeader(value = "Idempotency-Key", required = false) String idempotencyKey,
+            Authentication authentication) {
+        String username = (authentication != null) ? authentication.getName() : null;
+        PedidoResponse response = pedidoService.ampliarPedidoPorId(id, request, username, idempotencyKey);
+        if (Boolean.TRUE.equals(response.getReplay())) {
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
     @PatchMapping("/{id}/estado")
     @PreAuthorize("hasAnyRole('COCINERO', 'CAJERO', 'MOZO', 'ADMIN')")
     public ResponseEntity<PedidoResponse> cambiarEstadoPedido(

@@ -44,6 +44,7 @@ public class PedidoService {
     private static final BigDecimal FACTOR_IGV = new BigDecimal("1.18");
 
     private final Map<String, Integer> idempotenciaKeyAPedidoId = new ConcurrentHashMap<>();
+    private final Map<Integer, Integer> pedidoActivoPorMesaId = new ConcurrentHashMap<>();
     private final Map<Integer, String> pedidoIdAClientRequestId = new ConcurrentHashMap<>();
     private final Map<Integer, String> motivosAnulacion = new ConcurrentHashMap<>();
     private final Map<Integer, List<EventoPedidoDto>> eventosPorPedido = new ConcurrentHashMap<>();
@@ -103,7 +104,25 @@ public class PedidoService {
                             "Mesa no encontrada con ID: " + request.getMesaId()
                     ));
 
-            if (mesa.getEstado() == EstadoMesa.OCUPADA || mesa.getEstado() == EstadoMesa.CUENTA_SOLICITADA) {
+            if (mesa.getEstado() == EstadoMesa.CUENTA_SOLICITADA) {
+                throw new ConflictoOperacionException(
+                        "La mesa " + mesa.getNumero() + " no está disponible. Estado actual: " + mesa.getEstado()
+                );
+            }
+            if (mesa.getEstado() == EstadoMesa.OCUPADA) {
+                Integer idActivo = pedidoActivoPorMesaId.get(mesa.getId());
+                if (idActivo != null) {
+                    Pedido pedidoActivo = pedidoRepository.findById(idActivo).orElse(null);
+                    if (pedidoActivo != null
+                            && pedidoActivo.getEstado() != EstadoPedido.COBRADO
+                            && pedidoActivo.getEstado() != EstadoPedido.ANULADO
+                            && pedidoActivo.getMesa() != null
+                            && mesa.getId().equals(pedidoActivo.getMesa().getId())) {
+                        return ampliarPedidoExistente(
+                                pedidoActivo, request.getItems(), username, claveIdempotencia
+                        );
+                    }
+                }
                 throw new ConflictoOperacionException(
                         "La mesa " + mesa.getNumero() + " no está disponible. Estado actual: " + mesa.getEstado()
                 );
@@ -160,6 +179,9 @@ public class PedidoService {
         Pedido guardado = pedidoRepository.save(pedido);
 
         if (guardado.getId() != null) {
+            if (mesa != null && mesa.getId() != null) {
+                pedidoActivoPorMesaId.put(mesa.getId(), guardado.getId());
+            }
             String tipoResuelto = (request.getTipoPedido() != null && !request.getTipoPedido().isBlank())
                     ? request.getTipoPedido().trim()
                     : (mesa == null ? "PARA_LLEVAR" : "SALON");
@@ -182,6 +204,109 @@ public class PedidoService {
         if (guardado.getId() != null) {
             registrarEvento(guardado.getId(), null, EstadoPedido.PENDIENTE,
                     mozo.getUsername(), "Creación de comanda");
+            if (claveIdempotencia != null) {
+                idempotenciaKeyAPedidoId.put(claveIdempotencia, guardado.getId());
+                pedidoIdAClientRequestId.put(guardado.getId(), claveIdempotencia);
+            }
+        }
+
+        PedidoResponse respuesta = construirPedidoResponse(guardado);
+        respuesta.setReplay(Boolean.FALSE);
+        respuesta.setClientRequestId(claveIdempotencia);
+        return respuesta;
+    }
+
+    @Transactional
+    public PedidoResponse ampliarPedidoPorId(Integer pedidoId,
+                                             CrearPedidoRequest request,
+                                             String username,
+                                             String headerIdempotencyKey) {
+        String claveIdempotencia = resolverClaveIdempotencia(request, headerIdempotencyKey);
+        if (claveIdempotencia != null && idempotenciaKeyAPedidoId.containsKey(claveIdempotencia)) {
+            Pedido existente = pedidoRepository.findById(idempotenciaKeyAPedidoId.get(claveIdempotencia))
+                    .orElse(null);
+            if (existente != null) {
+                PedidoResponse replay = construirPedidoResponse(existente);
+                replay.setReplay(Boolean.TRUE);
+                replay.setClientRequestId(claveIdempotencia);
+                return replay;
+            }
+        }
+        if (request == null || request.getItems() == null || request.getItems().isEmpty()) {
+            throw new IllegalArgumentException("La lista de items no puede estar vacía");
+        }
+        Pedido pedido = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Pedido no encontrado con ID: " + pedidoId));
+        if (pedido.getEstado() == EstadoPedido.COBRADO || pedido.getEstado() == EstadoPedido.ANULADO) {
+            throw new ConflictoOperacionException(
+                    "No se puede ampliar un pedido en estado " + pedido.getEstado()
+            );
+        }
+        if (pedido.getMesa() != null && pedido.getMesa().getEstado() == EstadoMesa.CUENTA_SOLICITADA) {
+            throw new ConflictoOperacionException(
+                    "La mesa " + pedido.getMesa().getNumero()
+                            + " no está disponible. Estado actual: CUENTA_SOLICITADA"
+            );
+        }
+        return ampliarPedidoExistente(pedido, request.getItems(), username, claveIdempotencia);
+    }
+
+    private PedidoResponse ampliarPedidoExistente(Pedido pedido,
+                                                  List<ItemPedidoRequest> nuevosItems,
+                                                  String username,
+                                                  String claveIdempotencia) {
+        Usuario mozo = resolverMozo(username);
+        BigDecimal totalActual = pedido.getTotal() != null ? pedido.getTotal() : BigDecimal.ZERO;
+        int indiceInicioNuevos = pedido.getDetalles() != null ? pedido.getDetalles().size() : 0;
+        List<List<ModificadorItemDto>> modsNuevos = new ArrayList<>();
+
+        for (ItemPedidoRequest itemReq : nuevosItems) {
+            if (itemReq.getCantidad() == null || itemReq.getCantidad() < 1) {
+                throw new IllegalArgumentException("La cantidad debe ser mayor o igual a 1");
+            }
+            Producto producto = productoRepository.findById(itemReq.getProductoId())
+                    .orElseThrow(() -> new RecursoNoEncontradoException(
+                            "Producto no encontrado con ID: " + itemReq.getProductoId()
+                    ));
+            if (Boolean.FALSE.equals(producto.getDisponible())) {
+                throw new ConflictoOperacionException(
+                        "El producto '" + producto.getNombre() + "' no está disponible actualmente"
+                );
+            }
+            List<ModificadorItemDto> modsItem = limpiarModificadores(itemReq.getModificadores());
+            modsNuevos.add(modsItem);
+            BigDecimal recargoMods = calcularRecargoModificadores(modsItem);
+            BigDecimal precioUnitario = producto.getPrecio().add(recargoMods).setScale(2, RoundingMode.HALF_UP);
+            BigDecimal subtotalItem = precioUnitario.multiply(BigDecimal.valueOf(itemReq.getCantidad()))
+                    .setScale(2, RoundingMode.HALF_UP);
+            String notasFinales = componerNotasConModificadores(itemReq.getNotas(), modsItem);
+
+            DetallePedido detalle = new DetallePedido(
+                    producto, precioUnitario, itemReq.getCantidad(), notasFinales, subtotalItem
+            );
+            pedido.agregarDetalle(detalle);
+            totalActual = totalActual.add(subtotalItem);
+        }
+
+        pedido.setTotal(totalActual.setScale(2, RoundingMode.HALF_UP));
+        Pedido guardado = pedidoRepository.save(pedido);
+
+        if (guardado.getDetalles() != null) {
+            for (int i = 0; i < modsNuevos.size(); i++) {
+                int idx = indiceInicioNuevos + i;
+                if (idx < guardado.getDetalles().size()) {
+                    DetallePedido dp = guardado.getDetalles().get(idx);
+                    List<ModificadorItemDto> mods = modsNuevos.get(i);
+                    if (dp.getId() != null && !mods.isEmpty()) {
+                        modificadoresPorDetalleId.put(dp.getId(), mods);
+                    }
+                }
+            }
+        }
+
+        if (guardado.getId() != null) {
+            registrarEvento(guardado.getId(), guardado.getEstado(), guardado.getEstado(),
+                    mozo.getUsername(), "Ampliación de comanda existente (+" + nuevosItems.size() + " ítems)");
             if (claveIdempotencia != null) {
                 idempotenciaKeyAPedidoId.put(claveIdempotencia, guardado.getId());
                 pedidoIdAClientRequestId.put(guardado.getId(), claveIdempotencia);
