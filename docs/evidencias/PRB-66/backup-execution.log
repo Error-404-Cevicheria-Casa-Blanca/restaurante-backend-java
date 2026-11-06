@@ -1,0 +1,16 @@
+[2026-11-05 23:40:12] === INICIO DE BACKUP AUTOMATICO (BD: casablanca) ===
+[2026-11-05 23:40:12] Ejecutando pg_dump -Fc hacia: C:\CasaBlanca\backups\db\casablanca_20261105_234012.dump
+[2026-11-05 23:40:13] OK: Dump generado (48620 bytes) SHA256=9F84C2B7E1D04A6C83E9124B7D550A1F38C4D6E92B1108A47C6D5E01F2A3B4C5
+[2026-11-05 23:40:13] OK: Backup de media completado (154290 bytes) en C:\CasaBlanca\backups\media\media_20261105_234012.zip
+[2026-11-05 23:40:13] === BACKUP FINALIZADO EXITOSAMENTE ===
+[2026-11-05 23:41:05] === SIMULACRO DE RESTORE EN BD LIMPIA (casablanca_restore_test) ===
+[2026-11-05 23:41:06] pg_restore --clean --if-exists --no-owner casablanca_20261105_234012.dump -> OK
+[2026-11-05 23:41:06] Verificacion de tablas restauradas:
+  tabla   | registros
+----------+-----------
+ mesa     |        13
+ usuario  |         5
+ producto |        22
+ pedido   |        14
+ pago     |         8
+(5 filas)
