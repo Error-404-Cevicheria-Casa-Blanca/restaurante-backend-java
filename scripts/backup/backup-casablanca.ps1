@@ -45,6 +45,10 @@ $pgDumpExe = if ($pgDumpCmd) { $pgDumpCmd.Source } else { "C:\Program Files\Post
 $dumpFile = Join-Path $dbBackupDir "${DbName}_${timestamp}.dump"
 Write-BackupLog "Ejecutando pg_dump -Fc hacia: $dumpFile"
 
+if (-not $env:PGPASSWORD -and $env:DB_PASSWORD) {
+    $env:PGPASSWORD = $env:DB_PASSWORD
+}
+
 & $pgDumpExe -h $DbHost -p $DbPort -U $DbUser -Fc -f $dumpFile $DbName
 if ($LASTEXITCODE -ne 0) {
     Write-BackupLog "ERROR: pg_dump finalizo con codigo $LASTEXITCODE"

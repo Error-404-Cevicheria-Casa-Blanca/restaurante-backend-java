@@ -70,7 +70,12 @@ if (Test-Path $NssmPath) {
     & $NssmPath set CasaBlancaAdminDjango AppRestartDelay 5000
     Write-Host "[OK] Servicio CasaBlancaAdminDjango (:8000) registrado con auto-restart." -ForegroundColor Green
 } else {
-    Write-Host "[INFO] NSSM no encontrado en $NssmPath. Registrando definicion mediante sc.exe..."
+    Write-Host "[INFO] NSSM no encontrado en $NssmPath. Registrando definicion alternativa mediante sc.exe..."
+    $backendBin = "`"$JavaExe`" -jar `"$InstallRoot\backend\restaurante-backend.jar`""
+    sc.exe create CasaBlancaBackendJava binPath= $backendBin start= auto DisplayName= "Casa Blanca Backend Java" | Out-Null
+    $djangoBin = "`"$PythonExe`" -m waitress --host=0.0.0.0 --port=8000 config.wsgi:application"
+    sc.exe create CasaBlancaAdminDjango binPath= $djangoBin start= auto DisplayName= "Casa Blanca Admin Django" | Out-Null
+    Write-Host "[OK] Servicios creados con sc.exe (fallback sin NSSM)." -ForegroundColor Green
 }
 
 # 5. Configurar Firewall de Windows para permitir solo subred LAN en puertos 8080 y 8000

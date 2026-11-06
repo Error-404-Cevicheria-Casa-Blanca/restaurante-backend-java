@@ -66,7 +66,7 @@ Batería de 12 casos de prueba automatizados con `MockMvc` y H2:
   - **84.24% en Instrucciones** (3,101 de 3,681).
   - **69.80% en Ramas** (141 de 202).
 * **Análisis Estático de Código:**
-  - **Checkstyle 3.4.0:** 0 violaciones de estilo (`You have 0 Checkstyle violations`).
+  - **Checkstyle 3.4.0:** 0 errores bloqueantes de estilo (`You have 0 Checkstyle violations`, con advertencias de espaciado estilístico preexistentes).
   - **SpotBugs 4.8.6.6:** 0 bugs detectados (`BugInstance size is 0`).
 
 ---

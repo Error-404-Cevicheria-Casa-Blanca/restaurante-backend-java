@@ -13,9 +13,7 @@ Se ejecutó la auditoría integral de seguridad y el endurecimiento de la config
    - `Referrer-Policy: same-origin` (protección contra fuga de URLs internas en cabeceras Referer).
 3. **Eliminación de secretos por defecto y aislamiento de usuarios de prueba**:
    - `application.yml` exige variables de entorno obligatorias (`${DB_URL}`, `${DB_USER}`, `${DB_PASSWORD}`, `${JWT_SECRET}`) sin contraseñas hardcodeadas.
-   - `DataInitializer.java` está restringido exclusivamente a `@Profile("test")` (base de datos en memoria H2 para pruebas automatizadas).
-4. **Restricción de tráfico LAN en tablet Android (`network_security_config.xml`)**:
-   - El tráfico en la LAN local se limita exclusivamente a la IP privada del servidor central del local (`192.168.1.x`) y `10.0.2.2` en entorno de desarrollo.
+   - `DataInitializer.java` siembra datos iniciales solo cuando las tablas se encuentran vacías y persiste credenciales con BCrypt.
 
 ## 3. Informe de Hallazgos de Seguridad (Matriz de Severidad y Estado)
 
