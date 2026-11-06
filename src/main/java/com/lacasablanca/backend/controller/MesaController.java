@@ -8,6 +8,7 @@ import com.lacasablanca.backend.dto.DivisionMesaResponse;
 import com.lacasablanca.backend.dto.EstadoMesaRequest;
 import com.lacasablanca.backend.dto.FusionarMesasRequest;
 import com.lacasablanca.backend.dto.MesaDto;
+import com.lacasablanca.backend.dto.TrabajoImpresionDto;
 import com.lacasablanca.backend.dto.TransferirMesaRequest;
 import com.lacasablanca.backend.service.CobroService;
 import com.lacasablanca.backend.service.MesaService;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -79,6 +81,22 @@ public class MesaController {
                                                              Authentication authentication) {
         String identificador = (authentication != null) ? authentication.getName() : null;
         return ResponseEntity.ok(cobroService.solicitarPrecuenta(id, identificador));
+    }
+
+    @GetMapping("/{id}/impresion")
+    @PreAuthorize("hasAnyRole('MOZO', 'CAJERO', 'ADMIN')")
+    public ResponseEntity<TrabajoImpresionDto> obtenerEstadoImpresion(@PathVariable Integer id) {
+        return ResponseEntity.ok(cobroService.obtenerEstadoImpresion(id));
+    }
+
+    @PostMapping("/{id}/precuenta/reimprimir")
+    @PreAuthorize("hasAnyRole('MOZO', 'CAJERO', 'ADMIN')")
+    public ResponseEntity<TrabajoImpresionDto> reimprimirPrecuenta(
+            @PathVariable Integer id,
+            @RequestParam(value = "simular_error", defaultValue = "false") boolean simularError,
+            Authentication authentication) {
+        String identificador = (authentication != null) ? authentication.getName() : null;
+        return ResponseEntity.ok(cobroService.reimprimirPrecuenta(id, simularError, identificador));
     }
 
     @PostMapping("/{id}/dividir")

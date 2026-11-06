@@ -18,6 +18,15 @@ public class CuentaResponse {
     @JsonProperty("propina_sugerida")
     private BigDecimal propinaSugerida;
 
+    @JsonProperty("impresion_job_id")
+    private String impresionJobId;
+
+    @JsonProperty("estado_impresion")
+    private String estadoImpresion;
+
+    @JsonProperty("intentos_impresion")
+    private Integer intentosImpresion;
+
     public CuentaResponse() {
     }
 
@@ -87,5 +96,29 @@ public class CuentaResponse {
 
     public void setPropinaSugerida(BigDecimal propinaSugerida) {
         this.propinaSugerida = propinaSugerida;
+    }
+
+    public String getImpresionJobId() {
+        return impresionJobId;
+    }
+
+    public void setImpresionJobId(String impresionJobId) {
+        this.impresionJobId = impresionJobId;
+    }
+
+    public String getEstadoImpresion() {
+        return estadoImpresion;
+    }
+
+    public void setEstadoImpresion(String estadoImpresion) {
+        this.estadoImpresion = estadoImpresion;
+    }
+
+    public Integer getIntentosImpresion() {
+        return intentosImpresion;
+    }
+
+    public void setIntentosImpresion(Integer intentosImpresion) {
+        this.intentosImpresion = intentosImpresion;
     }
 }

@@ -7,6 +7,7 @@ import com.lacasablanca.backend.dto.ItemCuentaDto;
 import com.lacasablanca.backend.dto.ModificadorItemDto;
 import com.lacasablanca.backend.dto.PagoRequestDto;
 import com.lacasablanca.backend.dto.PedidoResumenCuentaDto;
+import com.lacasablanca.backend.dto.TrabajoImpresionDto;
 import com.lacasablanca.backend.exception.ConflictoOperacionException;
 import com.lacasablanca.backend.exception.RecursoNoEncontradoException;
 import com.lacasablanca.backend.model.DetallePedido;
@@ -45,6 +46,7 @@ public class CobroService {
     );
 
     private final Map<String, CobroResponse> cobrosIdempotentes = new ConcurrentHashMap<>();
+    private final Map<Integer, TrabajoImpresionDto> trabajosImpresionMesa = new ConcurrentHashMap<>();
 
     private final MesaRepository mesaRepository;
     private final PedidoRepository pedidoRepository;
@@ -124,7 +126,7 @@ public class CobroService {
                 .map(p -> new PedidoResumenCuentaDto(p.getId(), p.getEstado().name(), p.getTotal()))
                 .collect(Collectors.toList());
 
-        return new CuentaResponse(
+        CuentaResponse response = new CuentaResponse(
                 mesa.getId(),
                 pedidosDto,
                 new ArrayList<>(itemsConsolidados.values()),
@@ -133,6 +135,13 @@ public class CobroService {
                 total,
                 propinaSugerida
         );
+        TrabajoImpresionDto job = trabajosImpresionMesa.get(mesaId);
+        if (job != null) {
+            response.setImpresionJobId(job.getJobId());
+            response.setEstadoImpresion(job.getEstado());
+            response.setIntentosImpresion(job.getIntentos());
+        }
+        return response;
     }
 
     @Transactional
@@ -261,7 +270,63 @@ public class CobroService {
             mesaService.actualizarEstado(mesaId, EstadoMesa.CUENTA_SOLICITADA, identificadorUsuario);
         }
 
+        registrarTrabajoImpresion(mesaId, false);
         return obtenerCuenta(mesaId);
+    }
+
+    @Transactional
+    public TrabajoImpresionDto reimprimirPrecuenta(Integer mesaId,
+                                                   boolean simularError,
+                                                   String identificadorUsuario) {
+        Mesa mesa = mesaRepository.findById(mesaId)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Mesa no encontrada con ID: " + mesaId));
+
+        if (mesa.getEstado() == EstadoMesa.LIBRE) {
+            throw new ConflictoOperacionException("La mesa " + mesa.getNumero() + " está LIBRE");
+        }
+
+        return registrarTrabajoImpresion(mesaId, simularError);
+    }
+
+    @Transactional(readOnly = true)
+    public TrabajoImpresionDto obtenerEstadoImpresion(Integer mesaId) {
+        Mesa mesa = mesaRepository.findById(mesaId)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Mesa no encontrada con ID: " + mesaId));
+
+        TrabajoImpresionDto existente = trabajosImpresionMesa.get(mesa.getId());
+        if (existente != null) {
+            return existente;
+        }
+        return new TrabajoImpresionDto(
+                "job-mesa-" + mesa.getId() + "-pendiente",
+                mesa.getId(),
+                "PRECUENTA_80MM",
+                "EN_COLA",
+                0,
+                null,
+                OffsetDateTime.now()
+        );
+    }
+
+    private TrabajoImpresionDto registrarTrabajoImpresion(Integer mesaId, boolean simularError) {
+        TrabajoImpresionDto previo = trabajosImpresionMesa.get(mesaId);
+        int intentos = (previo != null && previo.getIntentos() != null) ? previo.getIntentos() + 1 : 1;
+        String jobId = "print-mesa-" + mesaId + "-" + intentos;
+        String estado = simularError ? "ERROR" : "IMPRESO";
+        String mensajeError = simularError
+                ? "Impresora térmica 80mm sin respuesta (apagada o desconectada). Comanda y cuenta operativas."
+                : null;
+        TrabajoImpresionDto nuevo = new TrabajoImpresionDto(
+                jobId,
+                mesaId,
+                "PRECUENTA_80MM",
+                estado,
+                intentos,
+                mensajeError,
+                OffsetDateTime.now()
+        );
+        trabajosImpresionMesa.put(mesaId, nuevo);
+        return nuevo;
     }
 
     private void registrarPagosEnBaseDeDatos(Pedido pedido,
