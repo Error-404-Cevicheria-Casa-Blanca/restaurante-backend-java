@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class JwtUtil {
@@ -16,8 +19,10 @@ public class JwtUtil {
     @Value("${app.jwt.secret}")
     private String secret;
 
-    @Value("${app.jwt.expiration-ms}")
+    @Value("${app.jwt.expiration-ms:43200000}")
     private long expirationMs;
+
+    private final Set<String> tokensRevocados = ConcurrentHashMap.newKeySet();
 
     private SecretKey getSigningKey() {
         byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
@@ -32,6 +37,7 @@ public class JwtUtil {
         Date now = new Date();
         Date exp = new Date(now.getTime() + customExpirationMs);
         return Jwts.builder()
+                .id(UUID.randomUUID().toString())
                 .subject(String.valueOf(usuarioId))
                 .claim("nombre", username)
                 .claim("rol", rol)
@@ -47,5 +53,15 @@ public class JwtUtil {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+
+    public void revocarToken(String token) {
+        if (token != null && !token.isBlank()) {
+            tokensRevocados.add(token.trim());
+        }
+    }
+
+    public boolean esTokenRevocado(String token) {
+        return token != null && tokensRevocados.contains(token.trim());
     }
 }

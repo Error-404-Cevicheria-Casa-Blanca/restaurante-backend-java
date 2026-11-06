@@ -20,6 +20,15 @@ public class GlobalExceptionHandler {
                 .body(Map.of("mensaje", ex.getMessage()));
     }
 
+    @ExceptionHandler(CuentaBloqueadaException.class)
+    public ResponseEntity<Map<String, String>> handleCuentaBloqueada(CuentaBloqueadaException ex) {
+        return ResponseEntity.status(HttpStatus.LOCKED)
+                .body(Map.of(
+                        "mensaje", ex.getMessage(),
+                        "codigo", "CUENTA_BLOQUEADA"
+                ));
+    }
+
     @ExceptionHandler(RecursoNoEncontradoException.class)
     public ResponseEntity<Map<String, String>> handleNotFound(RecursoNoEncontradoException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)

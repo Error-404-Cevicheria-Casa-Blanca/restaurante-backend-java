@@ -1,0 +1,15 @@
+=== REPORTE DE COBERTURA JACOCO - PRB-54 ===
+Fecha: 2026-11-05
+Rama: feature/PRB-54-roles-pin-acceso
+
+Clases analizadas: 53
+Tests ejecutados: 76 (0 fallos, 0 errores, 0 omitidos)
+
+Metricas globales:
+- Lineas cubiertas:        1105 / 1307 (84.54%) [Meta > 70% CUMPLIDA]
+- Instrucciones cubiertas: 4533 / 5321 (85.19%) [Meta > 70% CUMPLIDA]
+- Ramas cubiertas:          235 /  372 (63.17%)
+
+Calidad estatica:
+- Checkstyle: 0 violaciones
+- SpotBugs:   0 bugs / 0 errores

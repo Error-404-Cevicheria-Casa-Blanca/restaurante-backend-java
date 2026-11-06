@@ -20,6 +20,9 @@ public class Usuario {
     @JoinColumn(name = "rol_id", nullable = false)
     private Rol rol;
 
+    @Transient
+    private String pinHash;
+
     public Usuario() {}
 
     public Usuario(String username, String claveHash, Rol rol) {
@@ -46,4 +49,12 @@ public class Usuario {
 
     public Rol getRol() { return rol; }
     public void setRol(Rol rol) { this.rol = rol; }
+
+    public String getPinHash() {
+        return pinHash;
+    }
+
+    public void setPinHash(String pinHash) {
+        this.pinHash = pinHash;
+    }
 }
