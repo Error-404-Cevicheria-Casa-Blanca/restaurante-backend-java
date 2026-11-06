@@ -35,9 +35,24 @@ public class PedidoResponse {
     @JsonProperty("items_por_estacion")
     private Map<Estacion, List<DetallePedidoResponse>> itemsPorEstacion;
 
-    public PedidoResponse() {}
+    @JsonProperty("client_request_id")
+    private String clientRequestId;
 
-    public PedidoResponse(Integer id, Integer mesaId, Integer mozoId, String mozoNombre, EstadoPedido estado, BigDecimal subtotal, BigDecimal igv, BigDecimal total, LocalDateTime fechaCreacion, List<DetallePedidoResponse> items, Map<Estacion, List<DetallePedidoResponse>> itemsPorEstacion) {
+    private Boolean replay = Boolean.FALSE;
+
+    @JsonProperty("motivo_anulacion")
+    private String motivoAnulacion;
+
+    private List<EventoPedidoDto> eventos;
+
+    public PedidoResponse() {
+    }
+
+    public PedidoResponse(Integer id, Integer mesaId, Integer mozoId, String mozoNombre,
+                          EstadoPedido estado, BigDecimal subtotal, BigDecimal igv,
+                          BigDecimal total, LocalDateTime fechaCreacion,
+                          List<DetallePedidoResponse> items,
+                          Map<Estacion, List<DetallePedidoResponse>> itemsPorEstacion) {
         this.id = id;
         this.mesaId = mesaId;
         this.mozoId = mozoId;
@@ -51,36 +66,123 @@ public class PedidoResponse {
         this.itemsPorEstacion = itemsPorEstacion;
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public Integer getId() {
+        return id;
+    }
 
-    public Integer getMesaId() { return mesaId; }
-    public void setMesaId(Integer mesaId) { this.mesaId = mesaId; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public Integer getMozoId() { return mozoId; }
-    public void setMozoId(Integer mozoId) { this.mozoId = mozoId; }
+    public Integer getMesaId() {
+        return mesaId;
+    }
 
-    public String getMozoNombre() { return mozoNombre; }
-    public void setMozoNombre(String mozoNombre) { this.mozoNombre = mozoNombre; }
+    public void setMesaId(Integer mesaId) {
+        this.mesaId = mesaId;
+    }
 
-    public EstadoPedido getEstado() { return estado; }
-    public void setEstado(EstadoPedido estado) { this.estado = estado; }
+    public Integer getMozoId() {
+        return mozoId;
+    }
 
-    public BigDecimal getSubtotal() { return subtotal; }
-    public void setSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }
+    public void setMozoId(Integer mozoId) {
+        this.mozoId = mozoId;
+    }
 
-    public BigDecimal getIgv() { return igv; }
-    public void setIgv(BigDecimal igv) { this.igv = igv; }
+    public String getMozoNombre() {
+        return mozoNombre;
+    }
 
-    public BigDecimal getTotal() { return total; }
-    public void setTotal(BigDecimal total) { this.total = total; }
+    public void setMozoNombre(String mozoNombre) {
+        this.mozoNombre = mozoNombre;
+    }
 
-    public LocalDateTime getFechaCreacion() { return fechaCreacion; }
-    public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }
+    public EstadoPedido getEstado() {
+        return estado;
+    }
 
-    public List<DetallePedidoResponse> getItems() { return items; }
-    public void setItems(List<DetallePedidoResponse> items) { this.items = items; }
+    public void setEstado(EstadoPedido estado) {
+        this.estado = estado;
+    }
 
-    public Map<Estacion, List<DetallePedidoResponse>> getItemsPorEstacion() { return itemsPorEstacion; }
-    public void setItemsPorEstacion(Map<Estacion, List<DetallePedidoResponse>> itemsPorEstacion) { this.itemsPorEstacion = itemsPorEstacion; }
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public BigDecimal getIgv() {
+        return igv;
+    }
+
+    public void setIgv(BigDecimal igv) {
+        this.igv = igv;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public List<DetallePedidoResponse> getItems() {
+        return items;
+    }
+
+    public void setItems(List<DetallePedidoResponse> items) {
+        this.items = items;
+    }
+
+    public Map<Estacion, List<DetallePedidoResponse>> getItemsPorEstacion() {
+        return itemsPorEstacion;
+    }
+
+    public void setItemsPorEstacion(Map<Estacion, List<DetallePedidoResponse>> itemsPorEstacion) {
+        this.itemsPorEstacion = itemsPorEstacion;
+    }
+
+    public String getClientRequestId() {
+        return clientRequestId;
+    }
+
+    public void setClientRequestId(String clientRequestId) {
+        this.clientRequestId = clientRequestId;
+    }
+
+    public Boolean getReplay() {
+        return replay;
+    }
+
+    public void setReplay(Boolean replay) {
+        this.replay = replay;
+    }
+
+    public String getMotivoAnulacion() {
+        return motivoAnulacion;
+    }
+
+    public void setMotivoAnulacion(String motivoAnulacion) {
+        this.motivoAnulacion = motivoAnulacion;
+    }
+
+    public List<EventoPedidoDto> getEventos() {
+        return eventos;
+    }
+
+    public void setEventos(List<EventoPedidoDto> eventos) {
+        this.eventos = eventos;
+    }
 }

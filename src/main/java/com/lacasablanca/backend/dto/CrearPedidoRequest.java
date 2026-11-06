@@ -16,16 +16,44 @@ public class CrearPedidoRequest {
     @Valid
     private List<ItemPedidoRequest> items;
 
-    public CrearPedidoRequest() {}
+    @JsonProperty("client_request_id")
+    private String clientRequestId;
+
+    public CrearPedidoRequest() {
+    }
 
     public CrearPedidoRequest(Integer mesaId, List<ItemPedidoRequest> items) {
         this.mesaId = mesaId;
         this.items = items;
     }
 
-    public Integer getMesaId() { return mesaId; }
-    public void setMesaId(Integer mesaId) { this.mesaId = mesaId; }
+    public CrearPedidoRequest(Integer mesaId, List<ItemPedidoRequest> items, String clientRequestId) {
+        this.mesaId = mesaId;
+        this.items = items;
+        this.clientRequestId = clientRequestId;
+    }
 
-    public List<ItemPedidoRequest> getItems() { return items; }
-    public void setItems(List<ItemPedidoRequest> items) { this.items = items; }
+    public Integer getMesaId() {
+        return mesaId;
+    }
+
+    public void setMesaId(Integer mesaId) {
+        this.mesaId = mesaId;
+    }
+
+    public List<ItemPedidoRequest> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ItemPedidoRequest> items) {
+        this.items = items;
+    }
+
+    public String getClientRequestId() {
+        return clientRequestId;
+    }
+
+    public void setClientRequestId(String clientRequestId) {
+        this.clientRequestId = clientRequestId;
+    }
 }

@@ -5,5 +5,6 @@ public enum EstadoPedido {
     COCINANDO,
     LISTO,
     SERVIDO,
-    COBRADO
+    COBRADO,
+    ANULADO
 }

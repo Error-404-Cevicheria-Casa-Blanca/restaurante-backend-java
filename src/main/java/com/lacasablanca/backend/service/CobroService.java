@@ -62,7 +62,7 @@ public class CobroService {
 
         List<Pedido> pedidosActivos = pedidoRepository.findByMesaIdAndEstadoNotOrderByFechaCreacionAsc(
                 mesaId, EstadoPedido.COBRADO
-        );
+        ).stream().filter(p -> p.getEstado() != EstadoPedido.ANULADO).collect(Collectors.toList());
 
         BigDecimal total = pedidosActivos.stream()
                 .map(Pedido::getTotal)
@@ -128,7 +128,7 @@ public class CobroService {
 
         List<Pedido> pedidosActivos = pedidoRepository.findByMesaIdAndEstadoNotOrderByFechaCreacionAsc(
                 mesaId, EstadoPedido.COBRADO
-        );
+        ).stream().filter(p -> p.getEstado() != EstadoPedido.ANULADO).collect(Collectors.toList());
 
         BigDecimal totalConsumo = pedidosActivos.stream()
                 .map(Pedido::getTotal)
