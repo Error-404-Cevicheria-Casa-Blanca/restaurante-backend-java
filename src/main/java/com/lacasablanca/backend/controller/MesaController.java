@@ -3,10 +3,15 @@ package com.lacasablanca.backend.controller;
 import com.lacasablanca.backend.dto.CobrarRequest;
 import com.lacasablanca.backend.dto.CobroResponse;
 import com.lacasablanca.backend.dto.CuentaResponse;
+import com.lacasablanca.backend.dto.DividirMesaRequest;
+import com.lacasablanca.backend.dto.DivisionMesaResponse;
 import com.lacasablanca.backend.dto.EstadoMesaRequest;
+import com.lacasablanca.backend.dto.FusionarMesasRequest;
 import com.lacasablanca.backend.dto.MesaDto;
+import com.lacasablanca.backend.dto.TransferirMesaRequest;
 import com.lacasablanca.backend.service.CobroService;
 import com.lacasablanca.backend.service.MesaService;
+import com.lacasablanca.backend.service.PedidoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +33,14 @@ public class MesaController {
 
     private final MesaService mesaService;
     private final CobroService cobroService;
+    private final PedidoService pedidoService;
 
-    public MesaController(MesaService mesaService, CobroService cobroService) {
+    public MesaController(MesaService mesaService,
+                          CobroService cobroService,
+                          PedidoService pedidoService) {
         this.mesaService = mesaService;
         this.cobroService = cobroService;
+        this.pedidoService = pedidoService;
     }
 
     @GetMapping
@@ -70,5 +79,34 @@ public class MesaController {
                                                              Authentication authentication) {
         String identificador = (authentication != null) ? authentication.getName() : null;
         return ResponseEntity.ok(cobroService.solicitarPrecuenta(id, identificador));
+    }
+
+    @PostMapping("/{id}/dividir")
+    @PreAuthorize("hasAnyRole('MOZO', 'CAJERO', 'ADMIN')")
+    public ResponseEntity<DivisionMesaResponse> dividirMesa(@PathVariable Integer id,
+                                                            @Valid @RequestBody DividirMesaRequest request,
+                                                            Authentication authentication) {
+        String identificador = (authentication != null) ? authentication.getName() : null;
+        return ResponseEntity.ok(pedidoService.dividirMesa(id, request, identificador));
+    }
+
+    @PostMapping("/{id}/fusionar")
+    @PreAuthorize("hasAnyRole('MOZO', 'CAJERO', 'ADMIN')")
+    public ResponseEntity<CuentaResponse> fusionarMesas(@PathVariable Integer id,
+                                                        @Valid @RequestBody FusionarMesasRequest request,
+                                                        Authentication authentication) {
+        String identificador = (authentication != null) ? authentication.getName() : null;
+        pedidoService.fusionarMesas(id, request, identificador);
+        return ResponseEntity.ok(cobroService.obtenerCuenta(id));
+    }
+
+    @PostMapping("/{id}/transferir")
+    @PreAuthorize("hasAnyRole('MOZO', 'CAJERO', 'ADMIN')")
+    public ResponseEntity<CuentaResponse> transferirMesa(@PathVariable Integer id,
+                                                         @Valid @RequestBody TransferirMesaRequest request,
+                                                         Authentication authentication) {
+        String identificador = (authentication != null) ? authentication.getName() : null;
+        pedidoService.transferirMesa(id, request, identificador);
+        return ResponseEntity.ok(cobroService.obtenerCuenta(request.getMesaDestinoId()));
     }
 }

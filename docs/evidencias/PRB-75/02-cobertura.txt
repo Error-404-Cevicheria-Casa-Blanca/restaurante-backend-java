@@ -1,0 +1,15 @@
+=== REPORTE DE COBERTURA JACOCO - PRB-75 ===
+Fecha: 2026-11-05
+Rama: feature/PRB-75-division-fusion-transferencia-mesas
+
+Clases analizadas: 61
+Tests ejecutados: 89 (0 fallos, 0 errores, 0 omitidos)
+
+Metricas globales:
+- Lineas cubiertas:        1490 / 1818 (81.96%) [Meta > 70% CUMPLIDA]
+- Instrucciones cubiertas: 6169 / 7417 (83.17%) [Meta > 70% CUMPLIDA]
+- Ramas cubiertas:          357 /  582 (61.34%)
+
+Calidad estatica:
+- Checkstyle: 0 violaciones
+- SpotBugs:   0 bugs / 0 errores

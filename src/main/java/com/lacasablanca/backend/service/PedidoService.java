@@ -2,10 +2,14 @@ package com.lacasablanca.backend.service;
 
 import com.lacasablanca.backend.dto.CrearPedidoRequest;
 import com.lacasablanca.backend.dto.DetallePedidoResponse;
+import com.lacasablanca.backend.dto.DividirMesaRequest;
+import com.lacasablanca.backend.dto.DivisionMesaResponse;
 import com.lacasablanca.backend.dto.EventoPedidoDto;
+import com.lacasablanca.backend.dto.FusionarMesasRequest;
 import com.lacasablanca.backend.dto.ItemPedidoRequest;
 import com.lacasablanca.backend.dto.ModificadorItemDto;
 import com.lacasablanca.backend.dto.PedidoResponse;
+import com.lacasablanca.backend.dto.TransferirMesaRequest;
 import com.lacasablanca.backend.exception.ConflictoOperacionException;
 import com.lacasablanca.backend.exception.RecursoNoEncontradoException;
 import com.lacasablanca.backend.model.DetallePedido;
@@ -308,6 +312,233 @@ public class PedidoService {
         }
 
         return construirPedidoResponse(guardado);
+    }
+
+    @Transactional
+    public DivisionMesaResponse dividirMesa(Integer mesaOrigenId, DividirMesaRequest request, String username) {
+        if (request == null || request.getItemIds() == null || request.getItemIds().isEmpty()) {
+            throw new IllegalArgumentException("Debe indicar al menos un item_id para dividir la cuenta");
+        }
+
+        Mesa mesaOrigen = mesaRepository.findById(mesaOrigenId)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Mesa no encontrada con ID: " + mesaOrigenId));
+
+        if (mesaOrigen.getEstado() == EstadoMesa.LIBRE) {
+            throw new ConflictoOperacionException(
+                    "No se puede dividir la mesa " + mesaOrigen.getNumero() + " porque se encuentra LIBRE"
+            );
+        }
+
+        List<Pedido> pedidosActivos = pedidoRepository.findByMesaIdOrderByFechaCreacionDesc(mesaOrigenId).stream()
+                .filter(p -> p.getEstado() != EstadoPedido.COBRADO && p.getEstado() != EstadoPedido.ANULADO)
+                .collect(Collectors.toList());
+
+        if (pedidosActivos.isEmpty()) {
+            throw new ConflictoOperacionException(
+                    "La mesa " + mesaOrigen.getNumero() + " no tiene pedidos activos para dividir"
+            );
+        }
+
+        Mesa mesaDestino = mesaOrigen;
+        if (request.getMesaDestinoId() != null && !request.getMesaDestinoId().equals(mesaOrigenId)) {
+            mesaDestino = mesaRepository.findById(request.getMesaDestinoId())
+                    .orElseThrow(() -> new RecursoNoEncontradoException(
+                            "Mesa destino no encontrada con ID: " + request.getMesaDestinoId()
+                    ));
+            if (mesaDestino.getEstado() == EstadoMesa.OCUPADA
+                    || mesaDestino.getEstado() == EstadoMesa.CUENTA_SOLICITADA) {
+                throw new ConflictoOperacionException(
+                        "La mesa destino " + mesaDestino.getNumero()
+                                + " ya se encuentra ocupada. Estado actual: " + mesaDestino.getEstado()
+                );
+            }
+        }
+
+        Pedido pedidoOrigen = pedidosActivos.get(0);
+        List<DetallePedido> itemsAMover = new ArrayList<>();
+        for (Integer itemId : request.getItemIds()) {
+            DetallePedido encontrado = pedidoOrigen.getDetalles().stream()
+                    .filter(dp -> dp.getId() != null && dp.getId().equals(itemId))
+                    .findFirst()
+                    .orElseThrow(() -> new RecursoNoEncontradoException(
+                            "Ítem con ID " + itemId + " no pertenece al pedido activo de la mesa " + mesaOrigenId
+                    ));
+            itemsAMover.add(encontrado);
+        }
+
+        if (itemsAMover.size() >= pedidoOrigen.getDetalles().size()) {
+            throw new ConflictoOperacionException(
+                    "No se pueden separar todos los ítems en una división; debe quedar al menos un ítem en la cuenta original"
+            );
+        }
+
+        Pedido nuevoPedido = new Pedido(
+                mesaDestino,
+                pedidoOrigen.getMozo(),
+                pedidoOrigen.getEstado(),
+                BigDecimal.ZERO
+        );
+
+        for (DetallePedido itemOriginal : itemsAMover) {
+            List<ModificadorItemDto> modsPrevios = obtenerModificadoresDeDetalle(itemOriginal);
+            pedidoOrigen.getDetalles().remove(itemOriginal);
+
+            DetallePedido clon = new DetallePedido(
+                    itemOriginal.getProducto(),
+                    itemOriginal.getPrecioUnitario(),
+                    itemOriginal.getCantidad(),
+                    itemOriginal.getNotas(),
+                    itemOriginal.getSubtotal()
+            );
+            nuevoPedido.agregarDetalle(clon);
+            if (itemOriginal.getId() != null) {
+                modificadoresPorDetalleId.remove(itemOriginal.getId());
+            }
+            if (!modsPrevios.isEmpty() && clon.getId() != null) {
+                modificadoresPorDetalleId.put(clon.getId(), modsPrevios);
+            }
+        }
+
+        BigDecimal nuevoTotalOrigen = pedidoOrigen.getDetalles().stream()
+                .map(DetallePedido::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
+        pedidoOrigen.setTotal(nuevoTotalOrigen);
+
+        BigDecimal nuevoTotalDestino = nuevoPedido.getDetalles().stream()
+                .map(DetallePedido::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
+        nuevoPedido.setTotal(nuevoTotalDestino);
+
+        if (!mesaDestino.getId().equals(mesaOrigen.getId())) {
+            mesaDestino.setEstado(EstadoMesa.OCUPADA);
+            mesaDestino.setMozo(pedidoOrigen.getMozo());
+            mesaDestino.setFechaApertura(LocalDateTime.now());
+            mesaDestino.setFechaCierre(null);
+            mesaRepository.save(mesaDestino);
+        }
+
+        Pedido origenGuardado = pedidoRepository.save(pedidoOrigen);
+        Pedido nuevoGuardado = pedidoRepository.save(nuevoPedido);
+
+        registrarEvento(origenGuardado.getId(), origenGuardado.getEstado(), origenGuardado.getEstado(),
+                username, "División de cuenta hacia pedido #" + nuevoGuardado.getId());
+        registrarEvento(nuevoGuardado.getId(), null, nuevoGuardado.getEstado(),
+                username, "Cuenta generada por división desde pedido #" + origenGuardado.getId());
+
+        BigDecimal totalCombinado = nuevoTotalOrigen.add(nuevoTotalDestino).setScale(2, RoundingMode.HALF_UP);
+
+        return new DivisionMesaResponse(
+                mesaOrigen.getId(),
+                mesaDestino.getId(),
+                construirPedidoResponse(origenGuardado),
+                construirPedidoResponse(nuevoGuardado),
+                totalCombinado
+        );
+    }
+
+    @Transactional
+    public void fusionarMesas(Integer mesaDestinoId, FusionarMesasRequest request, String username) {
+        if (request == null || request.getMesaOrigenId() == null) {
+            throw new IllegalArgumentException("El mesa_origen_id es obligatorio para fusionar");
+        }
+        Integer mesaOrigenId = request.getMesaOrigenId();
+        if (mesaDestinoId.equals(mesaOrigenId)) {
+            throw new ConflictoOperacionException("No se puede fusionar una mesa consigo misma");
+        }
+
+        Mesa mesaDestino = mesaRepository.findById(mesaDestinoId)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Mesa destino no encontrada con ID: " + mesaDestinoId));
+        Mesa mesaOrigen = mesaRepository.findById(mesaOrigenId)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Mesa origen no encontrada con ID: " + mesaOrigenId));
+
+        if (mesaDestino.getEstado() == EstadoMesa.LIBRE || mesaOrigen.getEstado() == EstadoMesa.LIBRE) {
+            throw new ConflictoOperacionException("Ambas mesas deben estar ocupadas para poder fusionarse");
+        }
+
+        List<Pedido> pedidosDestino = pedidoRepository.findByMesaIdOrderByFechaCreacionDesc(mesaDestinoId).stream()
+                .filter(p -> p.getEstado() != EstadoPedido.COBRADO && p.getEstado() != EstadoPedido.ANULADO)
+                .collect(Collectors.toList());
+        List<Pedido> pedidosOrigen = pedidoRepository.findByMesaIdOrderByFechaCreacionDesc(mesaOrigenId).stream()
+                .filter(p -> p.getEstado() != EstadoPedido.COBRADO && p.getEstado() != EstadoPedido.ANULADO)
+                .collect(Collectors.toList());
+
+        if (pedidosDestino.isEmpty() || pedidosOrigen.isEmpty()) {
+            throw new ConflictoOperacionException("Ambas mesas deben tener pedidos activos para fusionarse");
+        }
+
+        for (Pedido p : pedidosOrigen) {
+            p.setMesa(mesaDestino);
+            pedidoRepository.save(p);
+            registrarEvento(p.getId(), p.getEstado(), p.getEstado(), username,
+                    "Fusión de mesa " + mesaOrigen.getNumero() + " hacia mesa " + mesaDestino.getNumero());
+        }
+
+        mesaOrigen.setEstado(EstadoMesa.LIBRE);
+        mesaOrigen.setMozo(null);
+        mesaOrigen.setFechaCierre(LocalDateTime.now());
+        mesaRepository.save(mesaOrigen);
+    }
+
+    @Transactional
+    public void transferirMesa(Integer mesaOrigenId, TransferirMesaRequest request, String username) {
+        if (request == null || request.getMesaDestinoId() == null) {
+            throw new IllegalArgumentException("El mesa_destino_id es obligatorio para transferir");
+        }
+        Integer mesaDestinoId = request.getMesaDestinoId();
+        if (mesaOrigenId.equals(mesaDestinoId)) {
+            throw new ConflictoOperacionException("La mesa destino debe ser distinta a la mesa de origen");
+        }
+
+        Mesa mesaOrigen = mesaRepository.findById(mesaOrigenId)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Mesa origen no encontrada con ID: " + mesaOrigenId));
+        Mesa mesaDestino = mesaRepository.findById(mesaDestinoId)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Mesa destino no encontrada con ID: " + mesaDestinoId));
+
+        if (mesaOrigen.getEstado() == EstadoMesa.LIBRE) {
+            throw new ConflictoOperacionException(
+                    "La mesa de origen " + mesaOrigen.getNumero() + " está LIBRE y no tiene pedidos para transferir"
+            );
+        }
+
+        if (mesaDestino.getEstado() == EstadoMesa.OCUPADA
+                || mesaDestino.getEstado() == EstadoMesa.CUENTA_SOLICITADA) {
+            throw new ConflictoOperacionException(
+                    "La mesa destino " + mesaDestino.getNumero()
+                            + " no está disponible para transferencia. Estado actual: " + mesaDestino.getEstado()
+            );
+        }
+
+        List<Pedido> pedidosOrigen = pedidoRepository.findByMesaIdOrderByFechaCreacionDesc(mesaOrigenId).stream()
+                .filter(p -> p.getEstado() != EstadoPedido.COBRADO && p.getEstado() != EstadoPedido.ANULADO)
+                .collect(Collectors.toList());
+
+        if (pedidosOrigen.isEmpty()) {
+            throw new ConflictoOperacionException(
+                    "La mesa " + mesaOrigen.getNumero() + " no tiene pedidos activos para transferir"
+            );
+        }
+
+        for (Pedido p : pedidosOrigen) {
+            p.setMesa(mesaDestino);
+            pedidoRepository.save(p);
+            registrarEvento(p.getId(), p.getEstado(), p.getEstado(), username,
+                    "Transferencia de mesa " + mesaOrigen.getNumero() + " a mesa " + mesaDestino.getNumero());
+        }
+
+        mesaDestino.setEstado(mesaOrigen.getEstado());
+        mesaDestino.setMozo(mesaOrigen.getMozo() != null ? mesaOrigen.getMozo() : pedidosOrigen.get(0).getMozo());
+        mesaDestino.setFechaApertura(
+                mesaOrigen.getFechaApertura() != null ? mesaOrigen.getFechaApertura() : LocalDateTime.now()
+        );
+        mesaDestino.setFechaCierre(null);
+        mesaRepository.save(mesaDestino);
+
+        mesaOrigen.setEstado(EstadoMesa.LIBRE);
+        mesaOrigen.setMozo(null);
+        mesaOrigen.setFechaCierre(LocalDateTime.now());
+        mesaRepository.save(mesaOrigen);
     }
 
     public List<ModificadorItemDto> obtenerModificadoresDeDetalle(DetallePedido dp) {
