@@ -217,7 +217,7 @@ public class AuthService {
         if (usuario.getPinHash() != null && !usuario.getPinHash().isBlank()) {
             return usuario.getPinHash();
         }
-        return usuario.getClaveHash();
+        return null;
     }
 
     private LoginResponse construirRespuestaLogin(Usuario u) {

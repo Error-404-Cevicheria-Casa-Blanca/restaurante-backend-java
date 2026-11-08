@@ -56,6 +56,12 @@ class AuthRolesPinIntegrationTest {
     @Autowired
     private PedidoRepository pedidoRepository;
 
+    @Autowired
+    private com.lacasablanca.backend.repository.UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private com.lacasablanca.backend.repository.RolRepository rolRepository;
+
     @BeforeEach
     void setUp() {
         authService.limpiarBloqueos();
@@ -254,5 +260,21 @@ class AuthRolesPinIntegrationTest {
                         .content(objectMapper.writeValueAsString(new EstadoMesaRequest(EstadoMesa.ATENDIDA))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.estado").value("ATENDIDA"));
+    }
+
+    @Test
+    @DisplayName("Usuario sin PIN configurado no puede autenticar por PIN ni cae a clave BCrypt")
+    void loginPinUsuarioSinPinConfiguradoFalla() throws Exception {
+        com.lacasablanca.backend.model.Usuario nuevo = new com.lacasablanca.backend.model.Usuario();
+        nuevo.setUsername("mozo_sin_pin_test");
+        nuevo.setClaveHash("$2a$10$dummyHashDePassword12345678901234567890123456789012");
+        nuevo.setRol(rolRepository.findByNombre("MOZO").orElseThrow());
+        usuarioRepository.save(nuevo);
+
+        PinLoginRequest req = new PinLoginRequest("mozo_sin_pin_test", "1234");
+        mockMvc.perform(post("/api/v1/auth/login-pin")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isUnauthorized());
     }
 }

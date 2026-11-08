@@ -139,9 +139,29 @@ public class CobroService {
                 propinaSugerida
         );
         TrabajoImpresionDto job = trabajosImpresionMesa.get(mesaId);
+        if (job == null && trabajoImpresionRepository != null) {
+            try {
+                job = trabajoImpresionRepository.findAll().stream()
+                        .filter(ti -> ("Mesa " + mesaId + " precuenta").equals(ti.getPayload()))
+                        .max(java.util.Comparator.comparing(com.lacasablanca.backend.model.TrabajoImpresion::getFechaCreacion))
+                        .map(ti -> new TrabajoImpresionDto(
+                                "print-mesa-" + mesaId + "-" + ti.getIntentos(),
+                                mesaId,
+                                "PRECUENTA_80MM",
+                                ti.getEstado(),
+                                ti.getIntentos(),
+                                ti.getError(),
+                                ti.getFechaCreacion()
+                        )).orElse(null);
+            } catch (Exception e) {
+                org.slf4j.LoggerFactory.getLogger(CobroService.class)
+                        .debug("Error consultando cola impresion en BD: {}", e.getMessage());
+            }
+        }
         if (job != null) {
+            String estadoImpresion = "FALLIDO".equals(job.getEstado()) ? "ERROR" : job.getEstado();
             response.setImpresionJobId(job.getJobId());
-            response.setEstadoImpresion(job.getEstado());
+            response.setEstadoImpresion(estadoImpresion);
             response.setIntentosImpresion(job.getIntentos());
         }
         return response;
@@ -181,7 +201,7 @@ public class CobroService {
 
         // 1. Persistir registros en la tabla 'pago' y actualizar 'sesion_caja' si está abierta
         if (!pedidosActivos.isEmpty()) {
-            registrarPagosEnBaseDeDatos(pedidosActivos.get(0), mesa, request, validacion.vuelto);
+            registrarPagosEnBaseDeDatos(pedidosActivos, mesa, request, validacion.vuelto);
         }
 
         // 2. Transicionar todos los pedidos activos a COBRADO
@@ -309,7 +329,28 @@ public class CobroService {
                 .orElseThrow(() -> new RecursoNoEncontradoException("Mesa no encontrada con ID: " + mesaId));
 
         TrabajoImpresionDto existente = trabajosImpresionMesa.get(mesa.getId());
+        if (existente == null && trabajoImpresionRepository != null) {
+            try {
+                existente = trabajoImpresionRepository.findAll().stream()
+                        .filter(ti -> ("Mesa " + mesaId + " precuenta").equals(ti.getPayload()))
+                        .max(java.util.Comparator.comparing(com.lacasablanca.backend.model.TrabajoImpresion::getFechaCreacion))
+                        .map(ti -> new TrabajoImpresionDto(
+                                "print-mesa-" + mesaId + "-" + ti.getIntentos(),
+                                mesaId,
+                                "PRECUENTA_80MM",
+                                ti.getEstado(),
+                                ti.getIntentos(),
+                                ti.getError(),
+                                ti.getFechaCreacion()
+                        )).orElse(null);
+            } catch (Exception e) {
+                org.slf4j.LoggerFactory.getLogger(CobroService.class)
+                        .debug("Error consultando cola impresion en BD: {}", e.getMessage());
+            }
+        }
         if (existente != null) {
+            String estadoImpresion = "FALLIDO".equals(existente.getEstado()) ? "ERROR" : existente.getEstado();
+            existente.setEstado(estadoImpresion);
             return existente;
         }
         return new TrabajoImpresionDto(
@@ -327,7 +368,8 @@ public class CobroService {
         TrabajoImpresionDto previo = trabajosImpresionMesa.get(mesaId);
         int intentos = (previo != null && previo.getIntentos() != null) ? previo.getIntentos() + 1 : 1;
         String jobId = "print-mesa-" + mesaId + "-" + intentos;
-        String estado = simularError ? "ERROR" : "IMPRESO";
+        String estadoDb = simularError ? "FALLIDO" : "IMPRESO";
+        String estadoDto = simularError ? "ERROR" : "IMPRESO";
         String mensajeError = simularError
                 ? "Impresora térmica 80mm sin respuesta (apagada o desconectada). Comanda y cuenta operativas."
                 : null;
@@ -335,7 +377,7 @@ public class CobroService {
                 jobId,
                 mesaId,
                 "PRECUENTA_80MM",
-                estado,
+                estadoDto,
                 intentos,
                 mensajeError,
                 OffsetDateTime.now()
@@ -345,7 +387,7 @@ public class CobroService {
         try {
             if (trabajoImpresionRepository != null) {
                 com.lacasablanca.backend.model.TrabajoImpresion ti = new com.lacasablanca.backend.model.TrabajoImpresion(
-                        null, "PRECUENTA", "CAJA_80MM", "Mesa " + mesaId + " precuenta", estado
+                        null, "PRECUENTA", "CAJA_80MM", "Mesa " + mesaId + " precuenta", estadoDb
                 );
                 ti.setIntentos(intentos);
                 ti.setError(mensajeError);
@@ -362,6 +404,16 @@ public class CobroService {
                                              Mesa mesa,
                                              CobrarRequest request,
                                              BigDecimal vueltoTotal) {
+        registrarPagosEnBaseDeDatos(List.of(pedido), mesa, request, vueltoTotal);
+    }
+
+    private void registrarPagosEnBaseDeDatos(List<Pedido> pedidos,
+                                             Mesa mesa,
+                                             CobrarRequest request,
+                                             BigDecimal vueltoTotal) {
+        if (pedidos == null || pedidos.isEmpty()) {
+            return;
+        }
         SesionCaja sesionAbierta = sesionCajaRepository
                 .findFirstByEstadoOrderByFechaAperturaDesc("ABIERTA")
                 .orElse(null);
@@ -372,54 +424,112 @@ public class CobroService {
                 : UUID.randomUUID().toString();
 
         BigDecimal vueltoRestante = vueltoTotal != null ? vueltoTotal : BigDecimal.ZERO;
-
         List<PagoRequestDto> listaPagos = request.getPagos();
+
+        if (pedidos.size() == 1) {
+            Pedido pedido = pedidos.get(0);
+            for (int i = 0; i < listaPagos.size(); i++) {
+                PagoRequestDto dto = listaPagos.get(i);
+                guardarRegistroPagoIndividual(pedido, mesa, dto, i, baseClientId, vueltoRestante, (i == 0 ? propinaTotal : BigDecimal.ZERO), sesionAbierta);
+                if ("EFECTIVO".equalsIgnoreCase(dto.getMetodo()) && vueltoRestante.compareTo(BigDecimal.ZERO) > 0) {
+                    vueltoRestante = vueltoRestante.subtract(dto.getMonto().min(vueltoRestante));
+                }
+            }
+            return;
+        }
+
+        // Si la mesa tiene múltiples pedidos, distribuimos los pagos entre ellos
+        int pedidoIdx = 0;
+        BigDecimal saldoPedidoActual = pedidos.get(0).getTotal();
+        int subIndex = 0;
+
         for (int i = 0; i < listaPagos.size(); i++) {
             PagoRequestDto dto = listaPagos.get(i);
-            String metodoUpper = dto.getMetodo().trim().toUpperCase(Locale.ROOT);
-            String metodoDb = "TRANSFERENCIA".equals(metodoUpper) ? "TARJETA" : metodoUpper;
-
-            BigDecimal montoNeto = dto.getMonto();
-            if ("EFECTIVO".equals(metodoDb) && vueltoRestante.compareTo(BigDecimal.ZERO) > 0) {
-                BigDecimal descuentoVuelto = montoNeto.min(vueltoRestante);
-                montoNeto = montoNeto.subtract(descuentoVuelto);
-                vueltoRestante = vueltoRestante.subtract(descuentoVuelto);
+            BigDecimal montoPago = dto.getMonto();
+            if ("EFECTIVO".equalsIgnoreCase(dto.getMetodo()) && vueltoRestante.compareTo(BigDecimal.ZERO) > 0) {
+                BigDecimal desc = montoPago.min(vueltoRestante);
+                montoPago = montoPago.subtract(desc);
+                vueltoRestante = vueltoRestante.subtract(desc);
             }
 
-            String itemClientId = (i == 0) ? baseClientId : baseClientId + "-" + i;
-            if (itemClientId.length() > 64) {
-                itemClientId = itemClientId.substring(0, 64);
-            }
-            if (pagoRepository.findByClientRequestId(itemClientId).isPresent()) {
-                itemClientId = UUID.randomUUID().toString();
-            }
-
-            Pago pago = new Pago();
-            pago.setPedido(pedido);
-            pago.setMesa(mesa);
-            pago.setMozo((mesa != null && mesa.getMozo() != null) ? mesa.getMozo() : pedido.getMozo());
-            pago.setSesionCaja(sesionAbierta);
-            pago.setMetodo(metodoDb);
-            pago.setMonto(montoNeto.compareTo(BigDecimal.ZERO) > 0 ? montoNeto : dto.getMonto());
-            pago.setPropina(i == 0 ? propinaTotal : BigDecimal.ZERO);
-            pago.setReferencia(dto.getReferencia());
-            pago.setClientRequestId(itemClientId);
-            pago.setFechaPago(OffsetDateTime.now());
-            pagoRepository.save(pago);
-
-            if (sesionAbierta != null) {
-                if ("EFECTIVO".equals(metodoDb)) {
-                    BigDecimal nuevoEfectivo = sesionAbierta.getMontoVentasEfectivo().add(pago.getMonto());
-                    sesionAbierta.setMontoVentasEfectivo(nuevoEfectivo);
-                    sesionAbierta.setMontoEsperado(
-                            sesionAbierta.getMontoInicial().add(nuevoEfectivo)
-                    );
+            while (montoPago.compareTo(BigDecimal.ZERO) > 0) {
+                Pedido pedidoDestino = pedidos.get(pedidoIdx);
+                BigDecimal montoParaEstePedido;
+                if (pedidoIdx < pedidos.size() - 1) {
+                    montoParaEstePedido = montoPago.min(saldoPedidoActual);
                 } else {
-                    BigDecimal nuevoDigital = sesionAbierta.getMontoVentasDigital().add(pago.getMonto());
-                    sesionAbierta.setMontoVentasDigital(nuevoDigital);
+                    montoParaEstePedido = montoPago;
                 }
-                sesionCajaRepository.save(sesionAbierta);
+
+                if (montoParaEstePedido.compareTo(BigDecimal.ZERO) <= 0) {
+                    montoParaEstePedido = montoPago;
+                }
+
+                PagoRequestDto subDto = new PagoRequestDto(dto.getMetodo(), montoParaEstePedido, dto.getReferencia());
+                BigDecimal propina = (subIndex == 0) ? propinaTotal : BigDecimal.ZERO;
+                guardarRegistroPagoIndividual(pedidoDestino, mesa, subDto, subIndex++, baseClientId, BigDecimal.ZERO, propina, sesionAbierta);
+
+                montoPago = montoPago.subtract(montoParaEstePedido);
+                saldoPedidoActual = saldoPedidoActual.subtract(montoParaEstePedido);
+
+                if (saldoPedidoActual.compareTo(BigDecimal.ZERO) <= 0 && pedidoIdx < pedidos.size() - 1) {
+                    pedidoIdx++;
+                    saldoPedidoActual = pedidos.get(pedidoIdx).getTotal();
+                }
             }
+        }
+    }
+
+    private void guardarRegistroPagoIndividual(Pedido pedido,
+                                               Mesa mesa,
+                                               PagoRequestDto dto,
+                                               int index,
+                                               String baseClientId,
+                                               BigDecimal vueltoRestante,
+                                               BigDecimal propina,
+                                               SesionCaja sesionAbierta) {
+        String metodoUpper = dto.getMetodo().trim().toUpperCase(Locale.ROOT);
+        String metodoDb = "TRANSFERENCIA".equals(metodoUpper) ? "TARJETA" : metodoUpper;
+
+        BigDecimal montoNeto = dto.getMonto();
+        if ("EFECTIVO".equals(metodoDb) && vueltoRestante.compareTo(BigDecimal.ZERO) > 0) {
+            BigDecimal descuentoVuelto = montoNeto.min(vueltoRestante);
+            montoNeto = montoNeto.subtract(descuentoVuelto);
+        }
+
+        String itemClientId = (index == 0) ? baseClientId : baseClientId + "-" + index;
+        if (itemClientId.length() > 64) {
+            itemClientId = itemClientId.substring(0, 64);
+        }
+        if (pagoRepository.findByClientRequestId(itemClientId).isPresent()) {
+            itemClientId = UUID.randomUUID().toString();
+        }
+
+        Pago pago = new Pago();
+        pago.setPedido(pedido);
+        pago.setMesa(mesa);
+        pago.setMozo((mesa != null && mesa.getMozo() != null) ? mesa.getMozo() : pedido.getMozo());
+        pago.setSesionCaja(sesionAbierta);
+        pago.setMetodo(metodoDb);
+        pago.setMonto(montoNeto.compareTo(BigDecimal.ZERO) > 0 ? montoNeto : dto.getMonto());
+        pago.setPropina(propina);
+        pago.setReferencia(dto.getReferencia());
+        pago.setClientRequestId(itemClientId);
+        pago.setFechaPago(OffsetDateTime.now());
+        pagoRepository.save(pago);
+
+        if (sesionAbierta != null) {
+            if ("EFECTIVO".equals(metodoDb)) {
+                BigDecimal nuevoEfectivo = sesionAbierta.getMontoVentasEfectivo().add(pago.getMonto());
+                sesionAbierta.setMontoVentasEfectivo(nuevoEfectivo);
+                sesionAbierta.setMontoEsperado(
+                        sesionAbierta.getMontoInicial().add(nuevoEfectivo)
+                );
+            } else {
+                BigDecimal nuevoDigital = sesionAbierta.getMontoVentasDigital().add(pago.getMonto());
+                sesionAbierta.setMontoVentasDigital(nuevoDigital);
+            }
+            sesionCajaRepository.save(sesionAbierta);
         }
     }
 
@@ -485,11 +595,33 @@ public class CobroService {
     }
 
     private CobroResponse reconstruirCobroResponseDesdeDb(Integer mesaId, String clientReqId) {
+        String patron = clientReqId != null ? clientReqId.trim() : "";
         List<Pago> pagosDb = pagoRepository.findAll().stream()
-                .filter(p -> p.getMesa() != null && p.getMesa().getId().equals(mesaId))
+                .filter(p -> p.getClientRequestId() != null && (
+                        p.getClientRequestId().equals(patron)
+                                || p.getClientRequestId().startsWith(patron + "-")
+                                || p.getClientRequestId().equals("MESA:" + mesaId + ":" + patron)
+                ))
                 .collect(Collectors.toList());
+        if (pagosDb.isEmpty() && mesaId != null) {
+            pagosDb = pagoRepository.findAll().stream()
+                    .filter(p -> p.getMesa() != null && mesaId.equals(p.getMesa().getId()))
+                    .collect(Collectors.toList());
+        }
+
         BigDecimal totalPagado = pagosDb.stream().map(Pago::getMonto).reduce(BigDecimal.ZERO, BigDecimal::add);
-        return new CobroResponse(totalPagado, totalPagado, BigDecimal.ZERO, List.of());
+        BigDecimal propinas = pagosDb.stream().map(Pago::getPropina).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        Set<Integer> pedidoIds = pagosDb.stream().map(p -> p.getPedido().getId()).collect(Collectors.toSet());
+        List<PedidoResumenCuentaDto> pedidos = pedidoRepository.findAllById(pedidoIds).stream()
+                .map(p -> new PedidoResumenCuentaDto(p.getId(), p.getEstado().name(), p.getTotal()))
+                .collect(Collectors.toList());
+        BigDecimal totalConsumo = pedidos.stream().map(PedidoResumenCuentaDto::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (totalConsumo.compareTo(BigDecimal.ZERO) == 0) {
+            totalConsumo = totalPagado.subtract(propinas).max(BigDecimal.ZERO);
+        }
+
+        return new CobroResponse(totalConsumo, totalPagado, BigDecimal.ZERO, pedidos);
     }
 
     private CobroResponse reconstruirCobroResponsePedidoDesdeDb(Integer pedidoId) {
@@ -499,6 +631,11 @@ public class CobroService {
                 ? List.of(new PedidoResumenCuentaDto(p.getId(), p.getEstado().name(), p.getTotal()))
                 : List.of();
         return new CobroResponse(total, total, BigDecimal.ZERO, resumen);
+    }
+
+    public void limpiarCacheParaPruebas() {
+        trabajosImpresionMesa.clear();
+        cobrosIdempotentes.clear();
     }
 
     private static final class ResultadoValidacionPagos {

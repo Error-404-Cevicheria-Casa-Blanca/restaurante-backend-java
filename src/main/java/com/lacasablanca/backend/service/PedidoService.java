@@ -116,6 +116,10 @@ public class PedidoService {
                 Integer idActivo = pedidoActivoPorMesaId.get(mesa.getId());
                 if (idActivo != null) {
                     pedidoActivo = pedidoRepository.findById(idActivo).orElse(null);
+                    if (pedidoActivo != null && (pedidoActivo.getEstado() == EstadoPedido.COBRADO || pedidoActivo.getEstado() == EstadoPedido.ANULADO)) {
+                        pedidoActivoPorMesaId.remove(mesa.getId());
+                        pedidoActivo = null;
+                    }
                 }
                 if (pedidoActivo == null) {
                     List<Pedido> activosDb = pedidoRepository.findByMesaIdAndEstadoNotOrderByFechaCreacionAsc(
@@ -123,6 +127,7 @@ public class PedidoService {
                     ).stream().filter(p -> p.getEstado() != EstadoPedido.ANULADO).collect(Collectors.toList());
                     if (!activosDb.isEmpty()) {
                         pedidoActivo = activosDb.get(activosDb.size() - 1);
+                        pedidoActivoPorMesaId.put(mesa.getId(), pedidoActivo.getId());
                     }
                 }
                 if (pedidoActivo != null
@@ -783,38 +788,32 @@ public class PedidoService {
         return combinada;
     }
 
+    private final com.fasterxml.jackson.databind.ObjectMapper objectMapper =
+            new com.fasterxml.jackson.databind.ObjectMapper();
+
     private String serializarModificadoresAJson(List<ModificadorItemDto> mods) {
         if (mods == null || mods.isEmpty()) {
             return null;
         }
-        StringBuilder sb = new StringBuilder("[");
-        for (int i = 0; i < mods.size(); i++) {
-            ModificadorItemDto m = mods.get(i);
-            if (i > 0) {
-                sb.append(",");
-            }
-            sb.append("{\"nombre\":\"").append(m.getNombre().replace("\"", "\\\"")).append("\",\"precio_adicional\":")
-                    .append(m.getPrecioAdicional() != null ? m.getPrecioAdicional() : BigDecimal.ZERO).append("}");
+        try {
+            return objectMapper.writeValueAsString(mods);
+        } catch (Exception e) {
+            return null;
         }
-        sb.append("]");
-        return sb.toString();
     }
 
     private List<ModificadorItemDto> deserializarModificadoresDesdeJson(String json) {
         if (json == null || json.isBlank() || !json.startsWith("[")) {
             return List.of();
         }
-        List<ModificadorItemDto> lista = new ArrayList<>();
-        java.util.regex.Pattern p = java.util.regex.Pattern.compile(
-                "\\{\"nombre\"\\s*:\\s*\"([^\"]+)\"\\s*,\\s*\"precio_adicional\"\\s*:\\s*([0-9.]+)\\}"
-        );
-        java.util.regex.Matcher m = p.matcher(json);
-        while (m.find()) {
-            String nombre = m.group(1);
-            BigDecimal precio = new BigDecimal(m.group(2));
-            lista.add(new ModificadorItemDto(nombre, precio));
+        try {
+            return objectMapper.readValue(
+                    json,
+                    objectMapper.getTypeFactory().constructCollectionType(List.class, ModificadorItemDto.class)
+            );
+        } catch (Exception e) {
+            return List.of();
         }
-        return lista;
     }
 
     private List<ModificadorItemDto> extraerModificadoresDesdeNotas(String notas) {
@@ -984,7 +983,9 @@ public class PedidoService {
                                 e.getFecha()
                         )).collect(Collectors.toList());
                     }
-                } catch (Exception ignored) {
+                } catch (Exception e) {
+                    org.slf4j.LoggerFactory.getLogger(PedidoService.class)
+                            .debug("Error consultando eventos en BD: {}", e.getMessage());
                 }
             }
             response.setEventos(eventos != null ? new ArrayList<>(eventos) : List.of());
@@ -1002,5 +1003,16 @@ public class PedidoService {
             response.setClienteNombre(cliente);
         }
         return response;
+    }
+
+    public void limpiarCacheParaPruebas() {
+        idempotenciaKeyAPedidoId.clear();
+        pedidoActivoPorMesaId.clear();
+        pedidoIdAClientRequestId.clear();
+        motivosAnulacion.clear();
+        eventosPorPedido.clear();
+        modificadoresPorDetalleId.clear();
+        tipoPorPedidoId.clear();
+        clientePorPedidoId.clear();
     }
 }

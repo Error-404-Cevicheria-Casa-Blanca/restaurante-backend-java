@@ -1,5 +1,5 @@
-commit a2106f4f7e37ec8b64e1159f092e615aa77b69b5
+commit a3fc71491e76cccdb3f1be48151b7b93cde8b2a3
 Author: maxmunoz-debug <max.munoz@tecsup.edu.pe>
-Date:   Fri Nov 6 11:41:35 2026 -0500
+Date:   Sun Nov 8 10:08:54 2026 -0500
 
-    feat(PRB-51,PRB-53,PRB-54,PRB-74,PRB-79,PRB-82): persistencia en base de datos de tokens, eventos, cola de impresion, modificadores y PINs eliminando estado en memoria
+    fix(PRB-82,PRB-54,PRB-74,PRB-75): restaurar @Profile test en DataInitializer, eliminar fallback pin a clave_hash, persistir FALLIDO en impresion_cola, distribucion cobro multi-pedido y @Version

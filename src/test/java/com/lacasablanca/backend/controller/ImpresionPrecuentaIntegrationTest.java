@@ -47,6 +47,9 @@ class ImpresionPrecuentaIntegrationTest {
     @Autowired
     private PedidoRepository pedidoRepository;
 
+    @Autowired
+    private com.lacasablanca.backend.service.CobroService cobroService;
+
     private String tokenMozo;
 
     @BeforeEach
@@ -130,5 +133,29 @@ class ImpresionPrecuentaIntegrationTest {
                         .content(objectMapper.writeValueAsString(cobrarReq)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.total").value(96.00));
+    }
+
+    @Test
+    @DisplayName("Precuenta persiste cola de impresión en BD con estado FALLIDO y reconstruye tras limpiar memoria")
+    void persistenciaColaImpresionYReconstruccionDesdeDb() throws Exception {
+        Mesa mesa = mesaRepository.findById(7).orElseThrow();
+        mesa.setEstado(EstadoMesa.OCUPADA);
+        mesaRepository.save(mesa);
+
+        // 1. Simular error en reimpresión -> se guarda FALLIDO en BD y retorna ERROR
+        mockMvc.perform(post("/api/v1/mesas/7/precuenta/reimprimir?simular_error=true")
+                        .header("Authorization", "Bearer " + tokenMozo))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("ERROR"));
+
+        // 2. Simular reinicio / limpiar memoria
+        cobroService.limpiarCacheParaPruebas();
+
+        // 3. Consultar estado de impresión debe reconstruir desde BD mapeando FALLIDO a ERROR sin crear job falso
+        mockMvc.perform(get("/api/v1/mesas/7/impresion")
+                        .header("Authorization", "Bearer " + tokenMozo))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.mesa_id").value(7))
+                .andExpect(jsonPath("$.estado").value("ERROR"));
     }
 }

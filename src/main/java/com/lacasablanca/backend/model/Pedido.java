@@ -44,6 +44,7 @@ public class Pedido {
     @Column(name = "cliente_nombre", length = 120)
     private String clienteNombre;
 
+    @Version
     @Column(name = "version")
     private Integer version = 1;
 

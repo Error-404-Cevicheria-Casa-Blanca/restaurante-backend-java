@@ -64,6 +64,9 @@ class MesaCobroIntegrationTest {
     @Autowired
     private PagoRepository pagoRepository;
 
+    @Autowired
+    private com.lacasablanca.backend.service.CobroService cobroService;
+
     private String tokenMozo;
 
     @BeforeEach
@@ -404,5 +407,45 @@ class MesaCobroIntegrationTest {
 
         mockMvc.perform(post("/api/v1/mesas/" + MESA_ID + "/precuenta"))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("Idempotencia de cobro en mesa con múltiples pedidos persiste en BD y reconstruye respuesta tras limpiar memoria")
+    void cobroIdempotenciaPersistenteMultiplesPedidos() throws Exception {
+        crearPedidoPruebaMesa(MESA_ID);
+        Mesa mesa = mesaRepository.findById(MESA_ID).orElseThrow();
+        Pedido segundo = new Pedido(mesa, mesa.getMozo(), EstadoPedido.LISTO, BigDecimal.valueOf(50.00));
+        pedidoRepository.save(segundo);
+
+        String clientReqId = "uuid-idemp-multi-" + UUID.randomUUID();
+        List<PagoRequestDto> pagos = List.of(
+                new PagoRequestDto("EFECTIVO", BigDecimal.valueOf(135.00), null)
+        );
+        CobrarRequest reqCobro = new CobrarRequest(
+                pagos,
+                BigDecimal.ZERO,
+                "Cobro múltiple idempotente",
+                clientReqId
+        );
+
+        mockMvc.perform(post("/api/v1/mesas/" + MESA_ID + "/cobrar")
+                        .header("Authorization", "Bearer " + tokenMozo)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(reqCobro)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.total").value(135.00))
+                .andExpect(jsonPath("$.pedidos", hasSize(2)));
+
+        // Limpiar caché en memoria de CobroService para forzar lectura de BD
+        cobroService.limpiarCacheParaPruebas();
+
+        // Segunda llamada idéntica debe reconstruir desde BD manteniendo el total y los pedidos
+        mockMvc.perform(post("/api/v1/mesas/" + MESA_ID + "/cobrar")
+                        .header("Authorization", "Bearer " + tokenMozo)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(reqCobro)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.total").value(135.00))
+                .andExpect(jsonPath("$.pedidos", hasSize(2)));
     }
 }
