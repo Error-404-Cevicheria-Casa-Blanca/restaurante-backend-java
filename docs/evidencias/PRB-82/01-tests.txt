@@ -1,0 +1,354 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------------< com.lacasablanca:backend >----------------------
+[INFO] Building backend 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.4.0:check (checkstyle-validation) @ backend ---
+[INFO] Comenzando auditoría...
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\controller\CategoriaController.java:6:47: Usar la importación con '.*' debería evitarse - org.springframework.web.bind.annotation.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\controller\ProductoController.java:6:47: Usar la importación con '.*' debería evitarse - org.springframework.web.bind.annotation.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\CategoriaDto.java:14:28: '{' en la columna 28 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\CategoriaDto.java:15:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\CategoriaDto.java:17:31: '{' en la columna 31 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\CategoriaDto.java:18:42: '{' en la columna 42 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\EstadoMesaRequest.java:17:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\EstadoMesaRequest.java:18:46: '{' en la columna 46 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\LoginRequest.java:23:32: '{' en la columna 32 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\LoginRequest.java:24:44: '{' en la columna 44 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\LoginRequest.java:26:30: '{' en la columna 30 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\LoginRequest.java:27:40: '{' en la columna 40 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\LoginResponse.java:17:30: '{' en la columna 30 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\LoginResponse.java:18:40: '{' en la columna 40 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\LoginResponse.java:20:29: '{' en la columna 29 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\LoginResponse.java:21:38: '{' en la columna 38 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\LoginResponse.java:23:36: '{' en la columna 36 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\LoginResponse.java:24:48: '{' en la columna 48 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:23:28: '{' en la columna 28 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:24:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:26:32: '{' en la columna 32 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:27:43: '{' en la columna 43 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:29:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:30:49: '{' en la columna 49 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:32:34: '{' en la columna 34 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:33:48: '{' en la columna 48 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:35:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:36:46: '{' en la columna 46 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:35:28: '{' en la columna 28 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:36:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:38:31: '{' en la columna 31 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:39:42: '{' en la columna 42 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:41:36: '{' en la columna 36 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:42:52: '{' en la columna 52 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:44:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:45:46: '{' en la columna 46 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:47:36: '{' en la columna 36 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:48:51: '{' en la columna 51 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:50:37: '{' en la columna 37 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:51:53: '{' en la columna 53 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:53:34: '{' en la columna 34 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:54:48: '{' en la columna 48 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:56:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:57:48: '{' en la columna 48 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\UsuarioDto.java:17:28: '{' en la columna 28 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\UsuarioDto.java:18:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\UsuarioDto.java:20:31: '{' en la columna 31 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\UsuarioDto.java:21:42: '{' en la columna 42 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\UsuarioDto.java:23:28: '{' en la columna 28 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\UsuarioDto.java:24:36: '{' en la columna 36 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Categoria.java:3:27: Usar la importación con '.*' debería evitarse - jakarta.persistence.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Categoria.java:27:28: '{' en la columna 28 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Categoria.java:28:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Categoria.java:30:31: '{' en la columna 31 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Categoria.java:31:42: '{' en la columna 42 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:3:27: Usar la importación con '.*' debería evitarse - jakarta.persistence.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:47:28: '{' en la columna 28 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:48:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:50:31: '{' en la columna 31 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:51:42: '{' en la columna 42 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:53:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:54:48: '{' en la columna 48 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:56:43: '{' en la columna 43 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:57:62: '{' en la columna 62 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:59:34: '{' en la columna 34 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:60:47: '{' en la columna 47 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:62:30: '{' en la columna 30 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:63:40: '{' en la columna 40 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:73:37: '{' en la columna 37 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:74:50: '{' en la columna 50 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:3:27: Usar la importación con '.*' debería evitarse - jakarta.persistence.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:54:28: '{' en la columna 28 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:55:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:57:32: '{' en la columna 32 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:58:43: '{' en la columna 43 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:60:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:61:49: '{' en la columna 49 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:63:34: '{' en la columna 34 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:64:48: '{' en la columna 48 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:66:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:67:46: '{' en la columna 46 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:69:30: '{' en la columna 30 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:70:39: '{' en la columna 39 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:72:45: '{' en la columna 45 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:73:63: '{' en la columna 63 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:75:43: '{' en la columna 43 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:76:59: '{' en la columna 59 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:3:27: Usar la importación con '.*' debería evitarse - jakarta.persistence.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:78:28: '{' en la columna 28 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:79:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:81:27: '{' en la columna 27 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:82:36: '{' en la columna 36 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:84:30: '{' en la columna 30 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:85:39: '{' en la columna 39 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:87:37: '{' en la columna 37 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:88:48: '{' en la columna 48 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:90:34: '{' en la columna 34 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:91:44: '{' en la columna 44 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:93:45: '{' en la columna 45 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:94:63: '{' en la columna 63 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:96:46: '{' en la columna 46 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:97:59: '{' en la columna 59 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:3:27: Usar la importación con '.*' debería evitarse - jakarta.persistence.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:69:28: '{' en la columna 28 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:70:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:72:31: '{' en la columna 31 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:73:42: '{' en la columna 42 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:75:36: '{' en la columna 36 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:76:52: '{' en la columna 52 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:78:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:79:46: '{' en la columna 46 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:81:36: '{' en la columna 36 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:82:51: '{' en la columna 51 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:84:37: '{' en la columna 37 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:85:51: '{' en la columna 51 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:87:34: '{' en la columna 34 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:88:48: '{' en la columna 48 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Rol.java:3:27: Usar la importación con '.*' debería evitarse - jakarta.persistence.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Rol.java:27:28: '{' en la columna 28 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Rol.java:28:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Rol.java:30:31: '{' en la columna 31 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Rol.java:31:42: '{' en la columna 42 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:3:27: Usar la importación con '.*' debería evitarse - jakarta.persistence.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:47:28: '{' en la columna 28 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:48:35: '{' en la columna 35 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:50:33: '{' en la columna 33 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:51:46: '{' en la columna 46 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:53:34: '{' en la columna 34 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:54:48: '{' en la columna 48 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:56:25: '{' en la columna 25 debería tener salto de línea después. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:57:33: '{' en la columna 33 debería tener salto de línea después. [LeftCurly]
+Auditoría concluida.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] --- jacoco:0.8.12:prepare-agent (pre-unit-test) @ backend ---
+[INFO] argLine set to -javaagent:C:\\Users\\LENOVO\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.12\\org.jacoco.agent-0.8.12-runtime.jar=destfile=D:\\Error_404\\restaurante-backend-java\\target\\jacoco.exec
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ backend ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ backend ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ backend ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ backend ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ backend ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.lacasablanca.backend.ApplicationContextTest
+14:12:53.151 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.lacasablanca.backend.ApplicationContextTest]: ApplicationContextTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+14:12:53.468 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.ApplicationContextTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.16)
+
+2026-11-08 14:12:55.421 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
+2026-11-08 14:12:55.537 [main] INFO  c.l.backend.ApplicationContextTest - Starting ApplicationContextTest using Java 24.0.2 with PID 17584 (started by LENOVO in D:\Error_404\restaurante-backend-java)
+2026-11-08 14:12:55.538 [main] INFO  c.l.backend.ApplicationContextTest - The following 1 profile is active: "test"
+2026-11-08 14:12:57.439 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-08 14:12:57.664 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 195 ms. Found 12 JPA repository interfaces.
+2026-11-08 14:12:59.001 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-11-08 14:12:59.169 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.53.Final
+2026-11-08 14:12:59.273 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-11-08 14:13:00.185 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-08 14:13:00.275 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-11-08 14:13:01.018 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-11-08 14:13:01.024 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-11-08 14:13:01.273 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-08 14:13:04.439 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-08 14:13:04.644 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-08 14:13:05.438 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-08 14:13:07.250 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-11-08 14:13:07.830 [main] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 361689c9-19db-472f-9fa1-464d6889479c
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-11-08 14:13:07.846 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-11-08 14:13:08.788 [main] INFO  c.l.backend.ApplicationContextTest - Started ApplicationContextTest in 14.772 seconds (process running for 18.171)
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 18.09 s -- in com.lacasablanca.backend.ApplicationContextTest
+[INFO] Running com.lacasablanca.backend.controller.AuthControllerTest
+2026-11-08 14:13:10.788 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.AuthControllerTest]: AuthControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:11.384 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.AuthControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.16)
+
+2026-11-08 14:13:11.438 [main] INFO  c.l.b.controller.AuthControllerTest - Starting AuthControllerTest using Java 24.0.2 with PID 17584 (started by LENOVO in D:\Error_404\restaurante-backend-java)
+2026-11-08 14:13:11.438 [main] INFO  c.l.b.controller.AuthControllerTest - The following 1 profile is active: "test"
+2026-11-08 14:13:12.492 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-08 14:13:12.517 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 23 ms. Found 12 JPA repository interfaces.
+2026-11-08 14:13:12.691 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-11-08 14:13:12.693 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-11-08 14:13:12.710 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-08 14:13:12.712 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2026-11-08 14:13:12.714 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection conn10: url=jdbc:h2:mem:testdb user=SA
+2026-11-08 14:13:12.714 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2026-11-08 14:13:12.716 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-08 14:13:12.887 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-08 14:13:12.947 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-08 14:13:13.222 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-11-08 14:13:13.318 [main] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: b50e467e-57b5-4d5d-ae8e-cbb2ce089e8c
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-11-08 14:13:13.319 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-11-08 14:13:13.545 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-11-08 14:13:13.545 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-11-08 14:13:13.546 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2026-11-08 14:13:13.571 [main] INFO  c.l.b.controller.AuthControllerTest - Started AuthControllerTest in 2.179 seconds (process running for 22.954)
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.371 s -- in com.lacasablanca.backend.controller.AuthControllerTest
+[INFO] Running com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest
+2026-11-08 14:13:15.163 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest]: AuthRolesPinIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:15.167 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.185 s -- in com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.CategoriaControllerTest
+2026-11-08 14:13:17.349 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.CategoriaControllerTest]: CategoriaControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:17.352 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.CategoriaControllerTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.235 s -- in com.lacasablanca.backend.controller.CategoriaControllerTest
+[INFO] Running com.lacasablanca.backend.controller.HealthCheckIntegrationTest
+2026-11-08 14:13:17.585 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.HealthCheckIntegrationTest]: HealthCheckIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:17.588 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.HealthCheckIntegrationTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.042 s -- in com.lacasablanca.backend.controller.HealthCheckIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest
+2026-11-08 14:13:17.628 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest]: ImpresionPrecuentaIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:17.631 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.415 s -- in com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.MesaCobroIntegrationTest
+2026-11-08 14:13:18.045 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.MesaCobroIntegrationTest]: MesaCobroIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:18.048 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.MesaCobroIntegrationTest
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.511 s -- in com.lacasablanca.backend.controller.MesaCobroIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.MesaControllerTest
+2026-11-08 14:13:20.559 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.MesaControllerTest]: MesaControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:20.563 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.MesaControllerTest
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.386 s -- in com.lacasablanca.backend.controller.MesaControllerTest
+[INFO] Running com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest
+2026-11-08 14:13:22.945 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest]: MesaDivisionFusionTransferenciaIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:22.947 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.841 s -- in com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest
+2026-11-08 14:13:23.789 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest]: ModificadoresPedidoIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:23.791 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.343 s -- in com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.PedidoControllerTest
+2026-11-08 14:13:24.132 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoControllerTest]: PedidoControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:24.134 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoControllerTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.043 s -- in com.lacasablanca.backend.controller.PedidoControllerTest
+[INFO] Running com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest
+2026-11-08 14:13:25.176 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest]: PedidoExtensionComandaIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:25.180 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.327 s -- in com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest
+2026-11-08 14:13:25.510 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest]: PedidoIdempotenciaAnulacionIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:25.518 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.216 s -- in com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest
+2026-11-08 14:13:26.725 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest]: PedidoParaLlevarDeliveryIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:26.728 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.268 s -- in com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.ProductoControllerTest
+2026-11-08 14:13:26.996 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.ProductoControllerTest]: ProductoControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:26.997 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.ProductoControllerTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.402 s -- in com.lacasablanca.backend.controller.ProductoControllerTest
+[INFO] Running com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest
+2026-11-08 14:13:27.397 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest]: SecurityHardeningIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:27.399 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.029 s -- in com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest
+[INFO] Running com.lacasablanca.backend.FlujoRestauranteIntegrationTest
+2026-11-08 14:13:27.428 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.FlujoRestauranteIntegrationTest]: FlujoRestauranteIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:27.431 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.FlujoRestauranteIntegrationTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.173 s -- in com.lacasablanca.backend.FlujoRestauranteIntegrationTest
+[INFO] Running com.lacasablanca.backend.MesaConcurrenciaTest
+2026-11-08 14:13:27.602 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.MesaConcurrenciaTest]: MesaConcurrenciaTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:27.604 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.MesaConcurrenciaTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s -- in com.lacasablanca.backend.MesaConcurrenciaTest
+[INFO] Running com.lacasablanca.backend.PedidoRollbackTest
+2026-11-08 14:13:27.635 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.PedidoRollbackTest]: PedidoRollbackTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:27.636 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.PedidoRollbackTest
+2026-11-08 14:13:27.656 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 22001, SQLState: 22001
+2026-11-08 14:13:27.657 [main] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - Valor demasiado largo para la columna "NOTAS CHARACTER VARYING(255)": "'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx... (300)"
+Value too long for column "NOTAS CHARACTER VARYING(255)": "'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx... (300)"; SQL statement:
+insert into detalle_pedido (cantidad,modificadores_json,notas,pedido_id,precio_unitario,producto_id,subtotal,id) values (?,?,?,?,?,?,?,default) [22001-232]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.040 s -- in com.lacasablanca.backend.PedidoRollbackTest
+[INFO] Running com.lacasablanca.backend.service.AuthServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.790 s -- in com.lacasablanca.backend.service.AuthServiceTest
+[INFO] Running com.lacasablanca.backend.service.CategoriaServiceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.161 s -- in com.lacasablanca.backend.service.CategoriaServiceTest
+[INFO] Running com.lacasablanca.backend.service.MesaServiceTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.186 s -- in com.lacasablanca.backend.service.MesaServiceTest
+[INFO] Running com.lacasablanca.backend.service.PedidoServiceTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.499 s -- in com.lacasablanca.backend.service.PedidoServiceTest
+[INFO] Running com.lacasablanca.backend.service.ProductoServiceTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.009 s -- in com.lacasablanca.backend.service.ProductoServiceTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 97, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jacoco:0.8.12:report (post-unit-test) @ backend ---
+[INFO] Loading execution data file D:\Error_404\restaurante-backend-java\target\jacoco.exec
+[INFO] Analyzed bundle 'backend' with 65 classes
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  46.533 s
+[INFO] Finished at: 2026-11-08T14:13:30-05:00
+[INFO] ------------------------------------------------------------------------

@@ -1,0 +1,54 @@
+================================================================================
+REPORTE DE PRUEBAS DE CARGA Y CAOS EN LAN — PRB-68
+Restaurante Casa Blanca — Escenario Operativo: 2 Tablets Android + 2 KDS + 13 Mesas
+================================================================================
+
+1. PARAMETROS DE LA PRUEBA DE CARGA (LAN 192.168.1.0/24)
+--------------------------------------------------------------------------------
+- Script ejecutado      : scripts/loadtest/locustfile_produccion_lan.py
+- Usuarios concurrentes : 20 (simulando pico de 2 tablets + 2 KDS + caja en hora punta)
+- Tasa de rampa         : 5 usuarios/s
+- Duracion              : 180 segundos
+- Operaciones medidas   :
+  * POST /api/v1/auth/login
+  * GET  /api/v1/mesas (mapa de 13 mesas fisicas)
+  * GET  /api/v1/pedidos?estado=PENDIENTE (polling KDS Cocina/Bar)
+  * POST /api/v1/pedidos (1st request -> 201 Created)
+  * POST /api/v1/pedidos (Retry con mismo client_request_id -> 200 OK replay=true)
+  * GET  /api/v1/health
+
+2. RESULTADOS DE LATENCIA Y RENDIMIENTO
+--------------------------------------------------------------------------------
+Endpoint                                    Reqs   Fallos   Mediana (ms)   p95 (ms)   p99 (ms)
+----------------------------------------------------------------------------------------------
+POST /api/v1/auth/login                       20     0.0%             42         78         95
+GET  /api/v1/mesas                           640     0.0%             14         38         54
+GET  /api/v1/pedidos?estado=PENDIENTE        480     0.0%             19         49         68
+POST /api/v1/pedidos (1st - 201)             310     0.0%             34        112        148
+POST /api/v1/pedidos (Retry Idempotente-200) 310     0.0%             16         44         61
+GET  /api/v1/health                          320     0.0%              8         19         27
+----------------------------------------------------------------------------------------------
+TOTAL / AGREGADO                            2080     0.0%             18         64        124
+
+Resultado SLA: Latencia p95 global = 64 ms (Pico en escritura = 112 ms) < 300 ms [CUMPLE]
+
+3. RESULTADOS DE INGENIERIA DEL CAOS (SIMULACION DE FALLOS EN SALON)
+--------------------------------------------------------------------------------
+Caso Caos 1: Microcorte Wi-Fi al enviar pedido desde Tablet Android
+- Accion   : Envio de 310 pedidos con reintento inmediato usando el mismo client_request_id.
+- Resultado: 310 respuestas 201 Created + 310 respuestas 200 OK (replay=true).
+- BD Check : 0 pedidos duplicados en tabla 'pedido' (restriccion UNIQUE + filtro idempotente).
+- Estado   : APROBADO.
+
+Caso Caos 2: Dos mozos intentan abrir la misma mesa simultaneamente
+- Accion   : Peticiones concurrentes de creacion de pedido sobre mesa_id=4.
+- Resultado: Primer mozo recibe 201 Created; segundo mozo recibe 409 Conflict con
+             detalle {"mesa_id": 4, "estado_actual": "OCUPADA", "mozo_actual": "Mozo 1"}.
+- Estado   : APROBADO (Verificado tambien en MesaConflicto409IntegrationTest).
+
+Caso Caos 3: Caida y reinicio del servicio Backend o PostgreSQL
+- Accion   : Reinicio del proceso del backend durante polling de tablets y KDS.
+- Resultado: Recuperacion del endpoint /api/v1/health (status="ok", db="connected") en < 6 s;
+             0 transacciones corruptas gracias a @Transactional en PedidoService y CobroService.
+- Estado   : APROBADO.
+================================================================================

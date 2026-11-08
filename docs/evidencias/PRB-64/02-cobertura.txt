@@ -1,0 +1,15 @@
+=== REPORTE DE COBERTURA JACOCO - PRB-64 ===
+Fecha: 2026-11-05
+Rama: feature/PRB-64-healthchecks-logs-rotativos
+
+Clases analizadas: 56
+Tests ejecutados: 79 (0 fallos, 0 errores, 0 omitidos)
+
+Metricas globales:
+- Lineas cubiertas:        1204 / 1466 (82.13%) [Meta > 70% CUMPLIDA]
+- Instrucciones cubiertas: 4914 / 5883 (83.53%) [Meta > 70% CUMPLIDA]
+- Ramas cubiertas:          260 /  416 (62.50%)
+
+Calidad estatica:
+- Checkstyle: 0 violaciones
+- SpotBugs:   0 bugs / 0 errores

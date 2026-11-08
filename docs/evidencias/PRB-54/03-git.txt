@@ -1,0 +1,38 @@
+ docs/evidencias/PRB-54/01-tests.txt                |  98 ++++++++
+ docs/evidencias/PRB-54/02-cobertura.txt            |  15 ++
+ docs/evidencias/PRB-54/CIERRE.md                   |  34 +++
+ .../backend/config/DataInitializer.java            |  61 ++++-
+ .../backend/controller/AuthController.java         |  21 +-
+ .../lacasablanca/backend/dto/PinLoginRequest.java  |  38 +++
+ .../exception/CuentaBloqueadaException.java        |   8 +
+ .../backend/exception/GlobalExceptionHandler.java  |   9 +
+ .../com/lacasablanca/backend/model/Usuario.java    |  11 +
+ .../backend/security/JwtAuthenticationFilter.java  |   5 +
+ .../com/lacasablanca/backend/security/JwtUtil.java |  18 +-
+ .../backend/security/SecurityConfig.java           |  17 +-
+ .../lacasablanca/backend/service/AuthService.java  | 137 ++++++++++-
+ src/main/resources/application.yml                 |   2 +-
+ .../controller/AuthRolesPinIntegrationTest.java    | 258 +++++++++++++++++++++
+ 15 files changed, 719 insertions(+), 13 deletions(-)
+commit cfd2f9cca413717c3a0b96d13be529c2c63ee503
+Author: maxmunoz-debug <max.munoz@tecsup.edu.pe>
+Date:   Thu Nov 5 22:38:38 2026 -0500
+
+    feat(PRB-54): login por PIN BCrypt, bloqueo temporal 423, logout y matriz de permisos por rol
+
+ docs/evidencias/PRB-54/01-tests.txt                |  98 ++++++++
+ docs/evidencias/PRB-54/02-cobertura.txt            |  15 ++
+ docs/evidencias/PRB-54/CIERRE.md                   |  34 +++
+ .../backend/config/DataInitializer.java            |  61 ++++-
+ .../backend/controller/AuthController.java         |  21 +-
+ .../lacasablanca/backend/dto/PinLoginRequest.java  |  38 +++
+ .../exception/CuentaBloqueadaException.java        |   8 +
+ .../backend/exception/GlobalExceptionHandler.java  |   9 +
+ .../com/lacasablanca/backend/model/Usuario.java    |  11 +
+ .../backend/security/JwtAuthenticationFilter.java  |   5 +
+ .../com/lacasablanca/backend/security/JwtUtil.java |  18 +-
+ .../backend/security/SecurityConfig.java           |  17 +-
+ .../lacasablanca/backend/service/AuthService.java  | 137 ++++++++++-
+ src/main/resources/application.yml                 |   2 +-
+ .../controller/AuthRolesPinIntegrationTest.java    | 258 +++++++++++++++++++++
+ 15 files changed, 719 insertions(+), 13 deletions(-)

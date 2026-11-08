@@ -1,0 +1,15 @@
+=== REPORTE DE COBERTURA JACOCO - PRB-79 ===
+Fecha: 2026-11-05
+Rama: feature/PRB-79-pedidos-para-llevar-delivery
+
+Clases analizadas: 61
+Tests ejecutados: 91 (0 fallos, 0 errores, 0 omitidos)
+
+Metricas globales:
+- Lineas cubiertas:        1532 / 1859 (82.41%) [Meta > 70% CUMPLIDA]
+- Instrucciones cubiertas: 6348 / 7598 (83.55%) [Meta > 70% CUMPLIDA]
+- Ramas cubiertas:          378 /  602 (62.79%)
+
+Calidad estatica:
+- Checkstyle: 0 violaciones
+- SpotBugs:   0 bugs / 0 errores

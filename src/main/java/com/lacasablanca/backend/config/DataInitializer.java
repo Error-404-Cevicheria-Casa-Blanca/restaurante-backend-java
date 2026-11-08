@@ -1,7 +1,17 @@
 package com.lacasablanca.backend.config;
 
-import com.lacasablanca.backend.model.*;
-import com.lacasablanca.backend.repository.*;
+import com.lacasablanca.backend.model.Categoria;
+import com.lacasablanca.backend.model.EstadoMesa;
+import com.lacasablanca.backend.model.Mesa;
+import com.lacasablanca.backend.model.Producto;
+import com.lacasablanca.backend.model.Rol;
+import com.lacasablanca.backend.model.Usuario;
+import com.lacasablanca.backend.repository.CategoriaRepository;
+import com.lacasablanca.backend.repository.MesaRepository;
+import com.lacasablanca.backend.repository.ProductoRepository;
+import com.lacasablanca.backend.repository.RolRepository;
+import com.lacasablanca.backend.repository.UsuarioRepository;
+import com.lacasablanca.backend.service.AuthService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,6 +19,10 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+/**
+ * Inicializador exclusivo para el perfil de pruebas automatizadas (@Profile("test")).
+ * En producción este componente NO se carga; los usuarios y PINs reales se administran en base de datos.
+ */
 @Component
 @Profile("test")
 public class DataInitializer implements CommandLineRunner {
@@ -19,19 +33,22 @@ public class DataInitializer implements CommandLineRunner {
     private final CategoriaRepository categoriaRepository;
     private final ProductoRepository productoRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthService authService;
 
     public DataInitializer(RolRepository rolRepository,
                            UsuarioRepository usuarioRepository,
                            MesaRepository mesaRepository,
                            CategoriaRepository categoriaRepository,
                            ProductoRepository productoRepository,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           AuthService authService) {
         this.rolRepository = rolRepository;
         this.usuarioRepository = usuarioRepository;
         this.mesaRepository = mesaRepository;
         this.categoriaRepository = categoriaRepository;
         this.productoRepository = productoRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authService = authService;
     }
 
     @Override
@@ -50,6 +67,12 @@ public class DataInitializer implements CommandLineRunner {
             usuarioRepository.save(new Usuario("cajero_01", hash, rCajero));
         }
 
+        authService.registrarPin("admin_test", "9999");
+        authService.registrarPin("mozo_01", "1234");
+        authService.registrarPin("mozo_02", "2345");
+        authService.registrarPin("cocinero_01", "3456");
+        authService.registrarPin("cajero_01", "4567");
+
         if (mesaRepository.count() == 0) {
             for (int i = 1; i <= 7; i++) {
                 mesaRepository.save(new Mesa(i, 4, "Primer piso", EstadoMesa.LIBRE));
@@ -65,10 +88,34 @@ public class DataInitializer implements CommandLineRunner {
             Categoria cBebidas = categoriaRepository.save(new Categoria("Bebidas"));
             Categoria cPostres = categoriaRepository.save(new Categoria("Postres"));
 
-            productoRepository.save(new Producto("Ceviche Clásico", "Pescado fresco marinado en limón", new BigDecimal("48.00"), true, cFondos, "https://lacasablanca.pe/ceviche.jpg"));
-            productoRepository.save(new Producto("Chicharrón de Calamar", "Crujientes aros de calamar", new BigDecimal("35.00"), true, cEntradas, "https://lacasablanca.pe/chicharron.jpg"));
-            productoRepository.save(new Producto("Chicha Morada 1L", "Bebida tradicional de maíz morado", new BigDecimal("15.00"), true, cBebidas, "https://lacasablanca.pe/chicha.jpg"));
-            productoRepository.save(new Producto("Suspiro a la Limeña", "Postre tradicional", new BigDecimal("18.00"), false, cPostres, "https://lacasablanca.pe/suspiro.jpg")); // No disponible
+            productoRepository.save(new Producto(
+                    "Ceviche Clásico",
+                    "Pescado fresco marinado en limón",
+                    new BigDecimal("48.00"),
+                    true,
+                    cFondos,
+                    "https://lacasablanca.pe/ceviche.jpg"));
+            productoRepository.save(new Producto(
+                    "Chicharrón de Calamar",
+                    "Crujientes aros de calamar",
+                    new BigDecimal("35.00"),
+                    true,
+                    cEntradas,
+                    "https://lacasablanca.pe/chicharron.jpg"));
+            productoRepository.save(new Producto(
+                    "Chicha Morada 1L",
+                    "Bebida tradicional de maíz morado",
+                    new BigDecimal("15.00"),
+                    true,
+                    cBebidas,
+                    "https://lacasablanca.pe/chicha.jpg"));
+            productoRepository.save(new Producto(
+                    "Suspiro a la Limeña",
+                    "Postre tradicional",
+                    new BigDecimal("18.00"),
+                    false,
+                    cPostres,
+                    "https://lacasablanca.pe/suspiro.jpg"));
         }
     }
 }

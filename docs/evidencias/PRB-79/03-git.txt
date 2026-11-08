@@ -1,0 +1,32 @@
+ docs/evidencias/PRB-79/01-tests.txt                | 108 ++++++++++++
+ docs/evidencias/PRB-79/02-cobertura.txt            |  15 ++
+ docs/evidencias/PRB-79/CIERRE.md                   |  21 +++
+ .../backend/controller/PedidoController.java       |   2 +-
+ .../backend/dto/CrearPedidoRequest.java            |  37 +++-
+ .../lacasablanca/backend/dto/PedidoResponse.java   |  33 ++++
+ .../java/com/lacasablanca/backend/model/Pago.java  |   2 +-
+ .../com/lacasablanca/backend/model/Pedido.java     |   2 +-
+ .../backend/security/SecurityConfig.java           |   1 +
+ .../lacasablanca/backend/service/CobroService.java |   6 +-
+ .../backend/service/PedidoService.java             |  43 +++--
+ .../PedidoParaLlevarDeliveryIntegrationTest.java   | 193 +++++++++++++++++++++
+ 12 files changed, 444 insertions(+), 19 deletions(-)
+commit b18e33f1505fdd70ccf0e69ecffc33ab9f62149d
+Author: maxmunoz-debug <max.munoz@tecsup.edu.pe>
+Date:   Thu Nov 5 23:36:33 2026 -0500
+
+    feat(PRB-79): soporte de pedidos Para Llevar y Delivery sin mesa con flujo KDS y cobro directo
+
+ docs/evidencias/PRB-79/01-tests.txt                | 108 ++++++++++++
+ docs/evidencias/PRB-79/02-cobertura.txt            |  15 ++
+ docs/evidencias/PRB-79/CIERRE.md                   |  21 +++
+ .../backend/controller/PedidoController.java       |   2 +-
+ .../backend/dto/CrearPedidoRequest.java            |  37 +++-
+ .../lacasablanca/backend/dto/PedidoResponse.java   |  33 ++++
+ .../java/com/lacasablanca/backend/model/Pago.java  |   2 +-
+ .../com/lacasablanca/backend/model/Pedido.java     |   2 +-
+ .../backend/security/SecurityConfig.java           |   1 +
+ .../lacasablanca/backend/service/CobroService.java |   6 +-
+ .../backend/service/PedidoService.java             |  43 +++--
+ .../PedidoParaLlevarDeliveryIntegrationTest.java   | 193 +++++++++++++++++++++
+ 12 files changed, 444 insertions(+), 19 deletions(-)

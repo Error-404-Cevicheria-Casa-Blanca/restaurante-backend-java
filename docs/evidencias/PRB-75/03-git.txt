@@ -1,0 +1,30 @@
+ docs/evidencias/PRB-75/01-tests.txt                | 106 +++++++++
+ docs/evidencias/PRB-75/02-cobertura.txt            |  15 ++
+ docs/evidencias/PRB-75/CIERRE.md                   |  23 ++
+ .../backend/controller/MesaController.java         |  40 +++-
+ .../backend/dto/DividirMesaRequest.java            |  40 ++++
+ .../backend/dto/DivisionMesaResponse.java          |  78 +++++++
+ .../backend/dto/FusionarMesasRequest.java          |  26 +++
+ .../backend/dto/TransferirMesaRequest.java         |  26 +++
+ .../backend/security/SecurityConfig.java           |   3 +
+ .../backend/service/PedidoService.java             | 231 +++++++++++++++++++
+ ...DivisionFusionTransferenciaIntegrationTest.java | 246 +++++++++++++++++++++
+ 11 files changed, 833 insertions(+), 1 deletion(-)
+commit 84799d9e704f8af82cecfbab8f5e642ad611b52a
+Author: maxmunoz-debug <max.munoz@tecsup.edu.pe>
+Date:   Thu Nov 5 23:26:12 2026 -0500
+
+    feat(PRB-75): endpoints para dividir, fusionar y transferir mesas con validacion de estados 409
+
+ docs/evidencias/PRB-75/01-tests.txt                | 106 +++++++++
+ docs/evidencias/PRB-75/02-cobertura.txt            |  15 ++
+ docs/evidencias/PRB-75/CIERRE.md                   |  23 ++
+ .../backend/controller/MesaController.java         |  40 +++-
+ .../backend/dto/DividirMesaRequest.java            |  40 ++++
+ .../backend/dto/DivisionMesaResponse.java          |  78 +++++++
+ .../backend/dto/FusionarMesasRequest.java          |  26 +++
+ .../backend/dto/TransferirMesaRequest.java         |  26 +++
+ .../backend/security/SecurityConfig.java           |   3 +
+ .../backend/service/PedidoService.java             | 231 +++++++++++++++++++
+ ...DivisionFusionTransferenciaIntegrationTest.java | 246 +++++++++++++++++++++
+ 11 files changed, 833 insertions(+), 1 deletion(-)

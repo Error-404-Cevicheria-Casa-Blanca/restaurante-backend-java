@@ -1,0 +1,98 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------------< com.lacasablanca:backend >----------------------
+[INFO] Building backend 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.4.0:check (checkstyle-validation) @ backend ---
+[INFO] Comenzando auditoría...
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] --- jacoco:0.8.12:prepare-agent (pre-unit-test) @ backend ---
+[INFO] argLine set to -javaagent:C:\\Users\\LENOVO\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.12\\org.jacoco.agent-0.8.12-runtime.jar=destfile=D:\\Error_404\\restaurante-backend-java\\target\\jacoco.exec
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ backend ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ backend ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 65 source files with javac [debug parameters release 17] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ backend ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ backend ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 17 source files with javac [debug parameters release 17] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ backend ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.lacasablanca.backend.ApplicationContextTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 16.18 s -- in com.lacasablanca.backend.ApplicationContextTest
+[INFO] Running com.lacasablanca.backend.controller.AuthControllerTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.283 s -- in com.lacasablanca.backend.controller.AuthControllerTest
+[INFO] Running com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.409 s -- in com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.CategoriaControllerTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.256 s -- in com.lacasablanca.backend.controller.CategoriaControllerTest
+[INFO] Running com.lacasablanca.backend.controller.MesaCobroIntegrationTest
+[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.314 s -- in com.lacasablanca.backend.controller.MesaCobroIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.MesaControllerTest
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.577 s -- in com.lacasablanca.backend.controller.MesaControllerTest
+[INFO] Running com.lacasablanca.backend.controller.PedidoControllerTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.200 s -- in com.lacasablanca.backend.controller.PedidoControllerTest
+[INFO] Running com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.225 s -- in com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.ProductoControllerTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.455 s -- in com.lacasablanca.backend.controller.ProductoControllerTest
+[INFO] Running com.lacasablanca.backend.FlujoRestauranteIntegrationTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.221 s -- in com.lacasablanca.backend.FlujoRestauranteIntegrationTest
+[INFO] Running com.lacasablanca.backend.MesaConcurrenciaTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.041 s -- in com.lacasablanca.backend.MesaConcurrenciaTest
+[INFO] Running com.lacasablanca.backend.PedidoRollbackTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.041 s -- in com.lacasablanca.backend.PedidoRollbackTest
+[INFO] Running com.lacasablanca.backend.service.AuthServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.705 s -- in com.lacasablanca.backend.service.AuthServiceTest
+[INFO] Running com.lacasablanca.backend.service.CategoriaServiceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.168 s -- in com.lacasablanca.backend.service.CategoriaServiceTest
+[INFO] Running com.lacasablanca.backend.service.MesaServiceTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.167 s -- in com.lacasablanca.backend.service.MesaServiceTest
+[INFO] Running com.lacasablanca.backend.service.PedidoServiceTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.355 s -- in com.lacasablanca.backend.service.PedidoServiceTest
+[INFO] Running com.lacasablanca.backend.service.ProductoServiceTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.014 s -- in com.lacasablanca.backend.service.ProductoServiceTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 76, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jacoco:0.8.12:report (post-unit-test) @ backend ---
+[INFO] Loading execution data file D:\Error_404\restaurante-backend-java\target\jacoco.exec
+[INFO] Analyzed bundle 'backend' with 53 classes
+[INFO] 
+[INFO] >>> spotbugs:4.8.6.6:check (default-cli) > :spotbugs @ backend >>>
+[INFO] 
+[INFO] --- spotbugs:4.8.6.6:spotbugs (spotbugs) @ backend ---
+[INFO] Fork Value is true
+[INFO] Done SpotBugs Analysis....
+[INFO] 
+[INFO] <<< spotbugs:4.8.6.6:check (default-cli) < :spotbugs @ backend <<<
+[INFO] 
+[INFO] 
+[INFO] --- spotbugs:4.8.6.6:check (default-cli) @ backend ---
+[INFO] BugInstance size is 0
+[INFO] Error size is 0
+[INFO] No errors/warnings found
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  59.562 s
+[INFO] Finished at: 2026-11-05T22:37:26-05:00
+[INFO] ------------------------------------------------------------------------

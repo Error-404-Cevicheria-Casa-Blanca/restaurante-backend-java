@@ -1,0 +1,5 @@
+commit 3b2a8b451805dc8ab794351b6c0dd5529cd05cd3
+Author: maxmunoz-debug <max.munoz@tecsup.edu.pe>
+Date:   Sun Nov 8 14:14:40 2026 -0500
+
+    fix(PRB-54,PRB-82): almacenar hash SHA-256 de tokens revocados en token_revocado y validar persistencia tras reinicio (D1)

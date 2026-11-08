@@ -1,0 +1,20 @@
+ docs/evidencias/PRB-43/01-tests.txt                | 15601 +++++++++++++++++++
+ docs/evidencias/PRB-43/02-cobertura.txt            |    17 +
+ docs/evidencias/PRB-43/03-git.txt                  |    14 +
+ docs/evidencias/PRB-43/CIERRE.md                   |    79 +
+ docs/evidencias/PRB-55/01-tests.txt                | 15601 +++++++++++++++++++
+ docs/evidencias/PRB-55/02-cobertura.txt            |    17 +
+ docs/evidencias/PRB-55/03-git.txt                  |    14 +
+ docs/evidencias/PRB-55/CIERRE.md                   |    79 +
+ .../backend/controller/MesaController.java         |    42 +-
+ .../backend/controller/PedidoController.java       |    25 +-
+ .../lacasablanca/backend/dto/CobrarRequest.java    |    67 +
+ .../lacasablanca/backend/dto/CobroResponse.java    |    54 +
+ .../lacasablanca/backend/dto/CuentaResponse.java   |    91 +
+ .../lacasablanca/backend/dto/ItemCuentaDto.java    |    58 +
+ .../lacasablanca/backend/dto/PagoRequestDto.java   |    51 +
+ .../backend/dto/PedidoResumenCuentaDto.java        |    43 +
+ .../backend/repository/PedidoRepository.java       |     3 +
+ .../lacasablanca/backend/service/CobroService.java |   305 +
+ .../controller/MesaCobroIntegrationTest.java       |   398 +
+ 19 files changed, 32555 insertions(+), 4 deletions(-)

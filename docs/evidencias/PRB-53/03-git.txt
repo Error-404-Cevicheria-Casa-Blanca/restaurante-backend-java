@@ -1,0 +1,36 @@
+ docs/evidencias/PRB-53/01-tests.txt                |  96 ++++++
+ docs/evidencias/PRB-53/02-cobertura.txt            |  15 +
+ docs/evidencias/PRB-53/CIERRE.md                   |  35 +++
+ .../backend/controller/PedidoController.java       |  78 ++++-
+ .../backend/dto/AnularPedidoRequest.java           |  24 ++
+ .../backend/dto/CrearPedidoRequest.java            |  38 ++-
+ .../backend/dto/EstadoPedidoRequest.java           |  36 +++
+ .../lacasablanca/backend/dto/EventoPedidoDto.java  |  70 +++++
+ .../lacasablanca/backend/dto/PedidoResponse.java   | 150 +++++++--
+ .../lacasablanca/backend/model/EstadoPedido.java   |   3 +-
+ .../backend/repository/PedidoRepository.java       |   5 +
+ .../lacasablanca/backend/service/CobroService.java |   4 +-
+ .../backend/service/PedidoService.java             | 349 ++++++++++++++++++---
+ ...PedidoIdempotenciaAnulacionIntegrationTest.java | 295 +++++++++++++++++
+ 14 files changed, 1115 insertions(+), 83 deletions(-)
+commit 39167b0fc1b641b79b901df90eecee2cb7485704
+Author: maxmunoz-debug <max.munoz@tecsup.edu.pe>
+Date:   Thu Nov 5 21:52:42 2026 -0500
+
+    feat(PRB-53): idempotencia client_request_id, consulta filtrada y anulacion auditada de pedidos
+
+ docs/evidencias/PRB-53/01-tests.txt                |  96 ++++++
+ docs/evidencias/PRB-53/02-cobertura.txt            |  15 +
+ docs/evidencias/PRB-53/CIERRE.md                   |  35 +++
+ .../backend/controller/PedidoController.java       |  78 ++++-
+ .../backend/dto/AnularPedidoRequest.java           |  24 ++
+ .../backend/dto/CrearPedidoRequest.java            |  38 ++-
+ .../backend/dto/EstadoPedidoRequest.java           |  36 +++
+ .../lacasablanca/backend/dto/EventoPedidoDto.java  |  70 +++++
+ .../lacasablanca/backend/dto/PedidoResponse.java   | 150 +++++++--
+ .../lacasablanca/backend/model/EstadoPedido.java   |   3 +-
+ .../backend/repository/PedidoRepository.java       |   5 +
+ .../lacasablanca/backend/service/CobroService.java |   4 +-
+ .../backend/service/PedidoService.java             | 349 ++++++++++++++++++---
+ ...PedidoIdempotenciaAnulacionIntegrationTest.java | 295 +++++++++++++++++
+ 14 files changed, 1115 insertions(+), 83 deletions(-)

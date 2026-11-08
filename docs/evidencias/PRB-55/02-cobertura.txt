@@ -1,0 +1,17 @@
+==================================================
+REPORTE DE COBERTURA DE CÓDIGO (JACOCO 0.8.12)
+==================================================
+Proyecto: restaurante-backend-java
+Tarea: PRB-43 / PRB-55 (P-08: Pre-cuenta con IGV y cobro multi-medio)
+Fecha: 2026-11-05
+
+MÉTRICAS GLOBALES:
+--------------------------------------------------
+- Cobertura de Instrucciones: 84.24% (3101/3681)
+- Cobertura de Líneas:        84.07% (802/954)
+- Cobertura de Ramas:         69.80% (141/202)
+
+CRITERIO DE CALIDAD:
+- Umbral mínimo exigido: > 70.00%
+- Estado Quality Gate:   PASSED (Superado con 84.07%)
+==================================================

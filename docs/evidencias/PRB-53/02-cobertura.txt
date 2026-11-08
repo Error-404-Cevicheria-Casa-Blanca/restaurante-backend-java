@@ -1,0 +1,15 @@
+=== REPORTE DE COBERTURA JACOCO - PRB-53 ===
+Fecha: 2026-11-05
+Rama: feature/PRB-53-idempotencia-pedidos
+
+Clases analizadas: 51
+Tests ejecutados: 71 (0 fallos, 0 errores, 0 omitidos)
+
+Metricas globales:
+- Lineas cubiertas:        990 / 1180 (83.90%)  [Meta > 70% CUMPLIDA]
+- Instrucciones cubiertas: 3879 / 4615 (84.05%) [Meta > 70% CUMPLIDA]
+- Ramas cubiertas:         203 / 316 (64.24%)
+
+Calidad estatica:
+- Checkstyle: 0 violaciones
+- SpotBugs:   0 bugs / 0 errores

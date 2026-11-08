@@ -28,6 +28,9 @@ public class DetallePedido {
     @Column(length = 255)
     private String notas;
 
+    @Column(name = "modificadores_json", columnDefinition = "TEXT")
+    private String modificadoresJson;
+
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal subtotal;
 
@@ -58,6 +61,14 @@ public class DetallePedido {
 
     public String getNotas() { return notas; }
     public void setNotas(String notas) { this.notas = notas; }
+
+    public String getModificadoresJson() {
+        return modificadoresJson;
+    }
+
+    public void setModificadoresJson(String modificadoresJson) {
+        this.modificadoresJson = modificadoresJson;
+    }
 
     public BigDecimal getSubtotal() { return subtotal; }
     public void setSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }

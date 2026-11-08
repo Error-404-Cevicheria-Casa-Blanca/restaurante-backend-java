@@ -1,0 +1,15 @@
+=== REPORTE DE COBERTURA JACOCO - PRB-74 ===
+Fecha: 2026-11-05
+Rama: feature/PRB-74-modificadores-platos
+
+Clases analizadas: 57
+Tests ejecutados: 85 (0 fallos, 0 errores, 0 omitidos)
+
+Metricas globales:
+- Lineas cubiertas:        1305 / 1604 (81.36%) [Meta > 70% CUMPLIDA]
+- Instrucciones cubiertas: 5344 / 6440 (82.98%) [Meta > 70% CUMPLIDA]
+- Ramas cubiertas:          302 /  488 (61.89%)
+
+Calidad estatica:
+- Checkstyle: 0 violaciones
+- SpotBugs:   0 bugs / 0 errores
