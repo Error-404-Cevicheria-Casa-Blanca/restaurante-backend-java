@@ -60,16 +60,31 @@ public class JwtUtil {
                 .getPayload();
     }
 
+    private String calcularHash(String token) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] digest = md.digest(token.trim().getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+            throw new IllegalStateException("Algoritmo SHA-256 no disponible", e);
+        }
+    }
+
     public void revocarToken(String token) {
         if (token != null && !token.isBlank()) {
-            String t = token.trim();
-            tokensRevocados.add(t);
+            String hash = calcularHash(token);
+            tokensRevocados.add(hash);
             try {
-                if (tokenRevocadoRepository != null && !tokenRevocadoRepository.existsByTokenHash(t)) {
-                    tokenRevocadoRepository.save(new com.lacasablanca.backend.model.TokenRevocado(t));
+                if (tokenRevocadoRepository != null && !tokenRevocadoRepository.existsByTokenHash(hash)) {
+                    tokenRevocadoRepository.save(new com.lacasablanca.backend.model.TokenRevocado(hash));
                 }
-            } catch (Exception ignored) {
-                // Si la BD no está disponible o es test en memoria
+            } catch (Exception e) {
+                org.slf4j.LoggerFactory.getLogger(JwtUtil.class)
+                        .debug("Error persistiendo token revocado en BD: {}", e.getMessage());
             }
         }
     }
@@ -78,18 +93,23 @@ public class JwtUtil {
         if (token == null || token.isBlank()) {
             return false;
         }
-        String t = token.trim();
-        if (tokensRevocados.contains(t)) {
+        String hash = calcularHash(token);
+        if (tokensRevocados.contains(hash)) {
             return true;
         }
         try {
-            if (tokenRevocadoRepository != null && tokenRevocadoRepository.existsByTokenHash(t)) {
-                tokensRevocados.add(t);
+            if (tokenRevocadoRepository != null && tokenRevocadoRepository.existsByTokenHash(hash)) {
+                tokensRevocados.add(hash);
                 return true;
             }
-        } catch (Exception ignored) {
-            // Fallback a set en memoria
+        } catch (Exception e) {
+            org.slf4j.LoggerFactory.getLogger(JwtUtil.class)
+                    .debug("Error consultando token revocado en BD: {}", e.getMessage());
         }
         return false;
+    }
+
+    public void limpiarCacheParaPruebas() {
+        tokensRevocados.clear();
     }
 }

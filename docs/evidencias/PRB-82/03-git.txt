@@ -1,5 +1,5 @@
-commit a3fc71491e76cccdb3f1be48151b7b93cde8b2a3
+commit 3b2a8b451805dc8ab794351b6c0dd5529cd05cd3
 Author: maxmunoz-debug <max.munoz@tecsup.edu.pe>
-Date:   Sun Nov 8 10:08:54 2026 -0500
+Date:   Sun Nov 8 14:14:40 2026 -0500
 
-    fix(PRB-82,PRB-54,PRB-74,PRB-75): restaurar @Profile test en DataInitializer, eliminar fallback pin a clave_hash, persistir FALLIDO en impresion_cola, distribucion cobro multi-pedido y @Version
+    fix(PRB-54,PRB-82): almacenar hash SHA-256 de tokens revocados en token_revocado y validar persistencia tras reinicio (D1)

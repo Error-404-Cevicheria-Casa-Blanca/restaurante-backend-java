@@ -164,8 +164,8 @@ Auditoría concluida.
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
 [INFO] Running com.lacasablanca.backend.ApplicationContextTest
-10:05:59.136 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.lacasablanca.backend.ApplicationContextTest]: ApplicationContextTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-10:05:59.428 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.ApplicationContextTest
+14:12:53.151 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.lacasablanca.backend.ApplicationContextTest]: ApplicationContextTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+14:12:53.468 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.ApplicationContextTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -176,19 +176,19 @@ Auditoría concluida.
 
  :: Spring Boot ::               (v3.5.16)
 
-2026-11-08 10:06:01.164 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
-2026-11-08 10:06:01.267 [main] INFO  c.l.backend.ApplicationContextTest - Starting ApplicationContextTest using Java 24.0.2 with PID 2320 (started by LENOVO in D:\Error_404\restaurante-backend-java)
-2026-11-08 10:06:01.268 [main] INFO  c.l.backend.ApplicationContextTest - The following 1 profile is active: "test"
-2026-11-08 10:06:03.047 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-11-08 10:06:03.230 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 161 ms. Found 12 JPA repository interfaces.
-2026-11-08 10:06:04.372 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-11-08 10:06:04.504 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.53.Final
-2026-11-08 10:06:04.592 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-11-08 10:06:05.411 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-11-08 10:06:05.502 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-11-08 10:06:06.260 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
-2026-11-08 10:06:06.265 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-11-08 10:06:06.485 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+2026-11-08 14:12:55.421 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
+2026-11-08 14:12:55.537 [main] INFO  c.l.backend.ApplicationContextTest - Starting ApplicationContextTest using Java 24.0.2 with PID 17584 (started by LENOVO in D:\Error_404\restaurante-backend-java)
+2026-11-08 14:12:55.538 [main] INFO  c.l.backend.ApplicationContextTest - The following 1 profile is active: "test"
+2026-11-08 14:12:57.439 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-08 14:12:57.664 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 195 ms. Found 12 JPA repository interfaces.
+2026-11-08 14:12:59.001 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-11-08 14:12:59.169 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.53.Final
+2026-11-08 14:12:59.273 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-11-08 14:13:00.185 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-08 14:13:00.275 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-11-08 14:13:01.018 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-11-08 14:13:01.024 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-11-08 14:13:01.273 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 2.3.232
@@ -196,22 +196,22 @@ Auditoría concluida.
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-11-08 10:06:09.785 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-11-08 10:06:10.011 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-11-08 10:06:10.838 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-11-08 10:06:12.278 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-11-08 10:06:12.863 [main] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+2026-11-08 14:13:04.439 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-08 14:13:04.644 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-08 14:13:05.438 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-08 14:13:07.250 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-11-08 14:13:07.830 [main] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
 
-Using generated security password: c8259027-700d-41be-ae41-00f6e020a5e7
+Using generated security password: 361689c9-19db-472f-9fa1-464d6889479c
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2026-11-08 10:06:12.889 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
-2026-11-08 10:06:13.757 [main] INFO  c.l.backend.ApplicationContextTest - Started ApplicationContextTest in 13.94 seconds (process running for 16.634)
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 16.64 s -- in com.lacasablanca.backend.ApplicationContextTest
+2026-11-08 14:13:07.846 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-11-08 14:13:08.788 [main] INFO  c.l.backend.ApplicationContextTest - Started ApplicationContextTest in 14.772 seconds (process running for 18.171)
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 18.09 s -- in com.lacasablanca.backend.ApplicationContextTest
 [INFO] Running com.lacasablanca.backend.controller.AuthControllerTest
-2026-11-08 10:06:15.360 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.AuthControllerTest]: AuthControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:15.412 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.AuthControllerTest
+2026-11-08 14:13:10.788 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.AuthControllerTest]: AuthControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:11.384 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.AuthControllerTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -222,17 +222,17 @@ This generated password is for development use only. Your security configuration
 
  :: Spring Boot ::               (v3.5.16)
 
-2026-11-08 10:06:15.461 [main] INFO  c.l.b.controller.AuthControllerTest - Starting AuthControllerTest using Java 24.0.2 with PID 2320 (started by LENOVO in D:\Error_404\restaurante-backend-java)
-2026-11-08 10:06:15.461 [main] INFO  c.l.b.controller.AuthControllerTest - The following 1 profile is active: "test"
-2026-11-08 10:06:15.793 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-11-08 10:06:15.827 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 32 ms. Found 12 JPA repository interfaces.
-2026-11-08 10:06:15.994 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-11-08 10:06:15.997 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-11-08 10:06:16.011 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-11-08 10:06:16.012 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
-2026-11-08 10:06:16.014 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection conn10: url=jdbc:h2:mem:testdb user=SA
-2026-11-08 10:06:16.015 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
-2026-11-08 10:06:16.016 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+2026-11-08 14:13:11.438 [main] INFO  c.l.b.controller.AuthControllerTest - Starting AuthControllerTest using Java 24.0.2 with PID 17584 (started by LENOVO in D:\Error_404\restaurante-backend-java)
+2026-11-08 14:13:11.438 [main] INFO  c.l.b.controller.AuthControllerTest - The following 1 profile is active: "test"
+2026-11-08 14:13:12.492 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-08 14:13:12.517 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 23 ms. Found 12 JPA repository interfaces.
+2026-11-08 14:13:12.691 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-11-08 14:13:12.693 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-11-08 14:13:12.710 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-08 14:13:12.712 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2026-11-08 14:13:12.714 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection conn10: url=jdbc:h2:mem:testdb user=SA
+2026-11-08 14:13:12.714 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2026-11-08 14:13:12.716 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
 	Database driver: undefined/unknown
 	Database version: 2.3.232
@@ -240,107 +240,103 @@ This generated password is for development use only. Your security configuration
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-11-08 10:06:16.217 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-11-08 10:06:16.308 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-11-08 10:06:16.640 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-11-08 10:06:16.791 [main] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+2026-11-08 14:13:12.887 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-08 14:13:12.947 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-08 14:13:13.222 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-11-08 14:13:13.318 [main] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
 
-Using generated security password: f3dc03c4-3b40-4e1e-a7cd-e31521124b59
+Using generated security password: b50e467e-57b5-4d5d-ae8e-cbb2ce089e8c
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2026-11-08 10:06:16.793 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
-2026-11-08 10:06:17.037 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-2026-11-08 10:06:17.037 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2026-11-08 10:06:17.039 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
-2026-11-08 10:06:17.054 [main] INFO  c.l.b.controller.AuthControllerTest - Started AuthControllerTest in 1.635 seconds (process running for 19.93)
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.229 s -- in com.lacasablanca.backend.controller.AuthControllerTest
+2026-11-08 14:13:13.319 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-11-08 14:13:13.545 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-11-08 14:13:13.545 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-11-08 14:13:13.546 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2026-11-08 14:13:13.571 [main] INFO  c.l.b.controller.AuthControllerTest - Started AuthControllerTest in 2.179 seconds (process running for 22.954)
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.371 s -- in com.lacasablanca.backend.controller.AuthControllerTest
 [INFO] Running com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest
-2026-11-08 10:06:18.588 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest]: AuthRolesPinIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:18.593 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest
-2026-11-08 10:06:20.945 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 22001, SQLState: 22001
-2026-11-08 10:06:20.945 [main] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - Valor demasiado largo para la columna "TOKEN_HASH CHARACTER VARYING(128)": "'eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJjNWM5MGJjYy0wZmM5LTQ2ODMtYWZkYi1jY2RkNmYyOGI1Yj... (249)"
-Value too long for column "TOKEN_HASH CHARACTER VARYING(128)": "'eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJjNWM5MGJjYy0wZmM5LTQ2ODMtYWZkYi1jY2RkNmYyOGI1Yj... (249)"; SQL statement:
-insert into token_revocado (fecha_revocacion,token_hash,id) values (?,?,default) [22001-232]
-[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.425 s -- in com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest
+2026-11-08 14:13:15.163 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest]: AuthRolesPinIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:15.167 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.185 s -- in com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest
 [INFO] Running com.lacasablanca.backend.controller.CategoriaControllerTest
-2026-11-08 10:06:21.017 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.CategoriaControllerTest]: CategoriaControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:21.020 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.CategoriaControllerTest
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.231 s -- in com.lacasablanca.backend.controller.CategoriaControllerTest
+2026-11-08 14:13:17.349 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.CategoriaControllerTest]: CategoriaControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:17.352 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.CategoriaControllerTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.235 s -- in com.lacasablanca.backend.controller.CategoriaControllerTest
 [INFO] Running com.lacasablanca.backend.controller.HealthCheckIntegrationTest
-2026-11-08 10:06:21.248 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.HealthCheckIntegrationTest]: HealthCheckIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:21.251 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.HealthCheckIntegrationTest
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.036 s -- in com.lacasablanca.backend.controller.HealthCheckIntegrationTest
+2026-11-08 14:13:17.585 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.HealthCheckIntegrationTest]: HealthCheckIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:17.588 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.HealthCheckIntegrationTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.042 s -- in com.lacasablanca.backend.controller.HealthCheckIntegrationTest
 [INFO] Running com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest
-2026-11-08 10:06:21.287 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest]: ImpresionPrecuentaIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:21.290 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.400 s -- in com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest
+2026-11-08 14:13:17.628 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest]: ImpresionPrecuentaIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:17.631 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.415 s -- in com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest
 [INFO] Running com.lacasablanca.backend.controller.MesaCobroIntegrationTest
-2026-11-08 10:06:21.689 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.MesaCobroIntegrationTest]: MesaCobroIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:21.694 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.MesaCobroIntegrationTest
-[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.569 s -- in com.lacasablanca.backend.controller.MesaCobroIntegrationTest
+2026-11-08 14:13:18.045 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.MesaCobroIntegrationTest]: MesaCobroIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:18.048 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.MesaCobroIntegrationTest
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.511 s -- in com.lacasablanca.backend.controller.MesaCobroIntegrationTest
 [INFO] Running com.lacasablanca.backend.controller.MesaControllerTest
-2026-11-08 10:06:24.260 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.MesaControllerTest]: MesaControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:24.264 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.MesaControllerTest
-[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.410 s -- in com.lacasablanca.backend.controller.MesaControllerTest
+2026-11-08 14:13:20.559 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.MesaControllerTest]: MesaControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:20.563 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.MesaControllerTest
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.386 s -- in com.lacasablanca.backend.controller.MesaControllerTest
 [INFO] Running com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest
-2026-11-08 10:06:26.670 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest]: MesaDivisionFusionTransferenciaIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:26.672 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.818 s -- in com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest
+2026-11-08 14:13:22.945 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest]: MesaDivisionFusionTransferenciaIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:22.947 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.841 s -- in com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest
 [INFO] Running com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest
-2026-11-08 10:06:27.491 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest]: ModificadoresPedidoIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:27.494 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.338 s -- in com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest
+2026-11-08 14:13:23.789 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest]: ModificadoresPedidoIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:23.791 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.343 s -- in com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest
 [INFO] Running com.lacasablanca.backend.controller.PedidoControllerTest
-2026-11-08 10:06:27.831 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoControllerTest]: PedidoControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:27.834 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoControllerTest
-[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.083 s -- in com.lacasablanca.backend.controller.PedidoControllerTest
+2026-11-08 14:13:24.132 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoControllerTest]: PedidoControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:24.134 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoControllerTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.043 s -- in com.lacasablanca.backend.controller.PedidoControllerTest
 [INFO] Running com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest
-2026-11-08 10:06:28.915 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest]: PedidoExtensionComandaIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:28.917 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.380 s -- in com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest
+2026-11-08 14:13:25.176 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest]: PedidoExtensionComandaIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:25.180 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.327 s -- in com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest
 [INFO] Running com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest
-2026-11-08 10:06:29.298 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest]: PedidoIdempotenciaAnulacionIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:29.300 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest
-[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.176 s -- in com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest
+2026-11-08 14:13:25.510 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest]: PedidoIdempotenciaAnulacionIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:25.518 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.216 s -- in com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest
 [INFO] Running com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest
-2026-11-08 10:06:30.475 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest]: PedidoParaLlevarDeliveryIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:30.477 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.318 s -- in com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest
+2026-11-08 14:13:26.725 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest]: PedidoParaLlevarDeliveryIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:26.728 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.268 s -- in com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest
 [INFO] Running com.lacasablanca.backend.controller.ProductoControllerTest
-2026-11-08 10:06:30.795 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.ProductoControllerTest]: ProductoControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:30.797 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.ProductoControllerTest
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.421 s -- in com.lacasablanca.backend.controller.ProductoControllerTest
+2026-11-08 14:13:26.996 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.ProductoControllerTest]: ProductoControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:26.997 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.ProductoControllerTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.402 s -- in com.lacasablanca.backend.controller.ProductoControllerTest
 [INFO] Running com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest
-2026-11-08 10:06:31.221 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest]: SecurityHardeningIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:31.227 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.042 s -- in com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest
+2026-11-08 14:13:27.397 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest]: SecurityHardeningIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:27.399 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.029 s -- in com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest
 [INFO] Running com.lacasablanca.backend.FlujoRestauranteIntegrationTest
-2026-11-08 10:06:31.262 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.FlujoRestauranteIntegrationTest]: FlujoRestauranteIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:31.265 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.FlujoRestauranteIntegrationTest
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.194 s -- in com.lacasablanca.backend.FlujoRestauranteIntegrationTest
+2026-11-08 14:13:27.428 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.FlujoRestauranteIntegrationTest]: FlujoRestauranteIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:27.431 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.FlujoRestauranteIntegrationTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.173 s -- in com.lacasablanca.backend.FlujoRestauranteIntegrationTest
 [INFO] Running com.lacasablanca.backend.MesaConcurrenciaTest
-2026-11-08 10:06:31.457 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.MesaConcurrenciaTest]: MesaConcurrenciaTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:31.458 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.MesaConcurrenciaTest
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.041 s -- in com.lacasablanca.backend.MesaConcurrenciaTest
+2026-11-08 14:13:27.602 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.MesaConcurrenciaTest]: MesaConcurrenciaTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:27.604 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.MesaConcurrenciaTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s -- in com.lacasablanca.backend.MesaConcurrenciaTest
 [INFO] Running com.lacasablanca.backend.PedidoRollbackTest
-2026-11-08 10:06:31.498 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.PedidoRollbackTest]: PedidoRollbackTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-08 10:06:31.501 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.PedidoRollbackTest
-2026-11-08 10:06:31.523 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 22001, SQLState: 22001
-2026-11-08 10:06:31.524 [main] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - Valor demasiado largo para la columna "NOTAS CHARACTER VARYING(255)": "'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx... (300)"
+2026-11-08 14:13:27.635 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.PedidoRollbackTest]: PedidoRollbackTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-08 14:13:27.636 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.PedidoRollbackTest
+2026-11-08 14:13:27.656 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 22001, SQLState: 22001
+2026-11-08 14:13:27.657 [main] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - Valor demasiado largo para la columna "NOTAS CHARACTER VARYING(255)": "'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx... (300)"
 Value too long for column "NOTAS CHARACTER VARYING(255)": "'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx... (300)"; SQL statement:
 insert into detalle_pedido (cantidad,modificadores_json,notas,pedido_id,precio_unitario,producto_id,subtotal,id) values (?,?,?,?,?,?,?,default) [22001-232]
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.035 s -- in com.lacasablanca.backend.PedidoRollbackTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.040 s -- in com.lacasablanca.backend.PedidoRollbackTest
 [INFO] Running com.lacasablanca.backend.service.AuthServiceTest
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.849 s -- in com.lacasablanca.backend.service.AuthServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.790 s -- in com.lacasablanca.backend.service.AuthServiceTest
 [INFO] Running com.lacasablanca.backend.service.CategoriaServiceTest
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.213 s -- in com.lacasablanca.backend.service.CategoriaServiceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.161 s -- in com.lacasablanca.backend.service.CategoriaServiceTest
 [INFO] Running com.lacasablanca.backend.service.MesaServiceTest
-[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.228 s -- in com.lacasablanca.backend.service.MesaServiceTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.186 s -- in com.lacasablanca.backend.service.MesaServiceTest
 [INFO] Running com.lacasablanca.backend.service.PedidoServiceTest
-[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.595 s -- in com.lacasablanca.backend.service.PedidoServiceTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.499 s -- in com.lacasablanca.backend.service.PedidoServiceTest
 [INFO] Running com.lacasablanca.backend.service.ProductoServiceTest
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 s -- in com.lacasablanca.backend.service.ProductoServiceTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.009 s -- in com.lacasablanca.backend.service.ProductoServiceTest
 [INFO] 
 [INFO] Results:
 [INFO] 
@@ -353,6 +349,6 @@ insert into detalle_pedido (cantidad,modificadores_json,notas,pedido_id,precio_u
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  43.661 s
-[INFO] Finished at: 2026-11-08T10:06:34-05:00
+[INFO] Total time:  46.533 s
+[INFO] Finished at: 2026-11-08T14:13:30-05:00
 [INFO] ------------------------------------------------------------------------

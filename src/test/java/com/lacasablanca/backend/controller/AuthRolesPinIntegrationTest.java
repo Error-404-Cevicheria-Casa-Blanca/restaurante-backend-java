@@ -62,6 +62,12 @@ class AuthRolesPinIntegrationTest {
     @Autowired
     private com.lacasablanca.backend.repository.RolRepository rolRepository;
 
+    @Autowired
+    private com.lacasablanca.backend.security.JwtUtil jwtUtil;
+
+    @Autowired
+    private com.lacasablanca.backend.repository.TokenRevocadoRepository tokenRevocadoRepository;
+
     @BeforeEach
     void setUp() {
         authService.limpiarBloqueos();
@@ -163,7 +169,7 @@ class AuthRolesPinIntegrationTest {
     }
 
     @Test
-    @DisplayName("PRB-54: POST /api/v1/auth/logout revoca el JWT e impide su uso posterior (401)")
+    @DisplayName("PRB-54: POST /api/v1/auth/logout revoca el JWT e impide su uso posterior incluso tras limpiar memoria")
     void logoutRevocaTokenCorrectamente() throws Exception {
         String token = loginPorPin("mozo_01", "1234");
 
@@ -176,6 +182,17 @@ class AuthRolesPinIntegrationTest {
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isNoContent());
 
+        mockMvc.perform(get("/api/v1/auth/me")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isUnauthorized());
+
+        // Validar persistencia en BD
+        assertTrue(tokenRevocadoRepository.count() > 0, "El token revocado debe estar persistido en BD");
+
+        // Simular reinicio limpiando la memoria del proceso
+        jwtUtil.limpiarCacheParaPruebas();
+
+        // Debe seguir revocado consultando la BD
         mockMvc.perform(get("/api/v1/auth/me")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isUnauthorized());
