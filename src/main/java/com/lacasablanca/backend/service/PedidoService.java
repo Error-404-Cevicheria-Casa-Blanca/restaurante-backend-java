@@ -14,6 +14,7 @@ import com.lacasablanca.backend.exception.ConflictoOperacionException;
 import com.lacasablanca.backend.exception.RecursoNoEncontradoException;
 import com.lacasablanca.backend.model.DetallePedido;
 import com.lacasablanca.backend.model.Estacion;
+import com.lacasablanca.backend.model.EstadoItem;
 import com.lacasablanca.backend.model.EstadoMesa;
 import com.lacasablanca.backend.model.EstadoPedido;
 import com.lacasablanca.backend.model.Mesa;
@@ -491,6 +492,59 @@ public class PedidoService {
         return construirPedidoResponse(guardado);
     }
 
+    /**
+     * Avanza el estado de preparación de un plato (PRB-87).
+     * Solo se permite el siguiente paso del flujo PENDIENTE → EN_PREPARACION → LISTO → SERVIDO.
+     *
+     * @throws RecursoNoEncontradoException si el pedido o el ítem (dentro de ese pedido) no existen (404)
+     * @throws ConflictoOperacionException  si el pedido ya está COBRADO o ANULADO (409)
+     * @throws IllegalArgumentException     si la transición es un salto, un retroceso o no cambia (400)
+     */
+    @Transactional
+    public DetallePedidoResponse actualizarEstadoItem(Integer pedidoId,
+                                                      Integer itemId,
+                                                      EstadoItem nuevoEstado,
+                                                      String username) {
+        if (nuevoEstado == null) {
+            throw new IllegalArgumentException("El estado del ítem es obligatorio");
+        }
+        Pedido pedido = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Pedido no encontrado con ID: " + pedidoId));
+
+        EstadoPedido estadoPedido = pedido.getEstado();
+        if (estadoPedido == EstadoPedido.COBRADO || estadoPedido == EstadoPedido.ANULADO) {
+            throw new ConflictoOperacionException(
+                    "No se puede cambiar el estado de ítems de un pedido en estado " + estadoPedido
+            );
+        }
+
+        DetallePedido item = pedido.getDetalles().stream()
+                .filter(dp -> dp.getId() != null && dp.getId().equals(itemId))
+                .findFirst()
+                .orElseThrow(() -> new RecursoNoEncontradoException(
+                        "Ítem con ID " + itemId + " no encontrado en el pedido " + pedidoId
+                ));
+
+        EstadoItem actual = item.getEstadoItem();
+        if (!actual.puedePasarA(nuevoEstado)) {
+            EstadoItem siguiente = actual.siguiente();
+            String permitido = siguiente != null
+                    ? "Solo se permite pasar a " + siguiente
+                    : "El ítem ya está en el estado final";
+            throw new IllegalArgumentException(
+                    "Transición de estado inválida para el ítem " + itemId + ": "
+                            + actual + " → " + nuevoEstado + ". " + permitido
+                            + " (flujo: PENDIENTE → EN_PREPARACION → LISTO → SERVIDO)"
+            );
+        }
+
+        item.setEstadoItem(nuevoEstado);
+        registrarEvento(pedidoId, estadoPedido, estadoPedido, username,
+                "Ítem " + itemId + ": " + actual + " → " + nuevoEstado);
+
+        return construirDetalleResponse(item);
+    }
+
     @Transactional
     public DivisionMesaResponse dividirMesa(Integer mesaOrigenId, DividirMesaRequest request, String username) {
         if (request == null || request.getItemIds() == null || request.getItemIds().isEmpty()) {
@@ -916,6 +970,22 @@ public class PedidoService {
         }
     }
 
+    private DetallePedidoResponse construirDetalleResponse(DetallePedido dp) {
+        DetallePedidoResponse detalle = new DetallePedidoResponse(
+                dp.getId(),
+                dp.getProducto().getId(),
+                dp.getProducto().getNombre(),
+                dp.getProducto().getEstacion(),
+                dp.getPrecioUnitario(),
+                dp.getCantidad(),
+                dp.getNotas(),
+                dp.getSubtotal(),
+                obtenerModificadoresDeDetalle(dp)
+        );
+        detalle.setEstado(dp.getEstadoItem());
+        return detalle;
+    }
+
     private PedidoResponse construirPedidoResponse(Pedido guardado) {
         BigDecimal totalRedondeado = (guardado.getTotal() != null)
                 ? guardado.getTotal().setScale(2, RoundingMode.HALF_UP)
@@ -926,18 +996,7 @@ public class PedidoService {
         List<DetallePedidoResponse> detalleResponses = new ArrayList<>();
         if (guardado.getDetalles() != null) {
             for (DetallePedido dp : guardado.getDetalles()) {
-                List<ModificadorItemDto> mods = obtenerModificadoresDeDetalle(dp);
-                detalleResponses.add(new DetallePedidoResponse(
-                        dp.getId(),
-                        dp.getProducto().getId(),
-                        dp.getProducto().getNombre(),
-                        dp.getProducto().getEstacion(),
-                        dp.getPrecioUnitario(),
-                        dp.getCantidad(),
-                        dp.getNotas(),
-                        dp.getSubtotal(),
-                        mods
-                ));
+                detalleResponses.add(construirDetalleResponse(dp));
             }
         }
 
