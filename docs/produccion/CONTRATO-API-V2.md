@@ -47,6 +47,13 @@
 | `POST` | `/api/v1/pedidos/{id}/items/{itemId}/anular` | `{motivo}` | `PedidoResponse` recalculado | `200`, `400`, `409` | `MOZO`, `ADMIN` |
 | `POST` | `/api/v1/pedidos/{id}/cobrar` (`/pagos`) | `CobrarRequest` | `CobroResponse` | `201`, `400`, `409` | `MOZO`, `CAJERO`, `ADMIN` |
 
+### 2.3.2 Cobro con Descuentos (`PRB-89`)
+`POST /api/v1/mesas/{id}/cobrar` y `POST /api/v1/pedidos/{id}/cobrar`
+- `CobrarRequest`: acepta campos opcionales `descuento` (monto fijo en S/), `tipo_descuento` (`"MONTO"` o `"PORCENTAJE"`) y `porcentaje_descuento` (0 a 100).
+- `CobroResponse`: devuelve `total` (con descuento aplicado), `subtotal` (neto sin IGV), `igv` (18%), `descuento` (monto descontado), `pagado`, `vuelto` y `pedidos`.
+- Validación: `totalConDescuento = totalConsumo - descuento`. No se permite descuento negativo ni mayor al total de la cuenta (400). Pagos se validan contra `totalConDescuento + propina` (400 si insuficiente).
+- Auditoría: Si hay descuento, se registra en la auditoría del pedido (`evento_pedido`) con el usuario que ejecutó el cobro.
+
 ### 2.4 Monitoreo y Salud Operativa (`PRB-64`)
 | Método | Ruta | Response | Auth |
 |---|---|---|---|

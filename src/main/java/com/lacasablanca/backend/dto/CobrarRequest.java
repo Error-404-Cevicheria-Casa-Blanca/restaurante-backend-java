@@ -17,6 +17,14 @@ public class CobrarRequest {
 
     private BigDecimal propina = BigDecimal.ZERO;
 
+    private BigDecimal descuento = BigDecimal.ZERO;
+
+    @JsonProperty("tipo_descuento")
+    private String tipoDescuento;
+
+    @JsonProperty("porcentaje_descuento")
+    private BigDecimal porcentajeDescuento;
+
     private String observacion;
 
     @NotBlank(message = "El client_request_id es obligatorio para idempotencia")
@@ -27,8 +35,20 @@ public class CobrarRequest {
     }
 
     public CobrarRequest(List<PagoRequestDto> pagos, BigDecimal propina, String observacion, String clientRequestId) {
+        this(pagos, propina, BigDecimal.ZERO, null, null, observacion, clientRequestId);
+    }
+
+    public CobrarRequest(List<PagoRequestDto> pagos, BigDecimal propina, BigDecimal descuento, String observacion, String clientRequestId) {
+        this(pagos, propina, descuento, null, null, observacion, clientRequestId);
+    }
+
+    public CobrarRequest(List<PagoRequestDto> pagos, BigDecimal propina, BigDecimal descuento, String tipoDescuento,
+                         BigDecimal porcentajeDescuento, String observacion, String clientRequestId) {
         this.pagos = pagos;
         this.propina = (propina != null) ? propina : BigDecimal.ZERO;
+        this.descuento = (descuento != null) ? descuento : BigDecimal.ZERO;
+        this.tipoDescuento = tipoDescuento;
+        this.porcentajeDescuento = porcentajeDescuento;
         this.observacion = observacion;
         this.clientRequestId = clientRequestId;
     }
@@ -47,6 +67,30 @@ public class CobrarRequest {
 
     public void setPropina(BigDecimal propina) {
         this.propina = (propina != null) ? propina : BigDecimal.ZERO;
+    }
+
+    public BigDecimal getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = (descuento != null) ? descuento : BigDecimal.ZERO;
+    }
+
+    public String getTipoDescuento() {
+        return tipoDescuento;
+    }
+
+    public void setTipoDescuento(String tipoDescuento) {
+        this.tipoDescuento = tipoDescuento;
+    }
+
+    public BigDecimal getPorcentajeDescuento() {
+        return porcentajeDescuento;
+    }
+
+    public void setPorcentajeDescuento(BigDecimal porcentajeDescuento) {
+        this.porcentajeDescuento = porcentajeDescuento;
     }
 
     public String getObservacion() {
