@@ -38,10 +38,7 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity<Map<String, Object>> perfilActual(Authentication authentication) {
-        return ResponseEntity.ok(Map.of(
-                "usuario_id", authentication.getName(),
-                "roles", authentication.getAuthorities()
-        ));
+        return ResponseEntity.ok(authService.obtenerPerfilActual(authentication));
     }
 
     @PostMapping("/logout")

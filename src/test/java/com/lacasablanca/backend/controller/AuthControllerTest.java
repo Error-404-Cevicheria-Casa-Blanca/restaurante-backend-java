@@ -14,7 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -43,7 +44,71 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.tipo").value("Bearer"))
                 .andExpect(jsonPath("$.usuario.id").isNumber())
                 .andExpect(jsonPath("$.usuario.nombre").value("mozo_01"))
-                .andExpect(jsonPath("$.usuario.rol").value("MOZO"));
+                .andExpect(jsonPath("$.usuario.rol").value("MOZO"))
+                .andExpect(jsonPath("$.usuario.nombre_visible").value("Mozo Salón (Piso 1)"))
+                .andExpect(jsonPath("$.usuario.turno").exists())
+                .andExpect(jsonPath("$.fecha_hora_servidor").isNotEmpty());
+    }
+
+    @Test
+    @DisplayName("PRB-85: Login exitoso con terminal_codigo vincula terminal y registra sesión")
+    void loginExitosoConTerminal() throws Exception {
+        LoginRequest req = new LoginRequest("mozo_01", "password123", "TERM-01");
+
+        mockMvc.perform(post("/api/v1/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.usuario.terminal").exists())
+                .andExpect(jsonPath("$.usuario.terminal.codigo").value("TERM-01"))
+                .andExpect(jsonPath("$.usuario.terminal.nombre").value("Tablet Salón Principal"))
+                .andExpect(jsonPath("$.usuario.turno").exists())
+                .andExpect(jsonPath("$.fecha_hora_servidor").isNotEmpty());
+    }
+
+    @Test
+    @DisplayName("PRB-85: Login con terminal_codigo inexistente retorna 400 Bad Request")
+    void loginTerminalInvalida() throws Exception {
+        LoginRequest req = new LoginRequest("mozo_01", "password123", "TERM-INEXISTENTE");
+
+        mockMvc.perform(post("/api/v1/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.mensaje").value("Terminal inválida o no registrada: TERM-INEXISTENTE"));
+    }
+
+    @Test
+    @DisplayName("PRB-85: GET /api/v1/auth/me autenticado retorna perfil completo (usuario, turno, terminal)")
+    void authMeAutenticado() throws Exception {
+        LoginRequest req = new LoginRequest("mozo_01", "password123", "TERM-01");
+        String jsonRes = mockMvc.perform(post("/api/v1/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        String token = objectMapper.readTree(jsonRes).get("token").asText();
+
+        mockMvc.perform(get("/api/v1/auth/me")
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.usuario_id").exists())
+                .andExpect(jsonPath("$.roles").isArray())
+                .andExpect(jsonPath("$.usuario.nombre").value("mozo_01"))
+                .andExpect(jsonPath("$.usuario.nombre_visible").value("Mozo Salón (Piso 1)"))
+                .andExpect(jsonPath("$.usuario.rol").value("MOZO"))
+                .andExpect(jsonPath("$.turno").exists())
+                .andExpect(jsonPath("$.terminal.codigo").value("TERM-01"))
+                .andExpect(jsonPath("$.fecha_hora_servidor").isNotEmpty());
+    }
+
+    @Test
+    @DisplayName("PRB-85: GET /api/v1/auth/me sin token retorna 401 Unauthorized")
+    void authMeSinToken() throws Exception {
+        mockMvc.perform(get("/api/v1/auth/me"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.mensaje").value("No autorizado: Token JWT requerido o inválido"));
     }
 
     @Test

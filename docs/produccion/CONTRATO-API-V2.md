@@ -16,12 +16,12 @@
 
 ## 2. Endpoints Oficiales v2
 
-### 2.1 Autenticación y Control de Acceso (`PRB-54`)
+### 2.1 Autenticación y Control de Acceso (`PRB-54`, `PRB-85`)
 | Método | Ruta | Request | Response | Códigos HTTP | Roles |
 |---|---|---|---|---|---|
-| `POST` | `/api/v1/auth/login` | `{usuario, clave}` | `{token, tipo, usuario:{id, nombre, rol}}` | `200`, `400`, `401`, `423` | Público |
-| `POST` | `/api/v1/auth/pin` | `{usuario, pin}` (4 dígitos) | `{token, tipo, usuario:{id, nombre, rol}}` | `200`, `400`, `401`, `423` | Público |
-| `GET` | `/api/v1/auth/me` | — | `{usuario_id, roles}` | `200`, `401`, `403` | Todos |
+| `POST` | `/api/v1/auth/login` | `{usuario, clave, terminal_codigo?}` | `{token, tipo, usuario:{id, nombre, nombre_visible, rol, turno, terminal}, fecha_hora_servidor}` | `200`, `400`, `401`, `423` | Público |
+| `POST` | `/api/v1/auth/pin` | `{usuario, pin, terminal_codigo?}` (4 dígitos) | `{token, tipo, usuario:{id, nombre, nombre_visible, rol, turno, terminal}, fecha_hora_servidor}` | `200`, `400`, `401`, `423` | Público |
+| `GET` | `/api/v1/auth/me` | — | `{usuario_id, roles, usuario, turno, terminal, fecha_hora_servidor}` | `200`, `401`, `403` | Todos |
 | `POST` | `/api/v1/auth/logout` | Header `Bearer` | Sin contenido | `204`, `401` | Todos |
 
 ### 2.2 Mesas, Salón, Pre-cuenta y Cobro (`PRB-40`, `PRB-43`, `PRB-55`, `PRB-75`)
