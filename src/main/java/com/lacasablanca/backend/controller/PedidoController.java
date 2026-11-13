@@ -4,6 +4,8 @@ import com.lacasablanca.backend.dto.AnularPedidoRequest;
 import com.lacasablanca.backend.dto.CobrarRequest;
 import com.lacasablanca.backend.dto.CobroResponse;
 import com.lacasablanca.backend.dto.CrearPedidoRequest;
+import com.lacasablanca.backend.dto.DetallePedidoResponse;
+import com.lacasablanca.backend.dto.EstadoItemRequest;
 import com.lacasablanca.backend.dto.EstadoPedidoRequest;
 import com.lacasablanca.backend.dto.PedidoResponse;
 import com.lacasablanca.backend.model.EstadoPedido;
@@ -93,6 +95,19 @@ public class PedidoController {
         String username = (authentication != null) ? authentication.getName() : null;
         return ResponseEntity.ok(
                 pedidoService.actualizarEstadoPedido(id, request.getEstado(), request.getMotivo(), username)
+        );
+    }
+
+    @PatchMapping("/{id}/items/{itemId}/estado")
+    @PreAuthorize("hasAnyRole('COCINERO', 'MOZO', 'ADMIN')")
+    public ResponseEntity<DetallePedidoResponse> cambiarEstadoItem(
+            @PathVariable Integer id,
+            @PathVariable Integer itemId,
+            @Valid @RequestBody EstadoItemRequest request,
+            Authentication authentication) {
+        String username = (authentication != null) ? authentication.getName() : null;
+        return ResponseEntity.ok(
+                pedidoService.actualizarEstadoItem(id, itemId, request.getEstado(), username)
         );
     }
 

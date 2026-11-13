@@ -45,7 +45,18 @@
 | `PATCH` | `/api/v1/pedidos/{id}/estado` | `{estado, motivo}` | `PedidoResponse` | `200`, `400`, `409` | `COCINERO`, `MOZO`, `CAJERO`, `ADMIN` |
 | `POST` | `/api/v1/pedidos/{id}/anular` | `{motivo}` | `PedidoResponse` (libera mesa si sin activos) | `200`, `400`, `409` | `MOZO`, `ADMIN` |
 | `POST` | `/api/v1/pedidos/{id}/items/{itemId}/anular` | `{motivo}` | `PedidoResponse` recalculado | `200`, `400`, `409` | `MOZO`, `ADMIN` |
+| `PATCH` | `/api/v1/pedidos/{id}/items/{itemId}/estado` | `{estado}` (PRB-87) | `DetallePedidoResponse` (ítem actualizado, con `estado`) | `200`, `400`, `403`, `404`, `409` | `COCINERO`, `MOZO`, `ADMIN` |
 | `POST` | `/api/v1/pedidos/{id}/cobrar` (`/pagos`) | `CobrarRequest` | `CobroResponse` | `201`, `400`, `409` | `MOZO`, `CAJERO`, `ADMIN` |
+
+### 2.3.1 Estado por plato (`PRB-87`)
+`PATCH /api/v1/pedidos/{id}/items/{itemId}/estado` — Request: `{"estado": "EN_PREPARACION"}`.
+
+- Estados: `PENDIENTE` → `EN_PREPARACION` → `LISTO` → `SERVIDO`. Solo se acepta el **siguiente** paso.
+- Response `200`: ítem actualizado, p. ej. `{"id": 7, "producto_id": 1, "producto_nombre": "...", "estacion": "COCINA", "cantidad": 1, "subtotal": 48.00, "modificadores": [], "estado": "EN_PREPARACION"}`.
+- Cada línea de `GET /api/v1/pedidos` y `GET /api/v1/pedidos/{id}` incluye `estado` (por defecto `PENDIENTE`).
+- Errores: `400` salto, retroceso, repetición o valor de `estado` desconocido (mensaje con el flujo permitido); `403` rol no permitido; `404` pedido inexistente o ítem que no pertenece al pedido; `409` pedido `COBRADO` o `ANULADO`.
+- Cada cambio queda en la auditoría del pedido (`evento_pedido`) con el motivo `Ítem {id}: A → B`.
+- Requiere la columna `detalle_pedido.estado_item VARCHAR(20) NOT NULL DEFAULT 'PENDIENTE'` (`PRB-86`).
 
 ### 2.4 Monitoreo y Salud Operativa (`PRB-64`)
 | Método | Ruta | Response | Auth |

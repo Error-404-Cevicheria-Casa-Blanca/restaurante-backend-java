@@ -34,6 +34,10 @@ public class DetallePedido {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal subtotal;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado_item", nullable = false, length = 20)
+    private EstadoItem estadoItem = EstadoItem.PENDIENTE;
+
     public DetallePedido() {}
 
     public DetallePedido(Producto producto, BigDecimal precioUnitario, Integer cantidad, String notas, BigDecimal subtotal) {
@@ -72,4 +76,12 @@ public class DetallePedido {
 
     public BigDecimal getSubtotal() { return subtotal; }
     public void setSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }
+
+    public EstadoItem getEstadoItem() {
+        return estadoItem != null ? estadoItem : EstadoItem.PENDIENTE;
+    }
+
+    public void setEstadoItem(EstadoItem estadoItem) {
+        this.estadoItem = estadoItem;
+    }
 }

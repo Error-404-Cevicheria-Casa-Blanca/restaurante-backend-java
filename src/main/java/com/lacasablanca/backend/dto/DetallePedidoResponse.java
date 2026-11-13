@@ -2,6 +2,7 @@ package com.lacasablanca.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lacasablanca.backend.model.Estacion;
+import com.lacasablanca.backend.model.EstadoItem;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,6 +27,9 @@ public class DetallePedidoResponse {
     private String notas;
     private BigDecimal subtotal;
     private List<ModificadorItemDto> modificadores = new ArrayList<>();
+
+    /** Estado de preparación de la línea (PRB-87). */
+    private EstadoItem estado = EstadoItem.PENDIENTE;
 
     public DetallePedidoResponse() {
     }
@@ -131,5 +135,13 @@ public class DetallePedidoResponse {
 
     public void setModificadores(List<ModificadorItemDto> modificadores) {
         this.modificadores = modificadores;
+    }
+
+    public EstadoItem getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoItem estado) {
+        this.estado = estado != null ? estado : EstadoItem.PENDIENTE;
     }
 }
