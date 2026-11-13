@@ -448,4 +448,150 @@ class MesaCobroIntegrationTest {
                 .andExpect(jsonPath("$.total").value(135.00))
                 .andExpect(jsonPath("$.pedidos", hasSize(2)));
     }
+
+    @Test
+    @DisplayName("PRB-89: Cobro con descuento de monto fijo recalcula total e IGV y audita el usuario")
+    void cobrarConDescuentoMontoFijoExitoso() throws Exception {
+        crearPedidoPruebaMesa(MESA_ID); // Total = S/ 85.00
+
+        // Descuento de S/ 15.00 -> Total a cobrar = S/ 70.00 (Subtotal 59.32 + IGV 10.68)
+        List<PagoRequestDto> pagos = List.of(new PagoRequestDto("EFECTIVO", new BigDecimal("70.00"), null));
+        CobrarRequest reqCobro = new CobrarRequest(
+                pagos,
+                BigDecimal.ZERO,
+                new BigDecimal("15.00"),
+                "Cortesía de la casa",
+                "uuid-prb89-descuento-fijo"
+        );
+
+        mockMvc.perform(post("/api/v1/mesas/" + MESA_ID + "/cobrar")
+                        .header("Authorization", "Bearer " + tokenMozo)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(reqCobro)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.total").value(70.00))
+                .andExpect(jsonPath("$.descuento").value(15.00))
+                .andExpect(jsonPath("$.subtotal").value(59.32))
+                .andExpect(jsonPath("$.igv").value(10.68))
+                .andExpect(jsonPath("$.pagado").value(70.00))
+                .andExpect(jsonPath("$.vuelto").value(0.00))
+                .andExpect(jsonPath("$.pedidos[0].estado").value("COBRADO"));
+
+        // Verificar que el evento de auditoría registró el descuento y usuario mozo_01
+        MvcResult res = mockMvc.perform(get("/api/v1/pedidos")
+                        .param("mesa_id", String.valueOf(MESA_ID))
+                        .header("Authorization", "Bearer " + tokenMozo))
+                .andExpect(status().isOk())
+                .andReturn();
+        String body = res.getResponse().getContentAsString();
+        org.junit.jupiter.api.Assertions.assertTrue(body.contains("Descuento de S/ 15.00"));
+        org.junit.jupiter.api.Assertions.assertTrue(body.contains("mozo_01"));
+    }
+
+    @Test
+    @DisplayName("PRB-89: Cobro con descuento por porcentaje (20%) recalcula total y vuelto en efectivo")
+    void cobrarConDescuentoPorcentajeExitoso() throws Exception {
+        crearPedidoPruebaMesa(MESA_ID); // Total = S/ 85.00
+
+        // 20% de S/ 85.00 = S/ 17.00 de descuento -> Total con descuento = S/ 68.00
+        // Paga S/ 70.00 en EFECTIVO -> Vuelto S/ 2.00
+        List<PagoRequestDto> pagos = List.of(new PagoRequestDto("EFECTIVO", new BigDecimal("70.00"), null));
+        CobrarRequest reqCobro = new CobrarRequest(
+                pagos,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                "PORCENTAJE",
+                new BigDecimal("20.0"),
+                "Descuento corporativo 20%",
+                "uuid-prb89-descuento-porcentaje"
+        );
+
+        mockMvc.perform(post("/api/v1/mesas/" + MESA_ID + "/cobrar")
+                        .header("Authorization", "Bearer " + tokenMozo)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(reqCobro)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.total").value(68.00))
+                .andExpect(jsonPath("$.descuento").value(17.00))
+                .andExpect(jsonPath("$.subtotal").value(57.63))
+                .andExpect(jsonPath("$.igv").value(10.37))
+                .andExpect(jsonPath("$.pagado").value(70.00))
+                .andExpect(jsonPath("$.vuelto").value(2.00));
+    }
+
+    @Test
+    @DisplayName("PRB-89: Descuento mayor al total o negativo devuelve 400")
+    void cobrarConDescuentoInvalidoRetorna400() throws Exception {
+        crearPedidoPruebaMesa(MESA_ID); // Total = S/ 85.00
+
+        // Descuento mayor al total (S/ 100.00 sobre cuenta de S/ 85.00)
+        List<PagoRequestDto> pagos = List.of(new PagoRequestDto("EFECTIVO", new BigDecimal("50.00"), null));
+        CobrarRequest reqExcesivo = new CobrarRequest(
+                pagos,
+                BigDecimal.ZERO,
+                new BigDecimal("100.00"),
+                "Descuento inválido excesivo",
+                "uuid-prb89-excesivo"
+        );
+
+        mockMvc.perform(post("/api/v1/mesas/" + MESA_ID + "/cobrar")
+                        .header("Authorization", "Bearer " + tokenMozo)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(reqExcesivo)))
+                .andExpect(status().isBadRequest());
+
+        // Descuento negativo
+        CobrarRequest reqNegativo = new CobrarRequest(
+                pagos,
+                BigDecimal.ZERO,
+                new BigDecimal("-10.00"),
+                "Descuento negativo",
+                "uuid-prb89-negativo"
+        );
+
+        mockMvc.perform(post("/api/v1/mesas/" + MESA_ID + "/cobrar")
+                        .header("Authorization", "Bearer " + tokenMozo)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(reqNegativo)))
+                .andExpect(status().isBadRequest());
+
+        // Porcentaje mayor a 100%
+        CobrarRequest reqPorcentajeInvalido = new CobrarRequest(
+                pagos,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                "PORCENTAJE",
+                new BigDecimal("150.0"),
+                "Porcentaje > 100",
+                "uuid-prb89-pct-invalido"
+        );
+
+        mockMvc.perform(post("/api/v1/mesas/" + MESA_ID + "/cobrar")
+                        .header("Authorization", "Bearer " + tokenMozo)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(reqPorcentajeInvalido)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("PRB-89: Descuadre en monto de pago considerando descuento devuelve 400")
+    void cobrarConDescuentoYDescuadreDePagoRetorna400() throws Exception {
+        crearPedidoPruebaMesa(MESA_ID); // Total = S/ 85.00
+
+        // Descuento S/ 15.00 -> Total a pagar = S/ 70.00, pero envía solo S/ 60.00
+        List<PagoRequestDto> pagos = List.of(new PagoRequestDto("EFECTIVO", new BigDecimal("60.00"), null));
+        CobrarRequest reqInsuficiente = new CobrarRequest(
+                pagos,
+                BigDecimal.ZERO,
+                new BigDecimal("15.00"),
+                "Descuento aplicado pero pago insuficiente",
+                "uuid-prb89-descuadre"
+        );
+
+        mockMvc.perform(post("/api/v1/mesas/" + MESA_ID + "/cobrar")
+                        .header("Authorization", "Bearer " + tokenMozo)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(reqInsuficiente)))
+                .andExpect(status().isBadRequest());
+    }
 }

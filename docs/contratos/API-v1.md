@@ -9,11 +9,83 @@ Leyenda: **[CONFIRMADO]** = escrito en una historia de Jira / verificado en cód
 - Errores: cuerpo `{"mensaje": "texto legible"}` **[CONFIRMADO]**.
 - Precios e IGV (D13): Los precios en carta **incluyen IGV (18%)**. El backend expone desglose informativo: `subtotal = total / 1.18` e `igv = total - subtotal` calculados con `BigDecimal`, escala 2 y `HALF_UP` **[CONFIRMADO D13]**.
 
-## POST /api/v1/auth/login  (HU-01)
-Request **[CONFIRMADO D4]**: `{"usuario": "string", "clave": "string"}`
-- 200 **[CONFIRMADO]**: JWT que contiene id de usuario (`sub`) y rol (`rol`). Cuerpo **[CONFIRMADO D4]**: `{"token":"...","tipo":"Bearer","usuario":{"id":1,"nombre":"...","rol":"MOZO"}}`
+## POST /api/v1/auth/login  (HU-01 / PRB-85)
+Request **[CONFIRMADO D4 / PRB-85]**: `{"usuario": "string", "clave": "string", "terminal_codigo": "string (opcional)"}`
+- 200 **[CONFIRMADO]**: JWT que contiene id de usuario (`sub`) y rol (`rol`), con perfil profesional, turno y terminal.
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "tipo": "Bearer",
+  "usuario": {
+    "id": 1,
+    "nombre": "mozo_01",
+    "nombre_visible": "Mozo Salón (Piso 1)",
+    "rol": "MOZO",
+    "turno": {
+      "id": 1,
+      "nombre": "Mañana",
+      "inicio": "08:00:00",
+      "fin": "16:00:00"
+    },
+    "terminal": {
+      "id": 1,
+      "codigo": "TERM-01",
+      "nombre": "Tablet Salón Principal"
+    }
+  },
+  "fecha_hora_servidor": "2026-11-10T21:40:00-05:00"
+}
+```
+- 400: terminal_codigo inválido o inactivo (`{"mensaje": "Terminal inválida o no registrada: ..."}`).
 - 401 **[CONFIRMADO]**: credenciales inválidas, mensaje claro y **genérico** (`{"mensaje": "Usuario o contraseña incorrectos"}`).
 - Token expirado en endpoint protegido → 403 **[CONFIRMADO, ver D9]**.
+
+## POST /api/v1/auth/pin  (PRB-54 / PRB-85)
+Request: `{"usuario": "string", "pin": "string (4 dígitos)", "terminal_codigo": "string (opcional)"}`
+- 200: Retorna `LoginResponse` completo igual a `/api/v1/auth/login`.
+- 400: PIN con formato inválido o terminal no registrada.
+- 401: Usuario o PIN incorrectos.
+- 423: Cuenta bloqueada temporalmente tras 5 intentos fallidos (15 min).
+
+## GET /api/v1/auth/me  (PRB-85)
+Headers: `Authorization: Bearer <token>`
+- 200: Perfil operativo completo del usuario autenticado:
+```json
+{
+  "usuario_id": "1",
+  "roles": [{"authority": "ROLE_MOZO"}],
+  "usuario": {
+    "id": 1,
+    "nombre": "mozo_01",
+    "nombre_visible": "Mozo Salón (Piso 1)",
+    "rol": "MOZO",
+    "turno": {
+      "id": 1,
+      "nombre": "Mañana",
+      "inicio": "08:00:00",
+      "fin": "16:00:00"
+    },
+    "terminal": {
+      "id": 1,
+      "codigo": "TERM-01",
+      "nombre": "Tablet Salón Principal"
+    }
+  },
+  "turno": {
+    "id": 1,
+    "nombre": "Mañana",
+    "inicio": "08:00:00",
+    "fin": "16:00:00"
+  },
+  "terminal": {
+    "id": 1,
+    "codigo": "TERM-01",
+    "nombre": "Tablet Salón Principal"
+  },
+  "fecha_hora_servidor": "2026-11-10T21:40:00-05:00"
+}
+```
+- 401: Sin token o token revocado (`{"mensaje": "No autorizado: Token JWT requerido o inválido"}`).
 
 ## GET /api/v1/mesas  (HU-02)
 - 200 **[CONFIRMADO]**: lista JSON con `id`, `numero`, `capacidad`, `ubicacion`, `estado`.

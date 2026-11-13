@@ -1,0 +1,27 @@
+Rama actual: feature/PRB-85-login-turno-terminal
+Base: develop (41a205c)
+
+Archivos modificados y agregados:
+ M docs/contratos/API-v1.md
+ M docs/produccion/CONTRATO-API-V2.md
+ M src/main/java/com/lacasablanca/backend/config/DataInitializer.java
+ M src/main/java/com/lacasablanca/backend/controller/AuthController.java
+ M src/main/java/com/lacasablanca/backend/dto/LoginRequest.java
+ M src/main/java/com/lacasablanca/backend/dto/LoginResponse.java
+ M src/main/java/com/lacasablanca/backend/dto/PinLoginRequest.java
+ M src/main/java/com/lacasablanca/backend/dto/UsuarioDto.java
+ M src/main/java/com/lacasablanca/backend/service/AuthService.java
+ M src/test/java/com/lacasablanca/backend/controller/AuthControllerTest.java
+ M src/test/java/com/lacasablanca/backend/service/AuthServiceTest.java
+ A src/main/java/com/lacasablanca/backend/dto/TerminalDto.java
+ A src/main/java/com/lacasablanca/backend/dto/TurnoDto.java
+ A src/main/java/com/lacasablanca/backend/model/SesionMozo.java
+ A src/main/java/com/lacasablanca/backend/model/Terminal.java
+ A src/main/java/com/lacasablanca/backend/model/Turno.java
+ A src/main/java/com/lacasablanca/backend/repository/SesionMozoRepository.java
+ A src/main/java/com/lacasablanca/backend/repository/TerminalRepository.java
+ A src/main/java/com/lacasablanca/backend/repository/TurnoRepository.java
+ A docs/evidencias/PRB-85/01-tests.txt
+ A docs/evidencias/PRB-85/02-curl.txt
+ A docs/evidencias/PRB-85/03-git.txt
+ A docs/evidencias/PRB-85/CIERRE.md

@@ -1,0 +1,139 @@
+# =============================================================================
+# PRB-85: EVIDENCIA DE PRUEBAS DE ENDPOINTS (CURL)
+# Backend Java: Ampliar Login y /auth/me con nombre visible, turno y terminal
+# =============================================================================
+
+# 1. Login exitoso con terminal_codigo (POST /api/v1/auth/login)
+curl -X POST http://localhost:8080/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "usuario": "mozo_01",
+    "clave": "password123",
+    "terminal_codigo": "TERM-01"
+  }'
+
+# Respuesta HTTP 200 OK:
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "tipo": "Bearer",
+  "usuario": {
+    "id": 2,
+    "nombre": "mozo_01",
+    "nombre_visible": "Mozo Salón (Piso 1)",
+    "rol": "MOZO",
+    "turno": {
+      "id": 1,
+      "nombre": "Mañana",
+      "inicio": "08:00:00",
+      "fin": "16:00:00"
+    },
+    "terminal": {
+      "id": 1,
+      "codigo": "TERM-01",
+      "nombre": "Tablet Salón Principal"
+    }
+  },
+  "fecha_hora_servidor": "2026-11-10T21:40:00-05:00"
+}
+
+# -----------------------------------------------------------------------------
+# 2. Login con terminal inválida o no registrada (POST /api/v1/auth/login)
+curl -X POST http://localhost:8080/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "usuario": "mozo_01",
+    "clave": "password123",
+    "terminal_codigo": "TERM-INEXISTENTE"
+  }'
+
+# Respuesta HTTP 400 Bad Request:
+{
+  "mensaje": "Terminal inválida o no registrada: TERM-INEXISTENTE"
+}
+
+# -----------------------------------------------------------------------------
+# 3. Login por PIN con terminal_codigo (POST /api/v1/auth/pin)
+curl -X POST http://localhost:8080/api/v1/auth/pin \
+  -H "Content-Type: application/json" \
+  -d '{
+    "usuario": "mozo_01",
+    "pin": "1234",
+    "terminal_codigo": "TERM-01"
+  }'
+
+# Respuesta HTTP 200 OK:
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "tipo": "Bearer",
+  "usuario": {
+    "id": 2,
+    "nombre": "mozo_01",
+    "nombre_visible": "Mozo Salón (Piso 1)",
+    "rol": "MOZO",
+    "turno": {
+      "id": 1,
+      "nombre": "Mañana",
+      "inicio": "08:00:00",
+      "fin": "16:00:00"
+    },
+    "terminal": {
+      "id": 1,
+      "codigo": "TERM-01",
+      "nombre": "Tablet Salón Principal"
+    }
+  },
+  "fecha_hora_servidor": "2026-11-10T21:40:00-05:00"
+}
+
+# -----------------------------------------------------------------------------
+# 4. Consulta de perfil autenticado (GET /api/v1/auth/me)
+curl -X GET http://localhost:8080/api/v1/auth/me \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+# Respuesta HTTP 200 OK:
+{
+  "usuario_id": "2",
+  "roles": [
+    {
+      "authority": "ROLE_MOZO"
+    }
+  ],
+  "usuario": {
+    "id": 2,
+    "nombre": "mozo_01",
+    "nombre_visible": "Mozo Salón (Piso 1)",
+    "rol": "MOZO",
+    "turno": {
+      "id": 1,
+      "nombre": "Mañana",
+      "inicio": "08:00:00",
+      "fin": "16:00:00"
+    },
+    "terminal": {
+      "id": 1,
+      "codigo": "TERM-01",
+      "nombre": "Tablet Salón Principal"
+    }
+  },
+  "turno": {
+    "id": 1,
+    "nombre": "Mañana",
+    "inicio": "08:00:00",
+    "fin": "16:00:00"
+  },
+  "terminal": {
+    "id": 1,
+    "codigo": "TERM-01",
+    "nombre": "Tablet Salón Principal"
+  },
+  "fecha_hora_servidor": "2026-11-10T21:40:00-05:00"
+}
+
+# -----------------------------------------------------------------------------
+# 5. Consulta de perfil sin token (GET /api/v1/auth/me)
+curl -X GET http://localhost:8080/api/v1/auth/me
+
+# Respuesta HTTP 401 Unauthorized:
+{
+  "mensaje": "No autorizado: Token JWT requerido o inválido"
+}

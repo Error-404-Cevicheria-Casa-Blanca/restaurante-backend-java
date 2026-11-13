@@ -5,11 +5,15 @@ import com.lacasablanca.backend.model.EstadoMesa;
 import com.lacasablanca.backend.model.Mesa;
 import com.lacasablanca.backend.model.Producto;
 import com.lacasablanca.backend.model.Rol;
+import com.lacasablanca.backend.model.Terminal;
+import com.lacasablanca.backend.model.Turno;
 import com.lacasablanca.backend.model.Usuario;
 import com.lacasablanca.backend.repository.CategoriaRepository;
 import com.lacasablanca.backend.repository.MesaRepository;
 import com.lacasablanca.backend.repository.ProductoRepository;
 import com.lacasablanca.backend.repository.RolRepository;
+import com.lacasablanca.backend.repository.TerminalRepository;
+import com.lacasablanca.backend.repository.TurnoRepository;
 import com.lacasablanca.backend.repository.UsuarioRepository;
 import com.lacasablanca.backend.service.AuthService;
 import org.springframework.boot.CommandLineRunner;
@@ -18,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 
 /**
  * Inicializador exclusivo para el perfil de pruebas automatizadas (@Profile("test")).
@@ -32,6 +37,8 @@ public class DataInitializer implements CommandLineRunner {
     private final MesaRepository mesaRepository;
     private final CategoriaRepository categoriaRepository;
     private final ProductoRepository productoRepository;
+    private final TurnoRepository turnoRepository;
+    private final TerminalRepository terminalRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
 
@@ -40,6 +47,8 @@ public class DataInitializer implements CommandLineRunner {
                            MesaRepository mesaRepository,
                            CategoriaRepository categoriaRepository,
                            ProductoRepository productoRepository,
+                           TurnoRepository turnoRepository,
+                           TerminalRepository terminalRepository,
                            PasswordEncoder passwordEncoder,
                            AuthService authService) {
         this.rolRepository = rolRepository;
@@ -47,6 +56,8 @@ public class DataInitializer implements CommandLineRunner {
         this.mesaRepository = mesaRepository;
         this.categoriaRepository = categoriaRepository;
         this.productoRepository = productoRepository;
+        this.turnoRepository = turnoRepository;
+        this.terminalRepository = terminalRepository;
         this.passwordEncoder = passwordEncoder;
         this.authService = authService;
     }
@@ -72,6 +83,16 @@ public class DataInitializer implements CommandLineRunner {
         authService.registrarPin("mozo_02", "2345");
         authService.registrarPin("cocinero_01", "3456");
         authService.registrarPin("cajero_01", "4567");
+
+        if (turnoRepository.count() == 0) {
+            turnoRepository.save(new Turno("Mañana", LocalTime.of(8, 0), LocalTime.of(16, 0), true));
+            turnoRepository.save(new Turno("Tarde", LocalTime.of(16, 0), LocalTime.of(23, 30), true));
+        }
+
+        if (terminalRepository.count() == 0) {
+            terminalRepository.save(new Terminal("TERM-01", "Tablet Salón Principal", true));
+            terminalRepository.save(new Terminal("TERM-02", "Tablet Segundo Piso / Terraza", true));
+        }
 
         if (mesaRepository.count() == 0) {
             for (int i = 1; i <= 7; i++) {
