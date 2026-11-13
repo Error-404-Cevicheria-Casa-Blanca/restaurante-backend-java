@@ -935,11 +935,11 @@ public class PedidoService {
         return mozo;
     }
 
-    private void registrarEvento(Integer pedidoId,
-                                 EstadoPedido estadoAnterior,
-                                 EstadoPedido estadoNuevo,
-                                 String usuario,
-                                 String motivo) {
+    public void registrarEvento(Integer pedidoId,
+                                EstadoPedido estadoAnterior,
+                                EstadoPedido estadoNuevo,
+                                String usuario,
+                                String motivo) {
         if (pedidoId == null) {
             return;
         }

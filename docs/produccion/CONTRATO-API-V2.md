@@ -58,6 +58,13 @@
 - Cada cambio queda en la auditoría del pedido (`evento_pedido`) con el motivo `Ítem {id}: A → B`.
 - Requiere la columna `detalle_pedido.estado_item VARCHAR(20) NOT NULL DEFAULT 'PENDIENTE'` (`PRB-86`).
 
+### 2.3.2 Cobro con Descuentos (`PRB-89`)
+`POST /api/v1/mesas/{id}/cobrar` y `POST /api/v1/pedidos/{id}/cobrar`
+- `CobrarRequest`: acepta campos opcionales `descuento` (monto fijo en S/), `tipo_descuento` (`"MONTO"` o `"PORCENTAJE"`) y `porcentaje_descuento` (0 a 100).
+- `CobroResponse`: devuelve `total` (con descuento aplicado), `subtotal` (neto sin IGV), `igv` (18%), `descuento` (monto descontado), `pagado`, `vuelto` y `pedidos`.
+- Validación: `totalConDescuento = totalConsumo - descuento`. No se permite descuento negativo ni mayor al total de la cuenta (400). Pagos se validan contra `totalConDescuento + propina` (400 si insuficiente).
+- Auditoría: Si hay descuento, se registra en la auditoría del pedido (`evento_pedido`) con el usuario que ejecutó el cobro.
+
 ### 2.4 Monitoreo y Salud Operativa (`PRB-64`)
 | Método | Ruta | Response | Auth |
 |---|---|---|---|

@@ -210,6 +210,13 @@ public class CobroService {
             p.setEstado(EstadoPedido.COBRADO);
             pedidoRepository.save(p);
             pedidosCobrados.add(new PedidoResumenCuentaDto(p.getId(), p.getEstado().name(), p.getTotal()));
+            if (validacion.montoDescuento.compareTo(BigDecimal.ZERO) > 0) {
+                String descTxt = "Descuento de S/ " + validacion.montoDescuento
+                        + (request.getPorcentajeDescuento() != null ? " (" + request.getPorcentajeDescuento() + "%)" : "")
+                        + " aplicado por " + (identificadorUsuario != null ? identificadorUsuario : "sistema");
+                pedidoService.registrarEvento(p.getId(), EstadoPedido.COBRADO, EstadoPedido.COBRADO,
+                        identificadorUsuario, descTxt);
+            }
         }
 
         // 3. Liberar la mesa y registrar fecha de cierre
@@ -219,7 +226,10 @@ public class CobroService {
         mesaRepository.save(mesa);
 
         CobroResponse respuesta = new CobroResponse(
-                totalConsumo,
+                validacion.totalConDescuento,
+                validacion.subtotalNeto,
+                validacion.igv,
+                validacion.montoDescuento,
                 validacion.totalPagado,
                 validacion.vuelto,
                 pedidosCobrados
@@ -278,8 +288,19 @@ public class CobroService {
                 new PedidoResumenCuentaDto(pedido.getId(), pedido.getEstado().name(), pedido.getTotal())
         );
 
+        if (validacion.montoDescuento.compareTo(BigDecimal.ZERO) > 0) {
+            String descTxt = "Descuento de S/ " + validacion.montoDescuento
+                    + (request.getPorcentajeDescuento() != null ? " (" + request.getPorcentajeDescuento() + "%)" : "")
+                    + " aplicado por " + (identificadorUsuario != null ? identificadorUsuario : "sistema");
+            pedidoService.registrarEvento(pedido.getId(), EstadoPedido.COBRADO, EstadoPedido.COBRADO,
+                    identificadorUsuario, descTxt);
+        }
+
         CobroResponse respuesta = new CobroResponse(
-                totalConsumo,
+                validacion.totalConDescuento,
+                validacion.subtotalNeto,
+                validacion.igv,
+                validacion.montoDescuento,
                 validacion.totalPagado,
                 validacion.vuelto,
                 pedidosCobrados
@@ -555,7 +576,38 @@ public class CobroService {
             throw new IllegalArgumentException("La propina no puede ser negativa");
         }
 
-        BigDecimal totalLiquidacion = totalConsumo.add(propina);
+        BigDecimal montoDescuento = BigDecimal.ZERO;
+        if (request.getPorcentajeDescuento() != null) {
+            BigDecimal porcentaje = request.getPorcentajeDescuento();
+            if (porcentaje.compareTo(BigDecimal.ZERO) < 0) {
+                throw new IllegalArgumentException("El porcentaje de descuento no puede ser negativo");
+            }
+            if (porcentaje.compareTo(BigDecimal.valueOf(100)) > 0) {
+                throw new IllegalArgumentException("El porcentaje de descuento no puede ser mayor a 100%");
+            }
+            montoDescuento = totalConsumo.multiply(porcentaje)
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        } else if (request.getDescuento() != null) {
+            if (request.getDescuento().compareTo(BigDecimal.ZERO) < 0) {
+                throw new IllegalArgumentException("El descuento no puede ser negativo");
+            }
+            montoDescuento = request.getDescuento().setScale(2, RoundingMode.HALF_UP);
+        }
+
+        if (montoDescuento.compareTo(totalConsumo) > 0) {
+            throw new IllegalArgumentException("El descuento no puede ser mayor al total de la cuenta. Descuento: "
+                    + montoDescuento + ", Total consumo: " + totalConsumo);
+        }
+
+        BigDecimal totalConDescuento = totalConsumo.subtract(montoDescuento).setScale(2, RoundingMode.HALF_UP);
+        if (totalConDescuento.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("El total a liquidar no puede ser negativo");
+        }
+
+        BigDecimal subtotalNeto = totalConDescuento.divide(BigDecimal.valueOf(1.18), 2, RoundingMode.HALF_UP);
+        BigDecimal igv = totalConDescuento.subtract(subtotalNeto);
+
+        BigDecimal totalLiquidacion = totalConDescuento.add(propina);
 
         BigDecimal totalPagado = BigDecimal.ZERO;
         boolean tieneEfectivo = false;
@@ -591,7 +643,14 @@ public class CobroService {
             throw new IllegalArgumentException("No se puede generar vuelto en pagos electrónicos directos");
         }
 
-        return new ResultadoValidacionPagos(totalPagado, vuelto);
+        return new ResultadoValidacionPagos(
+                totalPagado,
+                vuelto,
+                montoDescuento,
+                totalConDescuento,
+                subtotalNeto,
+                igv
+        );
     }
 
     private CobroResponse reconstruirCobroResponseDesdeDb(Integer mesaId, String clientReqId) {
@@ -621,7 +680,13 @@ public class CobroService {
             totalConsumo = totalPagado.subtract(propinas).max(BigDecimal.ZERO);
         }
 
-        return new CobroResponse(totalConsumo, totalPagado, BigDecimal.ZERO, pedidos);
+        BigDecimal subtotalNeto = totalConsumo.divide(BigDecimal.valueOf(1.18), 2, RoundingMode.HALF_UP);
+        BigDecimal igv = totalConsumo.subtract(subtotalNeto);
+        CobroResponse resp = new CobroResponse(totalConsumo, totalPagado, BigDecimal.ZERO, pedidos);
+        resp.setSubtotal(subtotalNeto);
+        resp.setIgv(igv);
+        resp.setDescuento(BigDecimal.ZERO);
+        return resp;
     }
 
     private CobroResponse reconstruirCobroResponsePedidoDesdeDb(Integer pedidoId) {
@@ -630,7 +695,13 @@ public class CobroService {
         List<PedidoResumenCuentaDto> resumen = p != null
                 ? List.of(new PedidoResumenCuentaDto(p.getId(), p.getEstado().name(), p.getTotal()))
                 : List.of();
-        return new CobroResponse(total, total, BigDecimal.ZERO, resumen);
+        BigDecimal subtotalNeto = total.divide(BigDecimal.valueOf(1.18), 2, RoundingMode.HALF_UP);
+        BigDecimal igv = total.subtract(subtotalNeto);
+        CobroResponse resp = new CobroResponse(total, total, BigDecimal.ZERO, resumen);
+        resp.setSubtotal(subtotalNeto);
+        resp.setIgv(igv);
+        resp.setDescuento(BigDecimal.ZERO);
+        return resp;
     }
 
     public void limpiarCacheParaPruebas() {
@@ -641,10 +712,20 @@ public class CobroService {
     private static final class ResultadoValidacionPagos {
         private final BigDecimal totalPagado;
         private final BigDecimal vuelto;
+        private final BigDecimal montoDescuento;
+        private final BigDecimal totalConDescuento;
+        private final BigDecimal subtotalNeto;
+        private final BigDecimal igv;
 
-        private ResultadoValidacionPagos(BigDecimal totalPagado, BigDecimal vuelto) {
+        private ResultadoValidacionPagos(BigDecimal totalPagado, BigDecimal vuelto,
+                                         BigDecimal montoDescuento, BigDecimal totalConDescuento,
+                                         BigDecimal subtotalNeto, BigDecimal igv) {
             this.totalPagado = totalPagado;
             this.vuelto = vuelto;
+            this.montoDescuento = montoDescuento;
+            this.totalConDescuento = totalConDescuento;
+            this.subtotalNeto = subtotalNeto;
+            this.igv = igv;
         }
     }
 }
