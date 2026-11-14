@@ -1,7 +1,7 @@
 # Evidencia de Cierre — PRB-71: [P-25] Capacitación y manual operativo
 
 - **Issue Jira:** `PRB-71`
-- **Responsable:** Max Erick Muñoz Paredes
+- **Responsable:** Julio César (Capacitación y Manual) / Max Erick Muñoz Paredes (Soporte Técnico)
 - **Rama:** `feature/PRB-69-go-live-y-cierre`
 - **Estado:** COMPLETADO Y VERIFICADO
 
