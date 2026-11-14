@@ -2,9 +2,9 @@
 
 - **Fecha de sesión UAT:** Noviembre 2026
 - **Participantes:**
-  - **Dueño / Administrador del Local:** Representante de Cevichería La Casa Blanca
-  - **Mozo Operativo de Salón:** Mozo de turno (validación en tablet Android)
-  - **Equipo Técnico Error 404:** Max Erick Muñoz Paredes, Jerardo, Franco, Luis
+  - **Dueño / Administrador del Local:** Representante de Cevichería La Casa Blanca (Pendiente de sesión presencial y firma)
+  - **Mozo Operativo de Salón:** Mozo de turno (Validación en tablet Android)
+  - **Equipo Técnico Error 404:** Max Erick Muñoz Paredes, Jerardo Cutipa, David Gabriel Rojas García, Julio Alexander Pérez Muñoz
 
 ---
 
@@ -33,7 +33,8 @@
 
 ## 3. Conformidad y Firma del Acta
 
-- **Estado Final UAT:** **APROBADO PARA GO-LIVE EN PRODUCCIÓN**
-- **Aprobado por:** Dueño / Administración — Cevichería La Casa Blanca
-- **Validado en Salón por:** Mozo Principal de Turno
-- **Responsable Técnico:** Max Erick Muñoz Paredes (Equipo Error 404)
+- **Estado Actual UAT:** **PENDIENTE DE EJECUCIÓN PRESENCIAL Y FIRMA FÍSICA (BLOQUEO)**
+- **Aprobado por:** Dueño / Administración — Cevichería La Casa Blanca (Pendiente de firma física)
+- **Validado en Salón por:** Mozo Principal de Turno (Pendiente de validación)
+- **Responsable Técnico / QA:** Julio Alexander Pérez Muñoz (Equipo Error 404)
+- **Documentación de Bloqueo:** Los casos UAT-01 a UAT-06 y hallazgos H-UAT-01 a H-UAT-03 están implementados en el código. Conforme a las reglas de calidad del proyecto, PRB-70 se mantendrá en estado **TEST** hasta incorporar la foto o PDF del acta física firmada por el dueño con la fecha exacta en `docs/evidencias/PRB-70/`.

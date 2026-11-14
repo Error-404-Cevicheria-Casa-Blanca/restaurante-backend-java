@@ -44,6 +44,6 @@
 ### 2. Directorio de Soporte Técnico (War Room & Post Go-Live)
 
 - **Líder Técnico / Backend & Infraestructura:** Max Erick Muñoz Paredes (`max.munoz@tecsup.edu.pe`)
-- **Base de Datos & Backoffice Django:** Jerardo (Equipo Error 404)
-- **App Móvil Android (Tablets):** Franco / Luis (Equipo Error 404)
+- **Base de Datos & Backoffice Django:** Jerardo Cutipa (`jerardo.cutipa@tecsup.edu.pe`)
+- **App Móvil Android (Tablets Salón):** David Gabriel Rojas García (`david.rojas.g@tecsup.edu.pe`) y Julio Alexander Pérez Muñoz (`julio.perez.m@tecsup.edu.pe`)
 - **Horario de Cobertura Directa (War Room):** 21/11 al 24/11 (Presencial y remoto en horario completo de atención).
