@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -48,6 +49,9 @@ class EstadoItemPedidoIntegrationTest {
 
     @Autowired
     private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     private String tokenMozo;
     private String tokenCocinero;
@@ -225,5 +229,41 @@ class EstadoItemPedidoIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"estado\": \"EN_PREPARACION\"}"))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("PRB-87: compatibilidad BD/Django KDS — lee estado_item='COCINANDO' y 'ANULADO' desde BD en GET /pedidos y soporta transiciones de mapa explícito")
+    void leeCocinandoYAnuladoDesdeBdYSoportaTransicionesExplicitas() throws Exception {
+        int[] ids = crearPedido(11, "uuid-prb87-kds-django");
+        int pedidoId = ids[0];
+        int item1 = ids[1];
+        int item2 = ids[2];
+
+        // Simula actualización directa hecha por el KDS de Django en la tabla detalle_pedido
+        jdbcTemplate.update("UPDATE detalle_pedido SET estado_item = 'COCINANDO' WHERE id = ?", item1);
+        jdbcTemplate.update("UPDATE detalle_pedido SET estado_item = 'ANULADO' WHERE id = ?", item2);
+
+        // GET /api/v1/pedidos responde 200 sin IllegalArgumentException y expone COCINANDO y ANULADO
+        mockMvc.perform(get("/api/v1/pedidos").param("mesa_id", "11")
+                        .header("Authorization", "Bearer " + tokenMozo))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].items[?(@.id==" + item1 + ")].estado").value("COCINANDO"))
+                .andExpect(jsonPath("$[0].items[?(@.id==" + item2 + ")].estado").value("ANULADO"));
+
+        mockMvc.perform(get("/api/v1/pedidos/" + pedidoId)
+                        .header("Authorization", "Bearer " + tokenMozo))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[?(@.id==" + item1 + ")].estado").value("COCINANDO"))
+                .andExpect(jsonPath("$.items[?(@.id==" + item2 + ")].estado").value("ANULADO"));
+
+        // Desde COCINANDO puede pasar directamente a LISTO (flujo KDS)
+        patchEstado(tokenCocinero, pedidoId, item1, "\"LISTO\"")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("LISTO"));
+
+        // Desde ANULADO no hay salida permitida (estado final)
+        patchEstado(tokenCocinero, pedidoId, item2, "\"LISTO\"")
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.mensaje").value(containsString("estado final")));
     }
 }

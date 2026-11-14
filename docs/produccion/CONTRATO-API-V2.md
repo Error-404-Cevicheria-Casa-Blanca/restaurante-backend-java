@@ -51,10 +51,16 @@
 ### 2.3.1 Estado por plato (`PRB-87`)
 `PATCH /api/v1/pedidos/{id}/items/{itemId}/estado` — Request: `{"estado": "EN_PREPARACION"}`.
 
-- Estados: `PENDIENTE` → `EN_PREPARACION` → `LISTO` → `SERVIDO`. Solo se acepta el **siguiente** paso.
+- Conjunto canónico (BD + Django KDS + Backend Java): `PENDIENTE`, `COCINANDO`, `EN_PREPARACION`, `LISTO`, `SERVIDO`, `ANULADO`.
+- Mapa explícito de transiciones permitidas:
+  - `PENDIENTE` → `COCINANDO`, `EN_PREPARACION`, `ANULADO`
+  - `COCINANDO` → `EN_PREPARACION`, `LISTO`, `ANULADO`
+  - `EN_PREPARACION` → `LISTO`, `ANULADO`
+  - `LISTO` → `SERVIDO`, `ANULADO`
+  - `SERVIDO` y `ANULADO` → estados finales (sin salida).
 - Response `200`: ítem actualizado, p. ej. `{"id": 7, "producto_id": 1, "producto_nombre": "...", "estacion": "COCINA", "cantidad": 1, "subtotal": 48.00, "modificadores": [], "estado": "EN_PREPARACION"}`.
-- Cada línea de `GET /api/v1/pedidos` y `GET /api/v1/pedidos/{id}` incluye `estado` (por defecto `PENDIENTE`).
-- Errores: `400` salto, retroceso, repetición o valor de `estado` desconocido (mensaje con el flujo permitido); `403` rol no permitido; `404` pedido inexistente o ítem que no pertenece al pedido; `409` pedido `COBRADO` o `ANULADO`.
+- Cada línea de `GET /api/v1/pedidos` y `GET /api/v1/pedidos/{id}` incluye `estado` (por defecto `PENDIENTE`, soportando lecturas directas de `COCINANDO` y `ANULADO` escritos por el KDS de Django).
+- Errores: `400` salto, retroceso, repetición o valor de `estado` desconocido (mensaje con las transiciones permitidas); `403` rol no permitido; `404` pedido inexistente o ítem que no pertenece al pedido; `409` pedido `COBRADO` o `ANULADO`.
 - Cada cambio queda en la auditoría del pedido (`evento_pedido`) con el motivo `Ítem {id}: A → B`.
 - Requiere la columna `detalle_pedido.estado_item VARCHAR(20) NOT NULL DEFAULT 'PENDIENTE'` (`PRB-86`).
 
