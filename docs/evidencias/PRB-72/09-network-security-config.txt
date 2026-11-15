@@ -1,8 +1,10 @@
-=== Mapeo de recurso 0x7f130007 (xml/network_security_config) en APK release ===
-    resource 0x7f130007 xml/network_security_config
-      () (file) res/8G.xml type=XML
+=== Mapeo de xml/network_security_config en APK release ===
 
-=== Contenido xmltree de res/8G.xml (xml/network_security_config) ===
+>     resource 0x7f130007 xml/network_security_config
+        () (file) res/8G.xml type=XML
+
+
+=== Contenido xmltree de res/8G.xml ===
 E: network-security-config (line=2)
   E: base-config (line=3)
     A: cleartextTrafficPermitted=(type 0x12)0x0

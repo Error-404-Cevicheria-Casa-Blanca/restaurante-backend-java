@@ -2,8 +2,8 @@
 
 - **Issue Jira:** `PRB-72`
 - **Responsable:** Julio Alexander Pérez Muñoz
-- **Rama:** `develop`
-- **Estado:** PENDIENTE DE VERIFICACIÓN (A la espera de ejecución de pruebas de rollback con salida cruda de terminal y generación de APK release firmado)
+- **Rama:** `feature/PRB-70-71-72-cierre`
+- **Estado:** PENDIENTE DE VERIFICACIÓN (APK release firmado generado y verificado; pendiente ejecución de pruebas de rollback con salida cruda de terminal en PostgreSQL/Windows y tablet ADB)
 
 ---
 
@@ -15,7 +15,7 @@
 2. **Configuración de Red Segura y Build Android (`restaurante-app-kotlin`):**
    - `network_security_config.xml` configurado para restringir cleartext traffic exclusivamente hacia `192.168.1.10`.
    - `build.gradle.kts` actualizado con `versionCode = 2`, `versionName = "2.0.0"` y `baseUrlRelease = "http://192.168.1.10:8080/"`.
-   - Certificado de firma de producción (fuera de Git): `CN=Cevicheria La Casa Blanca, OU=Equipo Error 404, O=La Casa Blanca, L=Cajamarca, ST=Cajamarca, C=PE` (RSA 2048 bits), huella SHA-256: `1948fc9e38d8436cd4dfdf4c9d0689667293f2204baa4edafb12eb426e5cf30c`.
+   - Certificado de firma de producción (fuera de Git): `CN=Cevicheria La Casa Blanca, OU=Equipo Error 404, O=La Casa Blanca, L=Cajamarca, ST=Cajamarca, C=PE` (RSA 2048 bits), huella SHA-256: `26f29213c2662103c04a324e50c7cbfba37d692077473f1ce04bde589f37a4ff`.
 
 ## 2. Evidencias de Compilación y Verificación de APK (Verificadas)
 - [x] `docs/evidencias/PRB-72/00-backend-verify.txt`: `mvn clean verify` (`117/117` pruebas pasando, Checkstyle `0` violaciones, SpotBugs `0` bugs).
