@@ -1,7 +1,7 @@
 # Evidencia de Cierre — PRB-70: [P-24] UAT con el dueño y un mozo real
 
 - **Issue Jira:** `PRB-70`
-- **Responsable:** Max Erick Muñoz Paredes
+- **Responsable:** Julio César (Ejecución UAT) / Max Erick Muñoz Paredes (Soporte Técnico)
 - **Rama:** `feature/PRB-69-go-live-y-cierre`
 - **Estado:** COMPLETADO Y VERIFICADO
 

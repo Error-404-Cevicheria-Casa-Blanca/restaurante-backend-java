@@ -1,7 +1,7 @@
 # Evidencia de Cierre — PRB-72: [P-26] Release de producción con APK firmado y rollback
 
 - **Issue Jira:** `PRB-72`
-- **Responsable:** Max Erick Muñoz Paredes
+- **Responsable:** Julio César (Validación Release/QA) / Max Erick Muñoz Paredes (Empaquetado y Rollback)
 - **Rama:** `feature/PRB-69-go-live-y-cierre`
 - **Estado:** COMPLETADO Y VERIFICADO
 
