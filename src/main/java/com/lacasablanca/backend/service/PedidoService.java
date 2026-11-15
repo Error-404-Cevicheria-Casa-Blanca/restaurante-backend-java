@@ -527,14 +527,14 @@ public class PedidoService {
 
         EstadoItem actual = item.getEstadoItem();
         if (!actual.puedePasarA(nuevoEstado)) {
-            EstadoItem siguiente = actual.siguiente();
-            String permitido = siguiente != null
-                    ? "Solo se permite pasar a " + siguiente
-                    : "El ítem ya está en el estado final";
+            List<EstadoItem> permitidos = actual.siguientesPermitidos();
+            String permitido = !permitidos.isEmpty()
+                    ? "Solo se permite pasar a " + permitidos
+                    : "El ítem ya está en el estado final (" + actual + ")";
             throw new IllegalArgumentException(
                     "Transición de estado inválida para el ítem " + itemId + ": "
                             + actual + " → " + nuevoEstado + ". " + permitido
-                            + " (flujo: PENDIENTE → EN_PREPARACION → LISTO → SERVIDO)"
+                            + " (flujo: PENDIENTE → COCINANDO/EN_PREPARACION → LISTO → SERVIDO, o ANULADO)"
             );
         }
 

@@ -1,0 +1,5 @@
+1dc2782 fix(PRB-87): agregar COCINANDO y ANULADO a EstadoItem con mapa explicito de transiciones y test KDS
+c2aab5c Merge pull request #11 from Error-404-Cevicheria-Casa-Blanca/feature/PRB-85-87-89-unificacion-develop
+6ae64c8 Merge remote-tracking branch 'origin/feature/PRB-44-conflicto-409-mesas' into feature/PRB-85-87-89-unificacion-develop
+5a87705 Merge remote-tracking branch 'origin/feature/PRB-65-infraestructura-y-produccion' into feature/PRB-85-87-89-unificacion-develop
+cad8aa0 Merge remote-tracking branch 'origin/feature/PRB-22-ci-github-actions' into feature/PRB-85-87-89-unificacion-develop
