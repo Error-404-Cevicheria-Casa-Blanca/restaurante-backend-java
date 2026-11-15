@@ -1,0 +1,17 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=Cevicheria La Casa Blanca, OU=Equipo Error 404, O=La Casa Blanca, L=Cajamarca, ST=Cajamarca, C=PE
+Signer #1 certificate SHA-256 digest: 1948fc9e38d8436cd4dfdf4c9d0689667293f2204baa4edafb12eb426e5cf30c
+Signer #1 certificate SHA-1 digest: 2e74cf07afd29a5fc3492a728f5edc1a6bc7be74
+Signer #1 certificate MD5 digest: 96ecc97fe1743633c2f2f8176f40eaba
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 2048
+Signer #1 public key SHA-256 digest: 04e11bf28ec56bd11fd98a2261c3a728ce75bba7a8525f954ce8bba2a1456e57
+Signer #1 public key SHA-1 digest: a1488f582df2de9c0efa23314f90c4379a30eca3
+Signer #1 public key MD5 digest: 2e4d7dbbf1ab20bfe20f549eb1a1a823

@@ -10,7 +10,7 @@
 
 | Componente | Artefacto Generado | Comando Reproducible | Ubicación en Producción |
 |---|---|---|---|
-| **Backend Spring Boot 3.3 (Java 17)** | `backend-0.0.1-SNAPSHOT.jar` (`v2.0.0-prod`) | `mvn clean package -DskipTests=false` (Suite de `116` tests unitarios/integración, Checkstyle `0`, SpotBugs `0`) | `C:\CasaBlanca\backend\restaurante-backend.jar` |
+| **Backend Spring Boot 3.3 (Java 17)** | `backend-0.0.1-SNAPSHOT.jar` (`v2.0.0-prod`) | `mvn clean verify` (Suite de `117` tests unitarios/integración, Checkstyle `0` violaciones, SpotBugs `0` bugs) | `C:\CasaBlanca\backend\restaurante-backend.jar` |
 | **Panel Admin & KDS Django** | Release `v2.0.0-prod` + `V2__produccion.sql` | `python manage.py check --deploy` + Waitress `:8000` | `C:\CasaBlanca\admin-django\` |
 | **App Tablets Android (Kotlin)** | `app-release-signed.apk` (`v2.0.0-prod`) | `./gradlew assembleRelease` (firmado con keystore de producción) | Instalado en las 2 tablets de salón |
 | **Base de Datos PostgreSQL 16** | Snapshot pre-release `casablanca_pre_golive.dump` | `scripts/backup/backup-casablanca.ps1` | `C:\CasaBlanca\backups\db\` |
@@ -30,7 +30,7 @@ Se validó el procedimiento completo de vuelta atrás (`scripts/deploy/rollback-
 ## 3. Checklist Final de Go-Live
 
 - [x] Esquema PostgreSQL v2 (`V2__produccion.sql` con `pago` y `sesion_caja`) validado con `ddl-auto: validate`.
-- [ ] Suite completa de 116 pruebas unitarias y de integración pasando con `0` violaciones Checkstyle y `0` bugs SpotBugs (pendiente consolidar salida cruda oficial).
+- [x] Suite completa de 117 pruebas unitarias y de integración pasando (`Failures: 0, Errors: 0, Skipped: 0`) con `0` violaciones Checkstyle y `0` bugs SpotBugs (`docs/evidencias/PRB-72/00-backend-verify.txt`).
 - [x] Servicios Windows (`CasaBlancaPostgres`, `CasaBlancaBackendJava`, `CasaBlancaAdminDjango`) en inicio automático.
 - [x] Firewall de Windows restringido a la LAN del local (`192.168.1.0/24`) y CORS restringido al origen del panel.
 - [x] Backups diarios programados a las `23:30` con retención de 30 días y restore probado.
