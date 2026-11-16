@@ -1,0 +1,44 @@
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/com/github/spotbugs/spotbugs-maven-plugin/4.8.6.6/spotbugs-maven-plugin-4.8.6.6.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/com/github/spotbugs/spotbugs-maven-plugin/4.8.6.6/spotbugs-maven-plugin-4.8.6.6.pom (43 kB at 297 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/com/github/spotbugs/spotbugs-maven-plugin/4.8.6.6/spotbugs-maven-plugin-4.8.6.6.jar
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/com/github/spotbugs/spotbugs-maven-plugin/4.8.6.6/spotbugs-maven-plugin-4.8.6.6.jar (169 kB at 1.1 MB/s)
+[INFO] --- maven-checkstyle-plugin:3.4.0:check (checkstyle-validation) @ backend ---
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 20.66 s -- in com.lacasablanca.backend.ApplicationContextTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.778 s -- in com.lacasablanca.backend.FlujoRestauranteIntegrationTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.236 s -- in com.lacasablanca.backend.MesaConcurrenciaTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.177 s -- in com.lacasablanca.backend.PedidoRollbackTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.954 s -- in com.lacasablanca.backend.controller.AuthControllerTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.491 s -- in com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.693 s -- in com.lacasablanca.backend.controller.CategoriaControllerTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.199 s -- in com.lacasablanca.backend.controller.EstadoItemPedidoIntegrationTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.066 s -- in com.lacasablanca.backend.controller.HealthCheckIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.595 s -- in com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest
+[INFO] Tests run: 17, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.707 s -- in com.lacasablanca.backend.controller.MesaCobroIntegrationTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.727 s -- in com.lacasablanca.backend.controller.MesaConflicto409IntegrationTest
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.650 s -- in com.lacasablanca.backend.controller.MesaControllerTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.373 s -- in com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.548 s -- in com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.953 s -- in com.lacasablanca.backend.controller.PedidoControllerTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.663 s -- in com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.691 s -- in com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.615 s -- in com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.586 s -- in com.lacasablanca.backend.controller.ProductoControllerTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.049 s -- in com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.505 s -- in com.lacasablanca.backend.service.AuthServiceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.486 s -- in com.lacasablanca.backend.service.CategoriaServiceTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.652 s -- in com.lacasablanca.backend.service.MesaServiceTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.372 s -- in com.lacasablanca.backend.service.PedidoServiceTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.029 s -- in com.lacasablanca.backend.service.ProductoServiceTest
+[INFO] Tests run: 117, Failures: 0, Errors: 0, Skipped: 0
+[INFO] >>> spotbugs-maven-plugin:4.8.6.6:check (spotbugs-analysis) > :spotbugs @ backend >>>
+[INFO] --- spotbugs-maven-plugin:4.8.6.6:spotbugs (spotbugs) @ backend ---
+[INFO] <<< spotbugs-maven-plugin:4.8.6.6:check (spotbugs-analysis) < :spotbugs @ backend <<<
+[INFO] --- spotbugs-maven-plugin:4.8.6.6:check (spotbugs-analysis) @ backend ---
+[INFO] BugInstance size is 0
+[INFO] Error size is 0
+[INFO] No errors/warnings found
+[INFO] BUILD SUCCESS
+[INFO] Total time:  02:07 min
+[INFO] Finished at: 2026-11-15T03:56:26Z

@@ -12,13 +12,15 @@ param(
     [string]$PreviousJarPath,
     [string]$TargetJarPath = "C:\CasaBlanca\backend\restaurante-backend.jar",
     [string]$DbDumpPath = "",
+    [string]$TargetDb = "casablanca",
+    [string]$PreviousApkPath = "",
     [string]$ServiceName = "CasaBlancaBackendJava",
     [string]$HealthUrl = "http://localhost:8080/api/v1/health"
 )
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "=== [PRB-65] Iniciando Rollback de Produccion - Restaurante Casa Blanca ===" -ForegroundColor Yellow
+Write-Host "=== [PRB-65/PRB-72] Iniciando Rollback de Produccion - Restaurante Casa Blanca ===" -ForegroundColor Yellow
 
 if (-not (Test-Path $PreviousJarPath)) {
     throw "No existe el artefacto previo en: $PreviousJarPath"
@@ -26,7 +28,7 @@ if (-not (Test-Path $PreviousJarPath)) {
 
 # 1. Detener servicio Backend
 if (Get-Service -Name $ServiceName -ErrorAction SilentlyContinue) {
-    Write-Host "[1/4] Deteniendo servicio $ServiceName..."
+    Write-Host "[1/5] Deteniendo servicio $ServiceName..."
     Stop-Service -Name $ServiceName -Force
 }
 
@@ -36,19 +38,29 @@ if (Test-Path $TargetJarPath) {
     Copy-Item -Path $TargetJarPath -Destination $backupFailedJar -Force
 }
 Copy-Item -Path $PreviousJarPath -Destination $TargetJarPath -Force
-Write-Host "[2/4] Artefacto .jar restaurado desde $PreviousJarPath" -ForegroundColor Green
+Write-Host "[2/5] Artefacto .jar restaurado desde $PreviousJarPath" -ForegroundColor Green
 
 # 3. Restaurar base de datos si se especifico un dump
 if ($DbDumpPath -ne "" -and (Test-Path $DbDumpPath)) {
-    Write-Host "[3/4] Ejecutando restore de base de datos desde $DbDumpPath..."
-    & "$PSScriptRoot\..\backup\restore-casablanca.ps1" -DumpFile $DbDumpPath
+    Write-Host "[3/5] Ejecutando restore de base de datos desde $DbDumpPath hacia '$TargetDb'..."
+    & "$PSScriptRoot\..\backup\restore-casablanca.ps1" -DumpFile $DbDumpPath -TargetDb $TargetDb
 } else {
-    Write-Host "[3/4] Sin rollback de base de datos solicitado (solo binario)."
+    Write-Host "[3/5] Sin rollback de base de datos solicitado (solo binario)."
 }
 
-# 4. Iniciar servicio y verificar Healthcheck
+# 4. Rollback de la App Android en tablets via ADB (si se especifica APK previo)
+if ($PreviousApkPath -ne "" -and (Test-Path $PreviousApkPath)) {
+    Write-Host "[4/5] Reinstalando version previa de APK en tablet via ADB ($PreviousApkPath)..."
+    adb install -r -d $PreviousApkPath
+    Write-Host "Verificando versionCode instalado en la tablet:"
+    adb shell dumpsys package com.lacasablanca.mesero | Select-String versionCode
+} else {
+    Write-Host "[4/5] Sin rollback de APK solicitado."
+}
+
+# 5. Iniciar servicio y verificar Healthcheck
 if (Get-Service -Name $ServiceName -ErrorAction SilentlyContinue) {
-    Write-Host "[4/4] Iniciando servicio $ServiceName..."
+    Write-Host "[5/5] Iniciando servicio $ServiceName..."
     Start-Service -Name $ServiceName
     Start-Sleep -Seconds 5
 }
