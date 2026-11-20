@@ -1,0 +1,5 @@
+6800b8e feat(PRB-106): encolar COMANDA por estacion y PRECUENTA con mesa_id en estado PENDIENTE (ADR-01, ADR-07)
+589bfa0 Merge pull request #13 from Error-404-Cevicheria-Casa-Blanca/feature/PRB-70-71-72-cierre
+b9a91c9 docs(PRB-72): actualizar evidencias APK firmado y huella SHA-256
+981e314 docs(PRB-72): evidencias de verificacion APK release y suite backend
+9bc73ba Merge remote-tracking branch 'origin/develop' into feature/PRB-70-71-72-cierre
