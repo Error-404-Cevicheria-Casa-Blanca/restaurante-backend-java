@@ -1,0 +1,5 @@
+7fb70a9 fix(PRB-106): usar consultas filtradas List sin Optional ni findAll() y documentar decision B03 via payload
+89546b4 docs(PRB-106): actualizar 01-tests.txt (118 tests) y 02-git.txt
+2e4eea9 fix(PRB-106): alinear mesa_id en payload JSON de PRECUENTA con PRB-107 de Django y ddl-auto validate
+2c9082e Merge remote-tracking branch 'origin/develop' into feature/PRB-106-impresion-real-cola
+351a82a Merge pull request #15 from Error-404-Cevicheria-Casa-Blanca/feature/PRB-98-tls-caddy-ca

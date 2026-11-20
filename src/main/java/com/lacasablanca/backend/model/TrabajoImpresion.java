@@ -8,11 +8,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.time.OffsetDateTime;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "impresion_cola")
 public class TrabajoImpresion {
+
+    private static final Pattern PATRON_MESA_ID = Pattern.compile(
+            "(?:\"mesa_id\"\\s*:\\s*|\\bmesa_id\\s*[:=]\\s*|\\bmesa\\s+#?\\s*)(\\d+)\\b",
+            Pattern.CASE_INSENSITIVE
+    );
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +29,9 @@ public class TrabajoImpresion {
     @ManyToOne
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
+
+    @Transient
+    private Integer mesaId;
 
     @Column(name = "tipo", nullable = false, length = 20)
     private String tipo;
@@ -49,11 +60,26 @@ public class TrabajoImpresion {
     public TrabajoImpresion() {}
 
     public TrabajoImpresion(Pedido pedido, String tipo, String estacion, String payload, String estado) {
+        this(pedido, (pedido != null && pedido.getMesa() != null) ? pedido.getMesa().getId() : null,
+                tipo, estacion, payload, estado);
+    }
+
+    public TrabajoImpresion(Pedido pedido, Integer mesaId, String tipo, String estacion, String payload, String estado) {
         this.pedido = pedido;
+        Integer resolvedMesaId = mesaId != null
+                ? mesaId
+                : ((pedido != null && pedido.getMesa() != null) ? pedido.getMesa().getId() : null);
+        this.mesaId = resolvedMesaId;
         this.tipo = tipo;
         this.estacion = estacion;
-        this.payload = payload;
-        this.estado = estado;
+        if (payload != null && !payload.isEmpty()) {
+            this.payload = payload;
+        } else if ("PRECUENTA".equals(tipo) && resolvedMesaId != null) {
+            this.payload = "{\"mesa_id\":" + resolvedMesaId + "}";
+        } else {
+            this.payload = "";
+        }
+        this.estado = estado != null ? estado : "PENDIENTE";
         this.fechaCreacion = OffsetDateTime.now();
     }
 
@@ -71,6 +97,30 @@ public class TrabajoImpresion {
 
     public void setPedido(Pedido pedido) {
         this.pedido = pedido;
+    }
+
+    public Integer getMesaId() {
+        if (mesaId != null) {
+            return mesaId;
+        }
+        if (pedido != null && pedido.getMesa() != null) {
+            return pedido.getMesa().getId();
+        }
+        if (payload != null && !payload.isBlank()) {
+            Matcher m = PATRON_MESA_ID.matcher(payload);
+            if (m.find()) {
+                try {
+                    return Integer.valueOf(m.group(1));
+                } catch (NumberFormatException ignored) {
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+
+    public void setMesaId(Integer mesaId) {
+        this.mesaId = mesaId;
     }
 
     public String getTipo() {
