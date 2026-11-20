@@ -1,0 +1,42 @@
+Owner: CN=Cevicheria La Casa Blanca Root CA, OU=Equipo Error 404, O=La Casa Blanca, L=Cajamarca, ST=Cajamarca, C=PE
+Issuer: CN=Cevicheria La Casa Blanca Root CA, OU=Equipo Error 404, O=La Casa Blanca, L=Cajamarca, ST=Cajamarca, C=PE
+Serial number: cb23cfba9750f556
+Valid from: Fri Nov 20 00:07:10 GMT-05:00 2026 until: Mon Nov 17 00:07:10 GMT-05:00 2036
+Certificate fingerprints:
+	 SHA1: 28:FE:71:73:A4:BB:0B:46:A5:5E:CE:1C:51:26:02:87:59:F9:4A:0F
+	 SHA256: 57:56:6D:57:D7:5F:EC:94:92:49:3B:76:98:EA:12:61:A4:AB:A4:1B:AC:F9:93:E2:B7:2E:01:6D:6D:02:7B:8C
+Signature algorithm name: SHA256withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
+
+Extensions: 
+
+#1: ObjectId: 2.5.29.19 Criticality=true
+BasicConstraints:[
+  CA:true
+  PathLen:1
+]
+
+#2: ObjectId: 2.5.29.15 Criticality=true
+KeyUsage [
+  DigitalSignature
+  Key_CertSign
+  Crl_Sign
+]
+
+#3: ObjectId: 2.5.29.17 Criticality=false
+SubjectAlternativeName [
+  DNSName: casa-blanca.local
+  DNSName: localhost
+  IPAddress: 192.168.1.10
+  IPAddress: 127.0.0.1
+]
+
+#4: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 87 EB 73 4D E9 40 95 54   51 9C DD 56 3B AC 19 9C  ..sM.@.TQ..V;...
+0010: B4 C7 70 FF                                        ..p.
+]
+]
+

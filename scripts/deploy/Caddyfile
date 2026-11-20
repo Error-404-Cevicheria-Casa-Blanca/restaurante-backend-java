@@ -1,0 +1,46 @@
+# ==============================================================================
+# Caddyfile — Reverse Proxy TLS Interno para Restaurante Casa Blanca (PRB-98 / ADR-02)
+# ==============================================================================
+# Termina TLS en https://casa-blanca.local (:443) con CA interna de Caddy
+# (o certificado firmado por certs/casa_blanca_ca.crt) y enruta:
+#   - /api/*     -> Backend Spring Boot (127.0.0.1:8080)
+#   - /health    -> Backend Spring Boot (127.0.0.1:8080)
+#   - /version   -> Backend Spring Boot (127.0.0.1:8080)
+#   - /*         -> Backoffice y KDS Django (127.0.0.1:8000)
+# ==============================================================================
+
+{
+    auto_https disable_redirects
+    local_certs
+}
+
+https://casa-blanca.local, https://192.168.1.10, https://localhost {
+    tls internal
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "same-origin"
+    }
+
+    @backend_api {
+        path /api/* /health /version
+    }
+
+    handle @backend_api {
+        reverse_proxy 127.0.0.1:8080 {
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-Host {host}
+            header_up X-Real-IP {remote_host}
+        }
+    }
+
+    handle {
+        reverse_proxy 127.0.0.1:8000 {
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-Host {host}
+            header_up X-Real-IP {remote_host}
+        }
+    }
+}

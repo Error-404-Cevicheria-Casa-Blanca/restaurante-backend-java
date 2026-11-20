@@ -64,6 +64,24 @@ class SecurityHardeningIntegrationTest {
         assertTrue(content.contains("${DB_USER}"));
         assertTrue(content.contains("${DB_PASSWORD}"));
         assertTrue(content.contains("${JWT_SECRET}"));
+        assertTrue(content.contains("forward-headers-strategy: framework"));
+        assertTrue(content.contains("https://casa-blanca.local"));
         assertFalse(content.contains("password123"));
+    }
+
+    @Test
+    @DisplayName("PRB-98 / ADR-02: CORS y proxy TLS Caddy permiten origen https://casa-blanca.local y cabeceras X-Forwarded-*")
+    void corsYCabecerasProxyCaddyPermitenHttpsCasaBlancaLocal() throws Exception {
+        mockMvc.perform(options("/api/v1/mesas")
+                        .header("Origin", "https://casa-blanca.local")
+                        .header("Access-Control-Request-Method", "GET"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Access-Control-Allow-Origin", "https://casa-blanca.local"));
+
+        mockMvc.perform(get("/api/v1/health")
+                        .header("X-Forwarded-Proto", "https")
+                        .header("X-Forwarded-Host", "casa-blanca.local")
+                        .header("X-Forwarded-For", "192.168.1.25"))
+                .andExpect(status().isOk());
     }
 }
