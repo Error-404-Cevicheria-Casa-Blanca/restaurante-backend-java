@@ -2,9 +2,10 @@ name: CI — Backend Spring Boot (PRB-22 / PRB-113)
 
 on:
   push:
-    branches: [ main, develop, "feature/**", "fix/**" ]
+    branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
+  workflow_dispatch:
 
 jobs:
   build-and-test-java:
