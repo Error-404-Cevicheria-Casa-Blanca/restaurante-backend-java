@@ -22,6 +22,9 @@ public class TrabajoImpresion {
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
 
+    @Column(name = "mesa_id")
+    private Integer mesaId;
+
     @Column(name = "tipo", nullable = false, length = 20)
     private String tipo;
 
@@ -49,11 +52,17 @@ public class TrabajoImpresion {
     public TrabajoImpresion() {}
 
     public TrabajoImpresion(Pedido pedido, String tipo, String estacion, String payload, String estado) {
+        this(pedido, (pedido != null && pedido.getMesa() != null) ? pedido.getMesa().getId() : null,
+                tipo, estacion, payload, estado);
+    }
+
+    public TrabajoImpresion(Pedido pedido, Integer mesaId, String tipo, String estacion, String payload, String estado) {
         this.pedido = pedido;
+        this.mesaId = mesaId != null ? mesaId : ((pedido != null && pedido.getMesa() != null) ? pedido.getMesa().getId() : null);
         this.tipo = tipo;
         this.estacion = estacion;
-        this.payload = payload;
-        this.estado = estado;
+        this.payload = payload != null ? payload : "";
+        this.estado = estado != null ? estado : "PENDIENTE";
         this.fechaCreacion = OffsetDateTime.now();
     }
 
@@ -71,6 +80,14 @@ public class TrabajoImpresion {
 
     public void setPedido(Pedido pedido) {
         this.pedido = pedido;
+    }
+
+    public Integer getMesaId() {
+        return mesaId;
+    }
+
+    public void setMesaId(Integer mesaId) {
+        this.mesaId = mesaId;
     }
 
     public String getTipo() {

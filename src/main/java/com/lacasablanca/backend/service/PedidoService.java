@@ -58,6 +58,7 @@ public class PedidoService {
     private final UsuarioRepository usuarioRepository;
     private final ProductoRepository productoRepository;
     private final com.lacasablanca.backend.repository.EventoPedidoRepository eventoPedidoRepository;
+    private final com.lacasablanca.backend.repository.TrabajoImpresionRepository trabajoImpresionRepository;
     private final MesaService mesaService;
 
     public PedidoService(PedidoRepository pedidoRepository,
@@ -66,11 +67,24 @@ public class PedidoService {
                          ProductoRepository productoRepository,
                          com.lacasablanca.backend.repository.EventoPedidoRepository eventoPedidoRepository,
                          MesaService mesaService) {
+        this(pedidoRepository, mesaRepository, usuarioRepository, productoRepository,
+                eventoPedidoRepository, null, mesaService);
+    }
+
+    @org.springframework.beans.factory.annotation.Autowired
+    public PedidoService(PedidoRepository pedidoRepository,
+                         MesaRepository mesaRepository,
+                         UsuarioRepository usuarioRepository,
+                         ProductoRepository productoRepository,
+                         com.lacasablanca.backend.repository.EventoPedidoRepository eventoPedidoRepository,
+                         com.lacasablanca.backend.repository.TrabajoImpresionRepository trabajoImpresionRepository,
+                         MesaService mesaService) {
         this.pedidoRepository = pedidoRepository;
         this.mesaRepository = mesaRepository;
         this.usuarioRepository = usuarioRepository;
         this.productoRepository = productoRepository;
         this.eventoPedidoRepository = eventoPedidoRepository;
+        this.trabajoImpresionRepository = trabajoImpresionRepository;
         this.mesaService = mesaService;
     }
 
@@ -232,6 +246,7 @@ public class PedidoService {
         if (guardado.getId() != null) {
             registrarEvento(guardado.getId(), null, EstadoPedido.PENDIENTE,
                     mozo.getUsername(), "Creación de comanda");
+            encolarComandasPorEstacion(guardado, guardado.getDetalles());
             if (claveIdempotencia != null) {
                 idempotenciaKeyAPedidoId.put(claveIdempotencia, guardado.getId());
                 pedidoIdAClientRequestId.put(guardado.getId(), claveIdempotencia);
@@ -341,6 +356,11 @@ public class PedidoService {
         if (guardado.getId() != null) {
             registrarEvento(guardado.getId(), guardado.getEstado(), guardado.getEstado(),
                     mozo.getUsername(), "Ampliación de comanda existente (+" + nuevosItems.size() + " ítems)");
+            List<DetallePedido> detallesNuevos = (guardado.getDetalles() != null
+                    && indiceInicioNuevos < guardado.getDetalles().size())
+                    ? guardado.getDetalles().subList(indiceInicioNuevos, guardado.getDetalles().size())
+                    : guardado.getDetalles();
+            encolarComandasPorEstacion(guardado, detallesNuevos);
             if (claveIdempotencia != null) {
                 idempotenciaKeyAPedidoId.put(claveIdempotencia, guardado.getId());
                 pedidoIdAClientRequestId.put(guardado.getId(), claveIdempotencia);
@@ -351,6 +371,43 @@ public class PedidoService {
         respuesta.setReplay(Boolean.FALSE);
         respuesta.setClientRequestId(claveIdempotencia);
         return respuesta;
+    }
+
+    private void encolarComandasPorEstacion(Pedido pedido, List<DetallePedido> detalles) {
+        if (trabajoImpresionRepository == null || pedido == null || pedido.getId() == null
+                || detalles == null || detalles.isEmpty()) {
+            return;
+        }
+        try {
+            java.util.Set<String> estaciones = new java.util.LinkedHashSet<>();
+            for (DetallePedido dp : detalles) {
+                if (dp != null && dp.getProducto() != null && dp.getProducto().getEstacion() != null) {
+                    estaciones.add(dp.getProducto().getEstacion().name());
+                }
+            }
+            Integer mesaId = (pedido.getMesa() != null) ? pedido.getMesa().getId() : null;
+            for (String estacion : estaciones) {
+                com.lacasablanca.backend.model.TrabajoImpresion existente = trabajoImpresionRepository
+                        .findByPedidoIdAndTipoAndEstacion(pedido.getId(), "COMANDA", estacion)
+                        .orElse(null);
+                if (existente != null) {
+                    existente.setEstado("PENDIENTE");
+                    existente.setError(null);
+                    existente.setMesaId(mesaId);
+                    existente.setFechaCreacion(java.time.OffsetDateTime.now());
+                    trabajoImpresionRepository.save(existente);
+                } else {
+                    com.lacasablanca.backend.model.TrabajoImpresion nuevo =
+                            new com.lacasablanca.backend.model.TrabajoImpresion(
+                                    pedido, mesaId, "COMANDA", estacion, "", "PENDIENTE"
+                            );
+                    trabajoImpresionRepository.save(nuevo);
+                }
+            }
+        } catch (Exception e) {
+            org.slf4j.LoggerFactory.getLogger(PedidoService.class)
+                    .debug("Error encolando comanda por estación en impresion_cola: {}", e.getMessage());
+        }
     }
 
     @Transactional(readOnly = true)

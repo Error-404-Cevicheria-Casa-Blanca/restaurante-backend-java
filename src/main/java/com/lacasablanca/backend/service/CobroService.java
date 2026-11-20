@@ -138,30 +138,13 @@ public class CobroService {
                 total,
                 propinaSugerida
         );
-        TrabajoImpresionDto job = trabajosImpresionMesa.get(mesaId);
-        if (job == null && trabajoImpresionRepository != null) {
-            try {
-                job = trabajoImpresionRepository.findAll().stream()
-                        .filter(ti -> ("Mesa " + mesaId + " precuenta").equals(ti.getPayload()))
-                        .max(java.util.Comparator.comparing(com.lacasablanca.backend.model.TrabajoImpresion::getFechaCreacion))
-                        .map(ti -> new TrabajoImpresionDto(
-                                "print-mesa-" + mesaId + "-" + ti.getIntentos(),
-                                mesaId,
-                                "PRECUENTA_80MM",
-                                ti.getEstado(),
-                                ti.getIntentos(),
-                                ti.getError(),
-                                ti.getFechaCreacion()
-                        )).orElse(null);
-            } catch (Exception e) {
-                org.slf4j.LoggerFactory.getLogger(CobroService.class)
-                        .debug("Error consultando cola impresion en BD: {}", e.getMessage());
-            }
+        TrabajoImpresionDto job = buscarUltimoTrabajoPrecuentaEnBd(mesaId);
+        if (job == null) {
+            job = trabajosImpresionMesa.get(mesaId);
         }
         if (job != null) {
-            String estadoImpresion = "FALLIDO".equals(job.getEstado()) ? "ERROR" : job.getEstado();
             response.setImpresionJobId(job.getJobId());
-            response.setEstadoImpresion(estadoImpresion);
+            response.setEstadoImpresion(job.getEstado());
             response.setIntentosImpresion(job.getIntentos());
         }
         return response;
@@ -349,76 +332,106 @@ public class CobroService {
         Mesa mesa = mesaRepository.findById(mesaId)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Mesa no encontrada con ID: " + mesaId));
 
-        TrabajoImpresionDto existente = trabajosImpresionMesa.get(mesa.getId());
-        if (existente == null && trabajoImpresionRepository != null) {
-            try {
-                existente = trabajoImpresionRepository.findAll().stream()
-                        .filter(ti -> ("Mesa " + mesaId + " precuenta").equals(ti.getPayload()))
-                        .max(java.util.Comparator.comparing(com.lacasablanca.backend.model.TrabajoImpresion::getFechaCreacion))
-                        .map(ti -> new TrabajoImpresionDto(
-                                "print-mesa-" + mesaId + "-" + ti.getIntentos(),
-                                mesaId,
-                                "PRECUENTA_80MM",
-                                ti.getEstado(),
-                                ti.getIntentos(),
-                                ti.getError(),
-                                ti.getFechaCreacion()
-                        )).orElse(null);
-            } catch (Exception e) {
-                org.slf4j.LoggerFactory.getLogger(CobroService.class)
-                        .debug("Error consultando cola impresion en BD: {}", e.getMessage());
-            }
+        TrabajoImpresionDto desdeBd = buscarUltimoTrabajoPrecuentaEnBd(mesa.getId());
+        if (desdeBd != null) {
+            return desdeBd;
         }
-        if (existente != null) {
-            String estadoImpresion = "FALLIDO".equals(existente.getEstado()) ? "ERROR" : existente.getEstado();
-            existente.setEstado(estadoImpresion);
-            return existente;
+        TrabajoImpresionDto enMemoria = trabajosImpresionMesa.get(mesa.getId());
+        if (enMemoria != null) {
+            return enMemoria;
         }
         return new TrabajoImpresionDto(
                 "job-mesa-" + mesa.getId() + "-pendiente",
                 mesa.getId(),
-                "PRECUENTA_80MM",
-                "EN_COLA",
+                "PRECUENTA",
+                "PENDIENTE",
                 0,
                 null,
                 OffsetDateTime.now()
         );
     }
 
+    private TrabajoImpresionDto buscarUltimoTrabajoPrecuentaEnBd(Integer mesaId) {
+        if (trabajoImpresionRepository == null || mesaId == null) {
+            return null;
+        }
+        try {
+            return trabajoImpresionRepository.findAll().stream()
+                    .filter(ti -> "PRECUENTA".equals(ti.getTipo()))
+                    .filter(ti -> mesaId.equals(ti.getMesaId())
+                            || (ti.getPedido() != null && ti.getPedido().getMesa() != null
+                            && mesaId.equals(ti.getPedido().getMesa().getId()))
+                            || ("Mesa " + mesaId + " precuenta").equals(ti.getPayload()))
+                    .max(java.util.Comparator
+                            .comparing(com.lacasablanca.backend.model.TrabajoImpresion::getFechaCreacion,
+                                    java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder()))
+                            .thenComparing(com.lacasablanca.backend.model.TrabajoImpresion::getId,
+                                    java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder())))
+                    .map(ti -> mapearTrabajoImpresionADto(ti, mesaId))
+                    .orElse(null);
+        } catch (Exception e) {
+            org.slf4j.LoggerFactory.getLogger(CobroService.class)
+                    .debug("Error consultando cola impresion en BD: {}", e.getMessage());
+            return null;
+        }
+    }
+
+    private TrabajoImpresionDto mapearTrabajoImpresionADto(
+            com.lacasablanca.backend.model.TrabajoImpresion ti,
+            Integer mesaId) {
+        String sufijo = ti.getId() != null ? String.valueOf(ti.getId()) : String.valueOf(ti.getIntentos());
+        return new TrabajoImpresionDto(
+                "print-mesa-" + mesaId + "-" + sufijo,
+                mesaId,
+                ti.getTipo(),
+                ti.getEstado(),
+                ti.getIntentos(),
+                ti.getError(),
+                ti.getFechaCreacion()
+        );
+    }
+
     private TrabajoImpresionDto registrarTrabajoImpresion(Integer mesaId, boolean simularError) {
-        TrabajoImpresionDto previo = trabajosImpresionMesa.get(mesaId);
-        int intentos = (previo != null && previo.getIntentos() != null) ? previo.getIntentos() + 1 : 1;
-        String jobId = "print-mesa-" + mesaId + "-" + intentos;
-        String estadoDb = simularError ? "FALLIDO" : "IMPRESO";
-        String estadoDto = simularError ? "ERROR" : "IMPRESO";
+        String estadoDb = simularError ? "FALLIDO" : "PENDIENTE";
+        int intentos = simularError ? 1 : 0;
         String mensajeError = simularError
                 ? "Impresora térmica 80mm sin respuesta (apagada o desconectada). Comanda y cuenta operativas."
                 : null;
-        TrabajoImpresionDto nuevo = new TrabajoImpresionDto(
+
+        List<Pedido> pedidosActivos = pedidoRepository.findByMesaIdAndEstadoNotOrderByFechaCreacionAsc(
+                mesaId, EstadoPedido.COBRADO
+        ).stream().filter(p -> p.getEstado() != EstadoPedido.ANULADO).collect(Collectors.toList());
+        Pedido pedidoAsociado = !pedidosActivos.isEmpty() ? pedidosActivos.get(pedidosActivos.size() - 1) : null;
+
+        if (trabajoImpresionRepository != null) {
+            try {
+                com.lacasablanca.backend.model.TrabajoImpresion ti = new com.lacasablanca.backend.model.TrabajoImpresion(
+                        pedidoAsociado, mesaId, "PRECUENTA", "CAJA", "", estadoDb
+                );
+                ti.setIntentos(intentos);
+                ti.setError(mensajeError);
+                com.lacasablanca.backend.model.TrabajoImpresion guardado = trabajoImpresionRepository.save(ti);
+                TrabajoImpresionDto dto = mapearTrabajoImpresionADto(guardado, mesaId);
+                trabajosImpresionMesa.put(mesaId, dto);
+                return dto;
+            } catch (Exception e) {
+                org.slf4j.LoggerFactory.getLogger(CobroService.class)
+                        .debug("Error registrando trabajo de impresion en BD: {}", e.getMessage());
+            }
+        }
+
+        String jobId = "print-mesa-" + mesaId + "-" + intentos;
+        TrabajoImpresionDto fallback = new TrabajoImpresionDto(
                 jobId,
                 mesaId,
-                "PRECUENTA_80MM",
-                estadoDto,
+                "PRECUENTA",
+                estadoDb,
                 intentos,
                 mensajeError,
                 OffsetDateTime.now()
         );
-        trabajosImpresionMesa.put(mesaId, nuevo);
-
-        try {
-            if (trabajoImpresionRepository != null) {
-                com.lacasablanca.backend.model.TrabajoImpresion ti = new com.lacasablanca.backend.model.TrabajoImpresion(
-                        null, "PRECUENTA", "CAJA_80MM", "Mesa " + mesaId + " precuenta", estadoDb
-                );
-                ti.setIntentos(intentos);
-                ti.setError(mensajeError);
-                trabajoImpresionRepository.save(ti);
-            }
-        } catch (Exception e) {
-            org.slf4j.LoggerFactory.getLogger(CobroService.class)
-                    .debug("Error registrando trabajo de impresion en BD: {}", e.getMessage());
-        }
-        return nuevo;
+        trabajosImpresionMesa.put(mesaId, fallback);
+        return fallback;
     }
 
     private void registrarPagosEnBaseDeDatos(Pedido pedido,
