@@ -8,9 +8,7 @@ import java.util.Optional;
 public interface TrabajoImpresionRepository extends JpaRepository<TrabajoImpresion, Integer> {
     List<TrabajoImpresion> findByPedidoIdOrderByFechaCreacionDesc(Integer pedidoId);
 
-    List<TrabajoImpresion> findByMesaIdAndTipoOrderByFechaCreacionDesc(Integer mesaId, String tipo);
-
-    List<TrabajoImpresion> findByMesaIdOrderByFechaCreacionDesc(Integer mesaId);
+    List<TrabajoImpresion> findByTipoOrderByFechaCreacionDesc(String tipo);
 
     Optional<TrabajoImpresion> findByPedidoIdAndTipoAndEstacion(Integer pedidoId, String tipo, String estacion);
 }

@@ -139,7 +139,10 @@ class ImpresionPrecuentaIntegrationTest {
                 .andExpect(jsonPath("$.intentos").value(0));
 
         // 4. Simular que el worker de Django procesa la precuenta y la marca IMPRESO en impresion_cola
-        List<TrabajoImpresion> precuentas = trabajoImpresionRepository.findByMesaIdAndTipoOrderByFechaCreacionDesc(7, "PRECUENTA");
+        List<TrabajoImpresion> precuentas = trabajoImpresionRepository.findByTipoOrderByFechaCreacionDesc("PRECUENTA")
+                .stream()
+                .filter(ti -> Integer.valueOf(7).equals(ti.getMesaId()))
+                .collect(Collectors.toList());
         assertEquals(1, precuentas.size());
         TrabajoImpresion jobPrecuenta = precuentas.get(0);
         assertEquals(7, jobPrecuenta.getMesaId());

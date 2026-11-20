@@ -8,11 +8,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.time.OffsetDateTime;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "impresion_cola")
 public class TrabajoImpresion {
+
+    private static final Pattern PATRON_MESA_ID = Pattern.compile(
+            "(?:\"mesa_id\"\\s*:\\s*|\\bmesa_id\\s*[:=]\\s*|\\bmesa\\s+#?\\s*)(\\d+)\\b",
+            Pattern.CASE_INSENSITIVE
+    );
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +30,7 @@ public class TrabajoImpresion {
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
 
-    @Column(name = "mesa_id")
+    @Transient
     private Integer mesaId;
 
     @Column(name = "tipo", nullable = false, length = 20)
@@ -58,10 +66,19 @@ public class TrabajoImpresion {
 
     public TrabajoImpresion(Pedido pedido, Integer mesaId, String tipo, String estacion, String payload, String estado) {
         this.pedido = pedido;
-        this.mesaId = mesaId != null ? mesaId : ((pedido != null && pedido.getMesa() != null) ? pedido.getMesa().getId() : null);
+        Integer resolvedMesaId = mesaId != null
+                ? mesaId
+                : ((pedido != null && pedido.getMesa() != null) ? pedido.getMesa().getId() : null);
+        this.mesaId = resolvedMesaId;
         this.tipo = tipo;
         this.estacion = estacion;
-        this.payload = payload != null ? payload : "";
+        if (payload != null && !payload.isEmpty()) {
+            this.payload = payload;
+        } else if ("PRECUENTA".equals(tipo) && resolvedMesaId != null) {
+            this.payload = "{\"mesa_id\":" + resolvedMesaId + "}";
+        } else {
+            this.payload = "";
+        }
         this.estado = estado != null ? estado : "PENDIENTE";
         this.fechaCreacion = OffsetDateTime.now();
     }
@@ -83,7 +100,23 @@ public class TrabajoImpresion {
     }
 
     public Integer getMesaId() {
-        return mesaId;
+        if (mesaId != null) {
+            return mesaId;
+        }
+        if (pedido != null && pedido.getMesa() != null) {
+            return pedido.getMesa().getId();
+        }
+        if (payload != null && !payload.isBlank()) {
+            Matcher m = PATRON_MESA_ID.matcher(payload);
+            if (m.find()) {
+                try {
+                    return Integer.valueOf(m.group(1));
+                } catch (NumberFormatException ignored) {
+                    return null;
+                }
+            }
+        }
+        return null;
     }
 
     public void setMesaId(Integer mesaId) {
