@@ -1,0 +1,691 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------------< com.lacasablanca:backend >----------------------
+[INFO] Building backend 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from central: https://repo.maven.apache.org/maven2/org/jacoco/jacoco-maven-plugin/0.8.13/jacoco-maven-plugin-0.8.13.pom
+Progress (1): 870 B
+Progress (1): 953 B
+Progress (1): 3.4 kB
+Progress (1): 4.2 kB
+                    
+Downloaded from central: https://repo.maven.apache.org/maven2/org/jacoco/jacoco-maven-plugin/0.8.13/jacoco-maven-plugin-0.8.13.pom (4.2 kB at 4.9 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.build/0.8.13/org.jacoco.build-0.8.13.pom
+Progress (1): 746 B
+Progress (1): 799 B
+Progress (1): 2.7 kB
+Progress (1): 4.6 kB
+Progress (1): 7.1 kB
+Progress (1): 12 kB 
+Progress (1): 16 kB
+Progress (1): 18 kB
+Progress (1): 21 kB
+Progress (1): 24 kB
+Progress (1): 25 kB
+Progress (1): 28 kB
+Progress (1): 30 kB
+Progress (1): 34 kB
+Progress (1): 40 kB
+Progress (1): 46 kB
+                   
+Downloaded from central: https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.build/0.8.13/org.jacoco.build-0.8.13.pom (46 kB at 420 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/ow2/asm/asm-bom/9.8/asm-bom-9.8.pom
+Progress (1): 1.1 kB
+Progress (1): 1.3 kB
+Progress (1): 3.3 kB
+                    
+Downloaded from central: https://repo.maven.apache.org/maven2/org/ow2/asm/asm-bom/9.8/asm-bom-9.8.pom (3.3 kB at 30 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/jacoco/jacoco-maven-plugin/0.8.13/jacoco-maven-plugin-0.8.13.jar
+Progress (1): 0.5/57 kB
+Progress (1): 1.9/57 kB
+Progress (1): 3.3/57 kB
+Progress (1): 4.7/57 kB
+Progress (1): 6.0/57 kB
+Progress (1): 7.4/57 kB
+Progress (1): 8.8/57 kB
+Progress (1): 10/57 kB 
+Progress (1): 11/57 kB
+Progress (1): 13/57 kB
+Progress (1): 14/57 kB
+Progress (1): 16/57 kB
+Progress (1): 17/57 kB
+Progress (1): 18/57 kB
+Progress (1): 20/57 kB
+Progress (1): 21/57 kB
+Progress (1): 22/57 kB
+Progress (1): 24/57 kB
+Progress (1): 25/57 kB
+Progress (1): 26/57 kB
+Progress (1): 27/57 kB
+Progress (1): 29/57 kB
+Progress (1): 30/57 kB
+Progress (1): 31/57 kB
+Progress (1): 33/57 kB
+Progress (1): 34/57 kB
+Progress (1): 36/57 kB
+Progress (1): 37/57 kB
+Progress (1): 41/57 kB
+Progress (1): 45/57 kB
+Progress (1): 50/57 kB
+Progress (1): 54/57 kB
+Progress (1): 57 kB   
+                   
+Downloaded from central: https://repo.maven.apache.org/maven2/org/jacoco/jacoco-maven-plugin/0.8.13/jacoco-maven-plugin-0.8.13.jar (57 kB at 504 kB/s)
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ backend ---
+[INFO] Deleting D:\Error_404\restaurante-backend-java\target
+[INFO] 
+[INFO] --- checkstyle:3.4.0:check (checkstyle-validation) @ backend ---
+[INFO] Comenzando auditor�a...
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\controller\CategoriaController.java:6:47: Usar la importaci�n con '.*' deber�a evitarse - org.springframework.web.bind.annotation.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\controller\ProductoController.java:6:47: Usar la importaci�n con '.*' deber�a evitarse - org.springframework.web.bind.annotation.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\CategoriaDto.java:14:28: '{' en la columna 28 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\CategoriaDto.java:15:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\CategoriaDto.java:17:31: '{' en la columna 31 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\CategoriaDto.java:18:42: '{' en la columna 42 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\EstadoMesaRequest.java:17:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\EstadoMesaRequest.java:18:46: '{' en la columna 46 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:23:28: '{' en la columna 28 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:24:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:26:32: '{' en la columna 32 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:27:43: '{' en la columna 43 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:29:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:30:49: '{' en la columna 49 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:32:34: '{' en la columna 34 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:33:48: '{' en la columna 48 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:35:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\MesaDto.java:36:46: '{' en la columna 46 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:35:28: '{' en la columna 28 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:36:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:38:31: '{' en la columna 31 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:39:42: '{' en la columna 42 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:41:36: '{' en la columna 36 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:42:52: '{' en la columna 52 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:44:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:45:46: '{' en la columna 46 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:47:36: '{' en la columna 36 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:48:51: '{' en la columna 51 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:50:37: '{' en la columna 37 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:51:53: '{' en la columna 53 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:53:34: '{' en la columna 34 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:54:48: '{' en la columna 48 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:56:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\ProductoDto.java:57:48: '{' en la columna 48 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\dto\TurnoDto.java:3:8: Importaci�n no usada - com.fasterxml.jackson.annotation.JsonProperty. [UnusedImports]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Categoria.java:3:27: Usar la importaci�n con '.*' deber�a evitarse - jakarta.persistence.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Categoria.java:27:28: '{' en la columna 28 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Categoria.java:28:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Categoria.java:30:31: '{' en la columna 31 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Categoria.java:31:42: '{' en la columna 42 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:3:27: Usar la importaci�n con '.*' deber�a evitarse - jakarta.persistence.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:51:28: '{' en la columna 28 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:52:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:54:31: '{' en la columna 31 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:55:42: '{' en la columna 42 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:57:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:58:48: '{' en la columna 48 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:60:43: '{' en la columna 43 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:61:62: '{' en la columna 62 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:63:34: '{' en la columna 34 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:64:47: '{' en la columna 47 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:66:30: '{' en la columna 30 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:67:40: '{' en la columna 40 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:77:37: '{' en la columna 37 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\DetallePedido.java:78:50: '{' en la columna 50 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:3:27: Usar la importaci�n con '.*' deber�a evitarse - jakarta.persistence.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:54:28: '{' en la columna 28 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:55:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:57:32: '{' en la columna 32 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:58:43: '{' en la columna 43 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:60:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:61:49: '{' en la columna 49 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:63:34: '{' en la columna 34 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:64:48: '{' en la columna 48 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:66:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:67:46: '{' en la columna 46 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:69:30: '{' en la columna 30 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:70:39: '{' en la columna 39 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:72:45: '{' en la columna 45 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:73:63: '{' en la columna 63 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:75:43: '{' en la columna 43 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Mesa.java:76:59: '{' en la columna 59 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:3:27: Usar la importaci�n con '.*' deber�a evitarse - jakarta.persistence.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:78:28: '{' en la columna 28 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:79:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:81:27: '{' en la columna 27 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:82:36: '{' en la columna 36 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:84:30: '{' en la columna 30 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:85:39: '{' en la columna 39 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:87:37: '{' en la columna 37 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:88:48: '{' en la columna 48 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:90:34: '{' en la columna 34 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:91:44: '{' en la columna 44 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:93:45: '{' en la columna 45 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:94:63: '{' en la columna 63 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:96:46: '{' en la columna 46 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Pedido.java:97:59: '{' en la columna 59 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:3:27: Usar la importaci�n con '.*' deber�a evitarse - jakarta.persistence.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:69:28: '{' en la columna 28 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:70:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:72:31: '{' en la columna 31 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:73:42: '{' en la columna 42 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:75:36: '{' en la columna 36 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:76:52: '{' en la columna 52 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:78:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:79:46: '{' en la columna 46 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:81:36: '{' en la columna 36 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:82:51: '{' en la columna 51 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:84:37: '{' en la columna 37 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:85:51: '{' en la columna 51 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:87:34: '{' en la columna 34 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Producto.java:88:48: '{' en la columna 48 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Rol.java:3:27: Usar la importaci�n con '.*' deber�a evitarse - jakarta.persistence.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Rol.java:27:28: '{' en la columna 28 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Rol.java:28:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Rol.java:30:31: '{' en la columna 31 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Rol.java:31:42: '{' en la columna 42 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:3:27: Usar la importaci�n con '.*' deber�a evitarse - jakarta.persistence.*. [AvoidStarImport]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:47:28: '{' en la columna 28 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:48:35: '{' en la columna 35 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:50:33: '{' en la columna 33 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:51:46: '{' en la columna 46 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:53:34: '{' en la columna 34 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:54:48: '{' en la columna 48 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:56:25: '{' en la columna 25 deber�a tener salto de l�nea despu�s. [LeftCurly]
+[WARN] D:\Error_404\restaurante-backend-java\src\main\java\com\lacasablanca\backend\model\Usuario.java:57:33: '{' en la columna 33 deber�a tener salto de l�nea despu�s. [LeftCurly]
+Auditor�a concluida.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] --- jacoco:0.8.13:prepare-agent (pre-unit-test) @ backend ---
+Downloading from central: https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.agent/0.8.13/org.jacoco.agent-0.8.13.pom
+Progress (1): 884 B
+Progress (1): 3.5 kB
+Progress (1): 3.5 kB
+                    
+Downloaded from central: https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.agent/0.8.13/org.jacoco.agent-0.8.13.pom (3.5 kB at 16 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.core/0.8.13/org.jacoco.core-0.8.13.pom
+Progress (1): 894 B
+Progress (1): 2.1 kB
+                    
+Downloaded from central: https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.core/0.8.13/org.jacoco.core-0.8.13.pom (2.1 kB at 18 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/ow2/asm/asm-commons/9.8/asm-commons-9.8.pom
+Progress (1): 1.1 kB
+Progress (1): 2.8 kB
+                    
+Downloaded from central: https://repo.maven.apache.org/maven2/org/ow2/asm/asm-commons/9.8/asm-commons-9.8.pom (2.8 kB at 28 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/ow2/asm/asm-tree/9.8/asm-tree-9.8.pom
+Progress (1): 1.1 kB
+Progress (1): 2.6 kB
+                    
+Downloaded from central: https://repo.maven.apache.org/maven2/org/ow2/asm/asm-tree/9.8/asm-tree-9.8.pom (2.6 kB at 26 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.report/0.8.13/org.jacoco.report-0.8.13.pom
+Progress (1): 898 B
+Progress (1): 1.9 kB
+                    
+Downloaded from central: https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.report/0.8.13/org.jacoco.report-0.8.13.pom (1.9 kB at 16 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.agent/0.8.13/org.jacoco.agent-0.8.13-runtime.jar
+Progress (1): 3.4/303 kB
+Progress (1): 7.6/303 kB
+Progress (1): 12/303 kB 
+Progress (1): 16/303 kB
+Progress (1): 20/303 kB
+Progress (1): 25/303 kB
+Progress (1): 28/303 kB
+Progress (1): 32/303 kB
+Progress (1): 36/303 kB
+Progress (1): 40/303 kB
+Progress (1): 45/303 kB
+Progress (1): 49/303 kB
+Progress (1): 53/303 kB
+Progress (1): 57/303 kB
+Progress (1): 61/303 kB
+Progress (1): 65/303 kB
+Progress (1): 69/303 kB
+Progress (1): 73/303 kB
+Progress (1): 77/303 kB
+Progress (1): 82/303 kB
+Progress (1): 86/303 kB
+Progress (1): 90/303 kB
+Progress (1): 94/303 kB
+Progress (1): 99/303 kB
+Progress (1): 103/303 kB
+Progress (1): 119/303 kB
+Progress (1): 126/303 kB
+Progress (1): 142/303 kB
+Progress (1): 159/303 kB
+Progress (1): 175/303 kB
+Progress (1): 192/303 kB
+Progress (1): 208/303 kB
+Progress (1): 224/303 kB
+Progress (1): 241/303 kB
+Progress (1): 257/303 kB
+Progress (1): 274/303 kB
+Progress (1): 290/303 kB
+Progress (1): 303 kB    
+                    
+Downloaded from central: https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.agent/0.8.13/org.jacoco.agent-0.8.13-runtime.jar (303 kB at 1.3 MB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.core/0.8.13/org.jacoco.core-0.8.13.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/ow2/asm/asm-commons/9.8/asm-commons-9.8.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/ow2/asm/asm-tree/9.8/asm-tree-9.8.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.report/0.8.13/org.jacoco.report-0.8.13.jar
+Progress (1): 7.7/223 kB
+Progress (1): 8.2/223 kB
+Progress (1): 25/223 kB 
+Progress (1): 41/223 kB
+Progress (1): 57/223 kB
+Progress (1): 74/223 kB
+Progress (1): 90/223 kB
+Progress (1): 106/223 kB
+Progress (1): 115/223 kB
+Progress (1): 131/223 kB
+Progress (1): 147/223 kB
+Progress (1): 164/223 kB
+Progress (1): 180/223 kB
+Progress (1): 197/223 kB
+Progress (1): 213/223 kB
+Progress (1): 223 kB    
+                    
+Downloaded from central: https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.core/0.8.13/org.jacoco.core-0.8.13.jar (223 kB at 798 kB/s)
+Progress (1): 0.9/52 kB
+Progress (1): 2.3/52 kB
+Progress (1): 3.6/52 kB
+Progress (1): 5.0/52 kB
+Progress (1): 6.4/52 kB
+Progress (1): 7.7/52 kB
+Progress (1): 9.1/52 kB
+Progress (1): 10/52 kB 
+Progress (1): 11/52 kB
+Progress (1): 13/52 kB
+Progress (1): 14/52 kB
+Progress (1): 15/52 kB
+Progress (1): 17/52 kB
+Progress (1): 18/52 kB
+Progress (1): 20/52 kB
+Progress (1): 21/52 kB
+Progress (1): 22/52 kB
+Progress (1): 24/52 kB
+Progress (1): 25/52 kB
+Progress (1): 26/52 kB
+Progress (1): 28/52 kB
+Progress (1): 29/52 kB
+Progress (1): 30/52 kB
+Progress (1): 32/52 kB
+Progress (1): 33/52 kB
+Progress (1): 35/52 kB
+Progress (1): 36/52 kB
+Progress (2): 36/52 kB | 0.9/131 kB
+Progress (2): 36/52 kB | 2.3/131 kB
+Progress (3): 36/52 kB | 2.3/131 kB | 0.9/73 kB
+Progress (3): 36/52 kB | 3.6/131 kB | 0.9/73 kB
+Progress (3): 36/52 kB | 3.6/131 kB | 2.3/73 kB
+Progress (3): 36/52 kB | 5.0/131 kB | 2.3/73 kB
+Progress (3): 36/52 kB | 6.4/131 kB | 2.3/73 kB
+Progress (3): 36/52 kB | 6.4/131 kB | 3.6/73 kB
+Progress (3): 36/52 kB | 7.7/131 kB | 3.6/73 kB
+Progress (3): 36/52 kB | 7.7/131 kB | 5.0/73 kB
+Progress (3): 36/52 kB | 8.2/131 kB | 5.0/73 kB
+Progress (3): 36/52 kB | 8.2/131 kB | 6.4/73 kB
+Progress (3): 36/52 kB | 9.6/131 kB | 6.4/73 kB
+Progress (3): 36/52 kB | 9.6/131 kB | 7.7/73 kB
+Progress (3): 37/52 kB | 9.6/131 kB | 7.7/73 kB
+Progress (3): 37/52 kB | 11/131 kB | 7.7/73 kB 
+Progress (3): 37/52 kB | 11/131 kB | 9.1/73 kB
+Progress (3): 37/52 kB | 12/131 kB | 9.1/73 kB
+Progress (3): 37/52 kB | 12/131 kB | 10/73 kB 
+Progress (3): 39/52 kB | 12/131 kB | 10/73 kB
+Progress (3): 39/52 kB | 14/131 kB | 10/73 kB
+Progress (3): 39/52 kB | 14/131 kB | 11/73 kB
+Progress (3): 40/52 kB | 14/131 kB | 11/73 kB
+Progress (3): 40/52 kB | 14/131 kB | 13/73 kB
+Progress (3): 41/52 kB | 14/131 kB | 13/73 kB
+Progress (3): 41/52 kB | 14/131 kB | 14/73 kB
+Progress (3): 43/52 kB | 14/131 kB | 14/73 kB
+Progress (3): 43/52 kB | 15/131 kB | 14/73 kB
+Progress (3): 43/52 kB | 15/131 kB | 15/73 kB
+Progress (3): 44/52 kB | 15/131 kB | 15/73 kB
+Progress (3): 44/52 kB | 16/131 kB | 15/73 kB
+Progress (3): 44/52 kB | 16/131 kB | 17/73 kB
+Progress (3): 44/52 kB | 16/131 kB | 18/73 kB
+Progress (3): 44/52 kB | 16/131 kB | 20/73 kB
+Progress (3): 44/52 kB | 16/131 kB | 21/73 kB
+Progress (3): 46/52 kB | 16/131 kB | 21/73 kB
+Progress (3): 46/52 kB | 18/131 kB | 21/73 kB
+Progress (3): 47/52 kB | 18/131 kB | 21/73 kB
+Progress (3): 47/52 kB | 18/131 kB | 22/73 kB
+Progress (3): 48/52 kB | 18/131 kB | 22/73 kB
+Progress (3): 48/52 kB | 18/131 kB | 24/73 kB
+Progress (3): 48/52 kB | 19/131 kB | 24/73 kB
+Progress (3): 50/52 kB | 19/131 kB | 24/73 kB
+Progress (3): 51/52 kB | 19/131 kB | 24/73 kB
+Progress (3): 51/52 kB | 21/131 kB | 24/73 kB
+Progress (3): 52 kB | 21/131 kB | 24/73 kB   
+Progress (3): 52 kB | 22/131 kB | 24/73 kB
+Progress (3): 52 kB | 23/131 kB | 24/73 kB
+Progress (3): 52 kB | 23/131 kB | 25/73 kB
+Progress (3): 52 kB | 25/131 kB | 25/73 kB
+Progress (3): 52 kB | 25/131 kB | 26/73 kB
+Progress (3): 52 kB | 25/131 kB | 28/73 kB
+Progress (3): 52 kB | 26/131 kB | 28/73 kB
+Progress (3): 52 kB | 26/131 kB | 29/73 kB
+Progress (3): 52 kB | 27/131 kB | 29/73 kB
+Progress (3): 52 kB | 27/131 kB | 31/73 kB
+Progress (3): 52 kB | 29/131 kB | 31/73 kB
+Progress (3): 52 kB | 29/131 kB | 32/73 kB
+Progress (3): 52 kB | 30/131 kB | 32/73 kB
+Progress (3): 52 kB | 30/131 kB | 33/73 kB
+Progress (3): 52 kB | 30/131 kB | 35/73 kB
+Progress (3): 52 kB | 30/131 kB | 36/73 kB
+                                          
+Downloaded from central: https://repo.maven.apache.org/maven2/org/ow2/asm/asm-tree/9.8/asm-tree-9.8.jar (52 kB at 121 kB/s)
+Progress (2): 31/131 kB | 36/73 kB
+Progress (2): 33/131 kB | 36/73 kB
+Progress (2): 34/131 kB | 36/73 kB
+Progress (2): 36/131 kB | 36/73 kB
+Progress (2): 37/131 kB | 36/73 kB
+Progress (2): 38/131 kB | 36/73 kB
+Progress (2): 40/131 kB | 36/73 kB
+Progress (2): 41/131 kB | 36/73 kB
+Progress (2): 42/131 kB | 36/73 kB
+Progress (2): 44/131 kB | 36/73 kB
+Progress (2): 45/131 kB | 36/73 kB
+Progress (2): 46/131 kB | 36/73 kB
+Progress (2): 48/131 kB | 36/73 kB
+Progress (2): 49/131 kB | 36/73 kB
+Progress (2): 49/131 kB | 37/73 kB
+Progress (2): 51/131 kB | 37/73 kB
+Progress (2): 51/131 kB | 39/73 kB
+Progress (2): 52/131 kB | 39/73 kB
+Progress (2): 52/131 kB | 40/73 kB
+Progress (2): 53/131 kB | 40/73 kB
+Progress (2): 53/131 kB | 41/73 kB
+Progress (2): 55/131 kB | 41/73 kB
+Progress (2): 55/131 kB | 43/73 kB
+Progress (2): 57/131 kB | 43/73 kB
+Progress (2): 57/131 kB | 44/73 kB
+Progress (2): 57/131 kB | 46/73 kB
+Progress (2): 62/131 kB | 46/73 kB
+Progress (2): 62/131 kB | 47/73 kB
+Progress (2): 62/131 kB | 48/73 kB
+Progress (2): 66/131 kB | 48/73 kB
+Progress (2): 66/131 kB | 50/73 kB
+Progress (2): 66/131 kB | 51/73 kB
+Progress (2): 70/131 kB | 51/73 kB
+Progress (2): 70/131 kB | 52/73 kB
+Progress (2): 70/131 kB | 54/73 kB
+Progress (2): 74/131 kB | 54/73 kB
+Progress (2): 74/131 kB | 55/73 kB
+Progress (2): 78/131 kB | 55/73 kB
+Progress (2): 78/131 kB | 59/73 kB
+Progress (2): 82/131 kB | 59/73 kB
+Progress (2): 82/131 kB | 64/73 kB
+Progress (2): 86/131 kB | 64/73 kB
+Progress (2): 90/131 kB | 64/73 kB
+Progress (2): 90/131 kB | 68/73 kB
+Progress (2): 90/131 kB | 72/73 kB
+Progress (2): 90/131 kB | 73 kB   
+                               
+Downloaded from central: https://repo.maven.apache.org/maven2/org/ow2/asm/asm-commons/9.8/asm-commons-9.8.jar (73 kB at 108 kB/s)
+Progress (1): 95/131 kB
+Progress (1): 99/131 kB
+Progress (1): 103/131 kB
+Progress (1): 107/131 kB
+Progress (1): 112/131 kB
+Progress (1): 116/131 kB
+Progress (1): 120/131 kB
+Progress (1): 124/131 kB
+Progress (1): 128/131 kB
+Progress (1): 131 kB    
+                    
+Downloaded from central: https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.report/0.8.13/org.jacoco.report-0.8.13.jar (131 kB at 164 kB/s)
+[INFO] argLine set to -javaagent:C:\\Users\\LENOVO\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.13\\org.jacoco.agent-0.8.13-runtime.jar=destfile=D:\\Error_404\\restaurante-backend-java\\target\\jacoco.exec
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ backend ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ backend ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 92 source files with javac [debug parameters release 17] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ backend ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ backend ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 26 source files with javac [debug parameters release 17] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ backend ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.lacasablanca.backend.ApplicationContextTest
+11:52:10.505 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.lacasablanca.backend.ApplicationContextTest]: ApplicationContextTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+11:52:10.867 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.ApplicationContextTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.16)
+
+2026-11-20 11:52:12.429 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
+2026-11-20 11:52:12.510 [main] INFO  c.l.backend.ApplicationContextTest - Starting ApplicationContextTest using Java 24.0.2 with PID 21604 (started by LENOVO in D:\Error_404\restaurante-backend-java)
+2026-11-20 11:52:12.511 [main] INFO  c.l.backend.ApplicationContextTest - The following 1 profile is active: "test"
+2026-11-20 11:52:14.200 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-20 11:52:14.394 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 171 ms. Found 15 JPA repository interfaces.
+2026-11-20 11:52:15.375 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-11-20 11:52:15.515 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.53.Final
+2026-11-20 11:52:15.587 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-11-20 11:52:16.374 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-20 11:52:16.454 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-11-20 11:52:17.055 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-11-20 11:52:17.060 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-11-20 11:52:17.227 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-20 11:52:19.769 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-20 11:52:19.947 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-20 11:52:20.458 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-20 11:52:21.929 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-11-20 11:52:22.386 [main] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: bf427980-e1c4-4cb9-b303-5661fb641d36
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-11-20 11:52:22.401 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-11-20 11:52:23.116 [main] INFO  c.l.backend.ApplicationContextTest - Started ApplicationContextTest in 11.767 seconds (process running for 14.998)
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\LENOVO\.m2\repository\net\bytebuddy\byte-buddy-agent\1.17.8\byte-buddy-agent-1.17.8.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 15.07 s -- in com.lacasablanca.backend.ApplicationContextTest
+[INFO] Running com.lacasablanca.backend.controller.AuthControllerTest
+2026-11-20 11:52:25.032 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.AuthControllerTest]: AuthControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:25.091 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.AuthControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.16)
+
+2026-11-20 11:52:25.128 [main] INFO  c.l.b.controller.AuthControllerTest - Starting AuthControllerTest using Java 24.0.2 with PID 21604 (started by LENOVO in D:\Error_404\restaurante-backend-java)
+2026-11-20 11:52:25.129 [main] INFO  c.l.b.controller.AuthControllerTest - The following 1 profile is active: "test"
+2026-11-20 11:52:25.435 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-20 11:52:25.481 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 44 ms. Found 15 JPA repository interfaces.
+2026-11-20 11:52:25.659 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-11-20 11:52:25.662 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-11-20 11:52:25.674 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-20 11:52:25.675 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2026-11-20 11:52:25.677 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection conn10: url=jdbc:h2:mem:testdb user=SA
+2026-11-20 11:52:25.677 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2026-11-20 11:52:25.678 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-20 11:52:25.821 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-20 11:52:25.872 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-20 11:52:26.047 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-11-20 11:52:26.121 [main] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 85ee532f-7099-45b3-9eb5-01fd118c0954
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-11-20 11:52:26.122 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-11-20 11:52:26.296 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-11-20 11:52:26.297 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-11-20 11:52:26.298 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2026-11-20 11:52:26.311 [main] INFO  c.l.b.controller.AuthControllerTest - Started AuthControllerTest in 1.214 seconds (process running for 18.192)
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.197 s -- in com.lacasablanca.backend.controller.AuthControllerTest
+[INFO] Running com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest
+2026-11-20 11:52:28.232 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest]: AuthRolesPinIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:28.238 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.334 s -- in com.lacasablanca.backend.controller.AuthRolesPinIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.CategoriaControllerTest
+2026-11-20 11:52:30.566 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.CategoriaControllerTest]: CategoriaControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:30.570 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.CategoriaControllerTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.230 s -- in com.lacasablanca.backend.controller.CategoriaControllerTest
+[INFO] Running com.lacasablanca.backend.controller.EstadoItemPedidoIntegrationTest
+2026-11-20 11:52:30.798 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.EstadoItemPedidoIntegrationTest]: EstadoItemPedidoIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:30.801 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.EstadoItemPedidoIntegrationTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.897 s -- in com.lacasablanca.backend.controller.EstadoItemPedidoIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.HealthCheckIntegrationTest
+2026-11-20 11:52:33.696 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.HealthCheckIntegrationTest]: HealthCheckIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:33.698 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.HealthCheckIntegrationTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s -- in com.lacasablanca.backend.controller.HealthCheckIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest
+2026-11-20 11:52:33.729 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest]: ImpresionPrecuentaIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:33.732 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.351 s -- in com.lacasablanca.backend.controller.ImpresionPrecuentaIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.MesaCobroIntegrationTest
+2026-11-20 11:52:34.084 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.MesaCobroIntegrationTest]: MesaCobroIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:34.089 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.MesaCobroIntegrationTest
+[INFO] Tests run: 17, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.688 s -- in com.lacasablanca.backend.controller.MesaCobroIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.MesaConflicto409IntegrationTest
+2026-11-20 11:52:36.773 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.MesaConflicto409IntegrationTest]: MesaConflicto409IntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:36.774 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.MesaConflicto409IntegrationTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.333 s -- in com.lacasablanca.backend.controller.MesaConflicto409IntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.MesaControllerTest
+2026-11-20 11:52:37.107 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.MesaControllerTest]: MesaControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:37.109 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.MesaControllerTest
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.214 s -- in com.lacasablanca.backend.controller.MesaControllerTest
+[INFO] Running com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest
+2026-11-20 11:52:39.326 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest]: MesaDivisionFusionTransferenciaIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:39.332 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.638 s -- in com.lacasablanca.backend.controller.MesaDivisionFusionTransferenciaIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest
+2026-11-20 11:52:39.963 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest]: ModificadoresPedidoIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:39.966 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.270 s -- in com.lacasablanca.backend.controller.ModificadoresPedidoIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.PedidoControllerTest
+2026-11-20 11:52:40.237 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoControllerTest]: PedidoControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:40.241 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoControllerTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.908 s -- in com.lacasablanca.backend.controller.PedidoControllerTest
+[INFO] Running com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest
+2026-11-20 11:52:41.144 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest]: PedidoExtensionComandaIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:41.148 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.326 s -- in com.lacasablanca.backend.controller.PedidoExtensionComandaIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest
+2026-11-20 11:52:41.471 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest]: PedidoIdempotenciaAnulacionIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:41.473 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.187 s -- in com.lacasablanca.backend.controller.PedidoIdempotenciaAnulacionIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest
+2026-11-20 11:52:42.660 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest]: PedidoParaLlevarDeliveryIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:42.664 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.288 s -- in com.lacasablanca.backend.controller.PedidoParaLlevarDeliveryIntegrationTest
+[INFO] Running com.lacasablanca.backend.controller.ProductoControllerTest
+2026-11-20 11:52:42.948 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.ProductoControllerTest]: ProductoControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:42.950 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.ProductoControllerTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.410 s -- in com.lacasablanca.backend.controller.ProductoControllerTest
+[INFO] Running com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest
+2026-11-20 11:52:43.359 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest]: SecurityHardeningIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:43.361 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.044 s -- in com.lacasablanca.backend.controller.SecurityHardeningIntegrationTest
+[INFO] Running com.lacasablanca.backend.FlujoRestauranteIntegrationTest
+2026-11-20 11:52:43.404 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.FlujoRestauranteIntegrationTest]: FlujoRestauranteIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:43.406 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.FlujoRestauranteIntegrationTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.167 s -- in com.lacasablanca.backend.FlujoRestauranteIntegrationTest
+[INFO] Running com.lacasablanca.backend.MesaConcurrenciaTest
+2026-11-20 11:52:43.572 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.MesaConcurrenciaTest]: MesaConcurrenciaTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:43.573 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.MesaConcurrenciaTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.023 s -- in com.lacasablanca.backend.MesaConcurrenciaTest
+[INFO] Running com.lacasablanca.backend.PedidoRollbackTest
+2026-11-20 11:52:43.596 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.lacasablanca.backend.PedidoRollbackTest]: PedidoRollbackTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20 11:52:43.597 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.lacasablanca.backend.BackendApplication for test class com.lacasablanca.backend.PedidoRollbackTest
+2026-11-20 11:52:43.613 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 22001, SQLState: 22001
+2026-11-20 11:52:43.614 [main] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - Valor demasiado largo para la columna "NOTAS CHARACTER VARYING(255)": "'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx... (300)"
+Value too long for column "NOTAS CHARACTER VARYING(255)": "'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx... (300)"; SQL statement:
+insert into detalle_pedido (cantidad,estado_item,modificadores_json,notas,pedido_id,precio_unitario,producto_id,subtotal,id) values (?,?,?,?,?,?,?,?,default) [22001-232]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.030 s -- in com.lacasablanca.backend.PedidoRollbackTest
+[INFO] Running com.lacasablanca.backend.service.AuthServiceTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.119 s -- in com.lacasablanca.backend.service.AuthServiceTest
+[INFO] Running com.lacasablanca.backend.service.CategoriaServiceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.146 s -- in com.lacasablanca.backend.service.CategoriaServiceTest
+[INFO] Running com.lacasablanca.backend.service.MesaServiceTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.169 s -- in com.lacasablanca.backend.service.MesaServiceTest
+[INFO] Running com.lacasablanca.backend.service.PedidoServiceTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.417 s -- in com.lacasablanca.backend.service.PedidoServiceTest
+[INFO] Running com.lacasablanca.backend.service.ProductoServiceTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.010 s -- in com.lacasablanca.backend.service.ProductoServiceTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 118, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jacoco:0.8.13:report (post-unit-test) @ backend ---
+[INFO] Loading execution data file D:\Error_404\restaurante-backend-java\target\jacoco.exec
+[INFO] Analyzed bundle 'backend' with 72 classes
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ backend ---
+[INFO] Building jar: D:\Error_404\restaurante-backend-java\target\backend-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:3.5.16:repackage (repackage) @ backend ---
+[INFO] Replacing main artifact D:\Error_404\restaurante-backend-java\target\backend-0.0.1-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to D:\Error_404\restaurante-backend-java\target\backend-0.0.1-SNAPSHOT.jar.original
+[INFO] 
+[INFO] --- jacoco:0.8.13:report (report-verify) @ backend ---
+[INFO] Loading execution data file D:\Error_404\restaurante-backend-java\target\jacoco.exec
+[INFO] Analyzed bundle 'backend' with 72 classes
+[INFO] 
+[INFO] >>> spotbugs:4.8.6.6:check (spotbugs-analysis) > :spotbugs @ backend >>>
+[INFO] 
+[INFO] --- spotbugs:4.8.6.6:spotbugs (spotbugs) @ backend ---
+[INFO] Fork Value is true
+[INFO] Done SpotBugs Analysis....
+[INFO] 
+[INFO] <<< spotbugs:4.8.6.6:check (spotbugs-analysis) < :spotbugs @ backend <<<
+[INFO] 
+[INFO] 
+[INFO] --- spotbugs:4.8.6.6:check (spotbugs-analysis) @ backend ---
+[INFO] BugInstance size is 0
+[INFO] Error size is 0
+[INFO] No errors/warnings found
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:09 min
+[INFO] Finished at: 2026-11-20T11:52:59-05:00
+[INFO] ------------------------------------------------------------------------

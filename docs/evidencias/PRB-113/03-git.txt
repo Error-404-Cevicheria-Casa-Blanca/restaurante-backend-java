@@ -1,0 +1,5 @@
+9a31a37 fix(PRB-113,PRB-114): configurar required_status_checks reales en los 3 repos y eliminar push duplicado en feature/**
+80de273 docs(PRB-113,PRB-114,PRB-22): adjuntar evidencias crudas de mvn verify, cobertura JaCoCo 80.81% y branch protection
+146144f ci(PRB-113,PRB-114,PRB-22): actualizar JaCoCo 0.8.13 con mvn verify, auditoria branch protection y runbook B08
+351a82a Merge pull request #15 from Error-404-Cevicheria-Casa-Blanca/feature/PRB-98-tls-caddy-ca
+c526dbc docs(PRB-98): adjuntar evidencia cruda de tests (01-tests.txt), git log (02-git.txt), CA cert (03-ca-cert.txt) y CIERRE.md

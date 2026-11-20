@@ -22,8 +22,8 @@
         <!-- Versión verificada hoy en Maven Central: docs/evidencias/PE-6-fix-java/01-jjwt-metadata.txt -->
         <jjwt.version>0.13.0</jjwt.version>
 
-        <!-- Versiones de herramientas de análisis estático y calidad (PRB-23) -->
-        <jacoco.version>0.8.12</jacoco.version>
+        <!-- Versiones de herramientas de análisis estático y calidad (PRB-23 / PRB-113) -->
+        <jacoco.version>0.8.13</jacoco.version>
         <checkstyle.plugin.version>3.4.0</checkstyle.plugin.version>
         <spotbugs.plugin.version>4.8.6.6</spotbugs.plugin.version>
         <sonar.plugin.version>5.0.0.4389</sonar.plugin.version>
@@ -115,6 +115,13 @@
                     <execution>
                         <id>post-unit-test</id>
                         <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report-verify</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>

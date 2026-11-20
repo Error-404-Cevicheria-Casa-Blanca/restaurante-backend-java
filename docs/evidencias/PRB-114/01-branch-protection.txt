@@ -1,0 +1,38 @@
+=== [PRB-114 / ADR-08] Auditoria y Configuracion de Branch Protection y Secrets en GitHub ===
+Fecha: 2026-11-20 15:06:53-05:00 | ApplyChanges: True
+
+----------------------------------------------------------------
+Repositorio: Error-404-Cevicheria-Casa-Blanca/restaurante-backend-java (Required Check: 'Build, Test, Checkstyle, SpotBugs & JaCoCo (JDK 17)')
+----------------------------------------------------------------
+  [APPLY] Configurada proteccion + required_status_checks en 'develop'
+Rama 'develop': protected=True
+  -> PR requerido: True | Aprobaciones requeridas: 1 | Enforce Admins: True | Required Status Checks: [Build, Test, Checkstyle, SpotBugs & JaCoCo (JDK 17)]
+  [APPLY] Configurada proteccion + required_status_checks en 'main'
+Rama 'main': protected=True
+  -> PR requerido: True | Aprobaciones requeridas: 1 | Enforce Admins: True | Required Status Checks: [Build, Test, Checkstyle, SpotBugs & JaCoCo (JDK 17)]
+GitHub Actions Secrets configurados (0): []
+Workflow CI registrado: 'CI — Backend Spring Boot (PRB-22)' (.github/workflows/ci.yml) -> state=active
+
+----------------------------------------------------------------
+Repositorio: Error-404-Cevicheria-Casa-Blanca/restaurante-admin-django (Required Check: 'Flake8, Django Check & Pytest')
+----------------------------------------------------------------
+  [APPLY] Configurada proteccion + required_status_checks en 'develop'
+Rama 'develop': protected=True
+  -> PR requerido: True | Aprobaciones requeridas: 1 | Enforce Admins: True | Required Status Checks: [Flake8, Django Check & Pytest]
+  [APPLY] Configurada proteccion + required_status_checks en 'main'
+Rama 'main': protected=True
+  -> PR requerido: True | Aprobaciones requeridas: 1 | Enforce Admins: True | Required Status Checks: [Flake8, Django Check & Pytest]
+GitHub Actions Secrets configurados (0): []
+Workflow CI registrado: 'CI — Panel Django (PRB-112)' (.github/workflows/ci.yml) -> state=active
+
+----------------------------------------------------------------
+Repositorio: Error-404-Cevicheria-Casa-Blanca/restaurante-app-kotlin (Required Check: 'Test, Detekt & AssembleDebug (JDK 17)')
+----------------------------------------------------------------
+  [APPLY] Configurada proteccion + required_status_checks en 'develop'
+Rama 'develop': protected=True
+  -> PR requerido: True | Aprobaciones requeridas: 1 | Enforce Admins: True | Required Status Checks: [Test, Detekt & AssembleDebug (JDK 17)]
+  [APPLY] Configurada proteccion + required_status_checks en 'main'
+Rama 'main': protected=True
+  -> PR requerido: True | Aprobaciones requeridas: 1 | Enforce Admins: True | Required Status Checks: [Test, Detekt & AssembleDebug (JDK 17)]
+GitHub Actions Secrets configurados (0): []
+Workflow CI registrado: 'CI — App Android Mesero (PRB-111)' (.github/workflows/ci.yml) -> state=active
