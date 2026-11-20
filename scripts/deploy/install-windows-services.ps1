@@ -69,6 +69,19 @@ if (Test-Path $NssmPath) {
     & $NssmPath set CasaBlancaAdminDjango AppExit Default Restart
     & $NssmPath set CasaBlancaAdminDjango AppRestartDelay 5000
     Write-Host "[OK] Servicio CasaBlancaAdminDjango (:8000) registrado con auto-restart." -ForegroundColor Green
+    # 5. Registrar servicio CasaBlancaCaddyTLS (:443 -> :8080 / :8000) via NSSM (PRB-98 / ADR-02)
+    $CaddyExe = "$InstallRoot\tools\caddy.exe"
+    if (Test-Path $CaddyExe) {
+        & $NssmPath install CasaBlancaCaddyTLS $CaddyExe "run --config $InstallRoot\backend\Caddyfile --adapter caddyfile"
+        & $NssmPath set CasaBlancaCaddyTLS AppDirectory "$InstallRoot\backend"
+        & $NssmPath set CasaBlancaCaddyTLS DependOnService CasaBlancaBackendJava
+        & $NssmPath set CasaBlancaCaddyTLS Start SERVICE_AUTO_START
+        & $NssmPath set CasaBlancaCaddyTLS AppStdout "$InstallRoot\logs\service-caddy-stdout.log"
+        & $NssmPath set CasaBlancaCaddyTLS AppStderr "$InstallRoot\logs\service-caddy-stderr.log"
+        & $NssmPath set CasaBlancaCaddyTLS AppExit Default Restart
+        & $NssmPath set CasaBlancaCaddyTLS AppRestartDelay 5000
+        Write-Host "[OK] Servicio CasaBlancaCaddyTLS (:443) registrado con auto-restart." -ForegroundColor Green
+    }
 } else {
     Write-Host "[INFO] NSSM no encontrado en $NssmPath. Registrando definicion alternativa mediante sc.exe..."
     $backendBin = "`"$JavaExe`" -jar `"$InstallRoot\backend\restaurante-backend.jar`""
@@ -78,8 +91,9 @@ if (Test-Path $NssmPath) {
     Write-Host "[OK] Servicios creados con sc.exe (fallback sin NSSM)." -ForegroundColor Green
 }
 
-# 5. Configurar Firewall de Windows para permitir solo subred LAN en puertos 8080 y 8000
+# 6. Configurar Firewall de Windows para permitir solo subred LAN en puertos 443 (Caddy TLS), 8080 y 8000
 $rules = @(
+    @{ Name = "CasaBlanca-Caddy-HTTPS-443-LAN"; Port = 443; Desc = "Reverse Proxy TLS Caddy https://casa-blanca.local (Solo LAN - PRB-98)" },
     @{ Name = "CasaBlanca-Backend-8080-LAN"; Port = 8080; Desc = "API REST Spring Boot POS Casa Blanca (Solo LAN)" },
     @{ Name = "CasaBlanca-Django-8000-LAN";  Port = 8000; Desc = "Panel Admin y KDS Django Casa Blanca (Solo LAN)" }
 )
