@@ -1,0 +1,4 @@
+=== REPORTE DE COBERTURA JACOCO 0.8.13 (target/site/jacoco/jacoco.csv) ===
+Instrucciones cubiertas: 9363 / 11587 (80.81%)
+Lineas cubiertas:        2265 / 2887 (78.46%)
+Ramas cubiertas:         613 / 1007 (60.87%)
