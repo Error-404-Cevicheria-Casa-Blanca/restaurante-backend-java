@@ -356,12 +356,23 @@ public class CobroService {
             return null;
         }
         try {
-            return trabajoImpresionRepository.findAll().stream()
-                    .filter(ti -> "PRECUENTA".equals(ti.getTipo()))
-                    .filter(ti -> mesaId.equals(ti.getMesaId())
-                            || (ti.getPedido() != null && ti.getPedido().getMesa() != null
-                            && mesaId.equals(ti.getPedido().getMesa().getId()))
-                            || ("Mesa " + mesaId + " precuenta").equals(ti.getPayload()))
+            List<com.lacasablanca.backend.model.TrabajoImpresion> candidatos = new ArrayList<>();
+            List<com.lacasablanca.backend.model.TrabajoImpresion> porPedidoMesa =
+                    trabajoImpresionRepository.findByTipoAndPedidoMesaIdOrderByFechaCreacionDescIdDesc(
+                            "PRECUENTA", mesaId
+                    );
+            if (porPedidoMesa != null) {
+                candidatos.addAll(porPedidoMesa);
+            }
+            List<com.lacasablanca.backend.model.TrabajoImpresion> porPayload =
+                    trabajoImpresionRepository.findByTipoAndPayloadContainingOrderByFechaCreacionDescIdDesc(
+                            "PRECUENTA", String.valueOf(mesaId)
+                    );
+            if (porPayload != null) {
+                candidatos.addAll(porPayload);
+            }
+            return candidatos.stream()
+                    .filter(ti -> mesaId.equals(ti.getMesaId()))
                     .max(java.util.Comparator
                             .comparing(com.lacasablanca.backend.model.TrabajoImpresion::getFechaCreacion,
                                     java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder()))

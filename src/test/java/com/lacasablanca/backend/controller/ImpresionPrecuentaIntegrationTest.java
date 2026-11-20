@@ -213,4 +213,61 @@ class ImpresionPrecuentaIntegrationTest {
                 .andExpect(jsonPath("$.mesa_id").value(7))
                 .andExpect(jsonPath("$.estado").value("FALLIDO"));
     }
+
+    @Test
+    @DisplayName("PRB-106: Ampliar comanda existente con múltiples filas COMANDA previas por estación (reimpresión Django) actualiza la más reciente sin IncorrectResultSizeDataAccessException")
+    void ampliarComandaConMultiplesFilasPreviasPorEstacionNoLanzaExcepcion() throws Exception {
+        MvcResult pedidoRes = mockMvc.perform(post("/api/v1/pedidos")
+                        .header("Authorization", "Bearer " + tokenMozo)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CrearPedidoRequest(
+                                8,
+                                List.of(new ItemPedidoRequest(1, 1, "Ceviche inicial")),
+                                "uuid-prb106-mesa8-dup"
+                        ))))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        int pedidoId = objectMapper.readTree(pedidoRes.getResponse().getContentAsString()).get("id").asInt();
+
+        // Simular que el worker imprimió la primera comanda y que desde el panel Django se disparó una 2da fila COMANDA para BARRA_FRIA
+        List<TrabajoImpresion> iniciales = trabajoImpresionRepository
+                .findByPedidoIdAndTipoAndEstacionOrderByFechaCreacionDescIdDesc(pedidoId, "COMANDA", "BARRA_FRIA");
+        assertEquals(1, iniciales.size());
+        TrabajoImpresion primera = iniciales.get(0);
+        primera.setEstado("IMPRESO");
+        primera.setIntentos(1);
+        trabajoImpresionRepository.save(primera);
+
+        TrabajoImpresion segundaReimpresa = new TrabajoImpresion(
+                primera.getPedido(), 8, "COMANDA", "BARRA_FRIA", "Reimpresion Django", "IMPRESO"
+        );
+        segundaReimpresa.setIntentos(1);
+        trabajoImpresionRepository.save(segundaReimpresa);
+
+        // Ampliar el pedido agregando otro ítem de BARRA_FRIA y uno de BEBIDAS
+        mockMvc.perform(post("/api/v1/pedidos/" + pedidoId + "/items")
+                        .header("Authorization", "Bearer " + tokenMozo)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CrearPedidoRequest(
+                                8,
+                                List.of(
+                                        new ItemPedidoRequest(1, 1, "Ceviche extra"),
+                                        new ItemPedidoRequest(3, 1, "Chicha morada")
+                                ),
+                                "uuid-prb106-mesa8-amp"
+                        ))))
+                .andExpect(status().isCreated());
+
+        // La fila más reciente de BARRA_FRIA volvió a PENDIENTE y la nueva estación BEBIDAS también se encoló en PENDIENTE
+        List<TrabajoImpresion> barraFria = trabajoImpresionRepository
+                .findByPedidoIdAndTipoAndEstacionOrderByFechaCreacionDescIdDesc(pedidoId, "COMANDA", "BARRA_FRIA");
+        assertEquals(2, barraFria.size());
+        assertEquals("PENDIENTE", barraFria.get(0).getEstado());
+
+        List<TrabajoImpresion> bebidas = trabajoImpresionRepository
+                .findByPedidoIdAndTipoAndEstacionOrderByFechaCreacionDescIdDesc(pedidoId, "COMANDA", "BEBIDAS");
+        assertEquals(1, bebidas.size());
+        assertEquals("PENDIENTE", bebidas.get(0).getEstado());
+    }
 }

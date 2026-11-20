@@ -387,9 +387,12 @@ public class PedidoService {
             }
             Integer mesaId = (pedido.getMesa() != null) ? pedido.getMesa().getId() : null;
             for (String estacion : estaciones) {
-                com.lacasablanca.backend.model.TrabajoImpresion existente = trabajoImpresionRepository
-                        .findByPedidoIdAndTipoAndEstacion(pedido.getId(), "COMANDA", estacion)
-                        .orElse(null);
+                List<com.lacasablanca.backend.model.TrabajoImpresion> existentes = trabajoImpresionRepository
+                        .findByPedidoIdAndTipoAndEstacionOrderByFechaCreacionDescIdDesc(
+                                pedido.getId(), "COMANDA", estacion
+                        );
+                com.lacasablanca.backend.model.TrabajoImpresion existente =
+                        (existentes != null && !existentes.isEmpty()) ? existentes.get(0) : null;
                 if (existente != null) {
                     existente.setEstado("PENDIENTE");
                     existente.setError(null);
