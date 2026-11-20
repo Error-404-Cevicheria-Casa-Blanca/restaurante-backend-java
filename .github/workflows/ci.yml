@@ -1,8 +1,8 @@
-name: CI — Backend Spring Boot (PRB-22)
+name: CI — Backend Spring Boot (PRB-22 / PRB-113)
 
 on:
   push:
-    branches: [ main, develop, "feature/**" ]
+    branches: [ main, develop, "feature/**", "fix/**" ]
   pull_request:
     branches: [ main, develop ]
 
@@ -23,7 +23,30 @@ jobs:
           cache: maven
 
       - name: Run Maven Verify (Tests + Checkstyle + SpotBugs + JaCoCo)
-        run: mvn -B clean verify
+        run: |
+          chmod +x mvnw
+          ./mvnw -B clean verify
+
+      - name: Print JaCoCo Coverage Summary
+        if: always()
+        run: |
+          if [ -f target/site/jacoco/jacoco.csv ]; then
+            echo "### Resumen de Cobertura JaCoCo (PRB-113)" >> $GITHUB_STEP_SUMMARY
+            python3 -c "
+          import csv
+          with open('target/site/jacoco/jacoco.csv') as f:
+              r = list(csv.DictReader(f))
+          im = sum(int(x['INSTRUCTION_MISSED']) for x in r)
+          ic = sum(int(x['INSTRUCTION_COVERED']) for x in r)
+          lm = sum(int(x['LINE_MISSED']) for x in r)
+          lc = sum(int(x['LINE_COVERED']) for x in r)
+          bm = sum(int(x['BRANCH_MISSED']) for x in r)
+          bc = sum(int(x['BRANCH_COVERED']) for x in r)
+          print(f'- **Instrucciones:** {ic}/{ic+im} ({100*ic/(ic+im):.2f}%)')
+          print(f'- **Líneas:** {lc}/{lc+lm} ({100*lc/(lc+lm):.2f}%)')
+          print(f'- **Ramas:** {bc}/{bc+bm} ({100*bc/(bc+bm):.2f}%)')
+          " | tee -a $GITHUB_STEP_SUMMARY
+          fi
 
       - name: Upload JUnit & JaCoCo Reports
         if: always()
